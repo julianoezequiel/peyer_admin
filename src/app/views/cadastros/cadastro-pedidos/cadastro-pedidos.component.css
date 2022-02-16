@@ -1,0 +1,92 @@
+.full-width {
+  width: 100%;
+}
+
+/* .shipping-card {
+  min-width: 120px;
+  margin: 20px auto;
+} */
+
+/* .mat-radio-button {
+  display: block;
+  margin: 5px 0;
+} */
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+ .col {
+  flex: 1;
+  margin-right: 20px;
+}  
+
+/* .col:last-child {
+  margin-right: 0;
+} */
+
+
+.icon-display {
+  transform: scale(0.8);
+  cursor: pointer;
+}
+
+.qtd {
+  position: relative;
+  text-align: center;
+  min-width: 20px;
+  /* height: 10px; */
+  display: inline-block;
+  /* vertical-align: middle; */
+  /* min-width: 20px; */
+}
+
+.td-prod {
+  vertical-align: middle;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  /* text-align: center; */
+}
+
+.td-prod-descr {
+  text-align: start;
+  vertical-align: middle;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  /* font-size: 10px; */
+}
+
+.td-prod-btn {
+  vertical-align: middle;
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  text-align: center;
+}
+
+.mat-button-toggle-button:focus {
+  outline: none;
+}
+
+.span-btn {
+  min-width: 115px;
+  display: block;
+  /* border-style: solid;
+     border-width: thin;
+     border-radius: 1em;
+     border-color: rgb(182, 182, 182); */
+  /* padding: 0px; */
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.altura-linha {
+  height: 15px !important;
+  display: block;
+  /* width: 110px !important; */
+  padding-bottom: 0px !important;
+  margin-bottom: 5px !important;
+  word-break: pre-line;
+}

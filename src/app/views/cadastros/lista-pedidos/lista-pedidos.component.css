@@ -1,0 +1,25 @@
+.full-width-table {
+  width: 100%;
+}
+
+#add-button{
+
+  float: right;
+  right: 20px;
+  bottom: 10px;
+  left: auto;
+  position: relative;
+}
+
+table {
+  width: 100%;
+}
+
+.carregando{
+  height: 20px;
+}
+
+.semconteudo{
+  /* height: 20px !important; */
+  width: 100%;
+}

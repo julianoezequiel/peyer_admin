@@ -1,0 +1,19 @@
+<mat-dialog-content class="full-width-dialog">
+  <mat-list>
+    <mat-list-item *ngIf="isLoading">
+      Carregando
+    </mat-list-item>
+    <mat-list-item *ngIf="listaOriginal.length==0 && !isLoading">
+      Não existe itens para selecionar
+    </mat-list-item>
+    <mat-list-item *ngFor="let prod of listaOriginal" style="white-space: nowrap;" >    
+      <button mat-icon-button color="accent">
+        <mat-icon (click)="addItem(prod)">add_circle</mat-icon>
+      </button>
+        {{ prod.descricao }}
+     </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Fechar</button>
+</mat-dialog-actions>

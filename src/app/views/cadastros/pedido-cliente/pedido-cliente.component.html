@@ -1,0 +1,186 @@
+<mat-toolbar color="primary">
+  <mat-icon>shopping_cart</mat-icon>
+  <!-- <span class="example-spacer"></span> -->
+  <span>&nbsp;&nbsp;Meu Pedido</span>
+
+  <!-- <div class="row">
+    <div class="col-sm-12 col-xm-12 col-md-6">
+        <h3 class="text-center">Seu Pedido</h3>
+    </div> -->
+  <!-- <mat-card-title class="" style="justify-content: center"> </mat-card-title>        -->
+  <!-- <mat-card-title>Cadastrar Pedido</mat-card-title>        -->
+  <!-- </div> -->
+</mat-toolbar>
+<form [formGroup]="pedidoForm" novalidate id="form">
+  <div class="row">
+    <div class="col">
+      <img class="card-img-top" width="80" height="80" style="float: left;" src="../../../assets/img/brand/logo.png" class="img-thumbnail" alt="Card image cap">
+      <p style="text-align: center;vertical-align: middle;margin-top: 15px;">
+        <span  style="font-size: small;padding: 5px;width: 100%;text-align: center;">Orgânicos São José</span><br>
+        <span style="font-size: small;padding: 5px;width: 100%;text-align: center;">CNPJ:88.888.888/0001-00</span>
+      </p>
+    </div>
+  </div>
+  <mat-card >
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="input-full-width" style="width: 100%">
+          <mat-label>Buscar</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            matInput
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="filtroString"
+            value=""
+            type="search"
+            placeholder="Buscar"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- <mat-card-content> -->
+
+    <div class="row">
+      <div class="col">
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <!-- <th>Preço</th> -->
+                <th class="td-prod-btn">qtd</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos | searchfilter: filtroString">
+                <td class="td-prod-descr" style="width: 50%">
+                 <span class="altura-linha"> {{ prod.descricao }} </span><br>
+                  {{ prod.valorA | currency: "BRL":true }}
+                  {{ tipoUnidademedida(prod) }}
+                </td>
+                <!-- <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td> -->
+                <td class="td-prod-btn">
+                  <span class="span-btn">
+                    <button
+                      class="td-prod mat-elevation-z1"
+                      type="button"
+                      mat-mini-fab
+                      color="default"
+                    >
+                      <mat-icon
+                        (click)="decrementarProd(prod)"
+                        class="icon-display"
+                        >remove</mat-icon
+                      >
+                    </button>
+
+                    <p class="qtd">{{ prod.quantidade || 0 }}</p>
+
+                    <button
+                      class="td-prod mat-elevation-z1"
+                      type="button"
+                      mat-mini-fab
+                      color="default"
+                    >
+                      <mat-icon
+                        (click)="incrementarProd(prod)"
+                        class="icon-display"
+                        >add</mat-icon
+                      >
+                    </button>
+                  </span>
+                </td>
+                <td class="td-prod">
+                  {{
+                    prod?.valor_total != null
+                      ? (prod.valor_total | currency: "BRL":true)
+                      : (0 | currency: "BRL":true)
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 70px">
+      <div class="col-sm-12 col-xm-12 col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>Celular</mat-label>
+          <input mask="+00 (00) 0000-0000|| +00 (00) 0 0000-0000"  
+            matInput
+            placeholder="(00)00000-0000"
+            formControlName="numero_celular"
+          />
+          <mat-error
+            *ngIf="pedidoForm.controls['numero_celular'].hasError('required')"
+          >
+            Informe o <strong>número do celular</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-xm-12 col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>Dia de entrega</mat-label>
+          <mat-select
+            placeholder="Selecione o dia para entrega"
+            formControlName="dia_entrega"
+          >
+            <mat-option *ngFor="let dia of dia_semana" [value]="dia">
+              {{ dia }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="pedidoForm.controls['dia_entrega'].hasError('required')"
+          >
+            Escolha o <strong>dia de entrega</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-xm-12 col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>Forma de pagamento</mat-label>
+          <mat-select
+            placeholder="Unidade Medida"
+            formControlName="forma_pagamento"
+          >
+            <mat-option *ngFor="let state of forma_pagamento" [value]="state">
+              {{ state }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="pedidoForm.controls['forma_pagamento'].hasError('required')"
+          >
+            Escolha a forma de <strong>pagamento</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- </mat-card-content> -->
+    <!-- <mat-card-actions style="margin-bottom: 20px;"> -->
+    <!-- <button mat-raised-button color="primary" type="submit">Salvar</button> -->
+    <!-- <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Cancelar</button> -->
+    <!-- </mat-card-actions> -->
+  </mat-card>
+</form>
+<div class="row fixed-bottom" style="background-color: whitesmoke">
+  <div class="col">
+    <p class="text-center" style="margin-top: 15px">
+      <span class="align-middle mat-elevation-z1"
+        >Total Pedido: {{ total | currency: "BRL":true }}</span
+      >
+    </p>
+  </div>
+  <button
+    style="margin: 5px 20px 5px 5px"
+    mat-raised-button
+    color="primary"
+    class="col-sm-12 col-md-1 col-xm-12"
+    type="button"
+    (click)="onSubmit()"
+  >
+    ENVIAR PEDIDO
+  </button>
+</div>

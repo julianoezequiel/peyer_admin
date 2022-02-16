@@ -1,0 +1,67 @@
+<form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-header>
+      <mat-card-title>Cadastro de Usuários </mat-card-title>
+      <!-- <mat-card-title>Título </mat-card-title> -->
+    </mat-card-header>
+    <div class="row">
+      <div class="col-md-5">
+        <mat-form-field appearance="fill" >
+          <mat-label>Nome de Usuário</mat-label>
+          <input matInput  formControlName="usuario">
+          <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
+            Nome usuário é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="fill" >
+          <mat-label>E-mail</mat-label>
+          <input matInput formControlName="email" type="email">
+          <mat-error *ngIf="userForm.controls['email'].hasError('required')">
+            E-mail é <strong>obrigatório</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['email'].hasError('email')">
+            E-mail é <strong>inválido</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="fill" >
+          <mat-label>Senha</mat-label>
+          <input matInput formControlName="senha" type="password">
+          <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
+            Senha é <strong>obrigatória</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
+           Tamanho mínimo  <strong>6 dígitos</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>   
+    </div>
+    <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill" >
+            <mat-label>Senha</mat-label>
+            <input matInput formControlName="senha_confirma"  type="password">
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
+              Senha é <strong>obrigatória</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
+              Tamanho mínimo  <strong>6 dígitos</strong>
+            </mat-error>
+          </mat-form-field>
+      </div>
+    </div>  
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Salvar</button>
+      <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Voltar</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>
+  

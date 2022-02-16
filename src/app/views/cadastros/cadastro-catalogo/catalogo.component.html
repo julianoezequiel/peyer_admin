@@ -1,0 +1,107 @@
+<form [formGroup]="catalogoForm" novalidate (ngSubmit)="onSubmit()">
+<mat-card class="shipping-card">
+  <mat-card-header>
+    <mat-card-title>Cadastro de Catálogo </mat-card-title>
+    <!-- <mat-card-title>Título </mat-card-title> -->
+  </mat-card-header>
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="fill" >
+        <mat-label>Data Entrega</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="data_entrega">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="catalogoForm.controls['data_entrega'].hasError('required')">
+          Data é <strong>obrigatória</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" >
+        <mat-label>Hora Início Entrega</mat-label>
+        <input matInput  formControlName="hora_inicio_entrega">
+        <mat-error *ngIf="catalogoForm.controls['hora_inicio_entrega'].hasError('required')">
+          Data é <strong>obrigatória</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" >
+        <mat-label>Dia Início Entrega</mat-label>
+
+        <mat-select placeholder="Dia da Semana" formControlName="dia_confirmar">
+          <mat-option *ngFor="let dia of dia_semana" [value]="dia">
+            {{ dia }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="catalogoForm.controls['dia_confirmar'].hasError('required')">
+          Dia  <strong>obrigatória</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" >
+        <mat-label>Hora Limite Confirmar Pedido</mat-label>
+        <input matInput formControlName="hora_confirmar">
+        <mat-error *ngIf="catalogoForm.controls['hora_confirmar'].hasError('required')">
+          Data é <strong>obrigatória</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" >
+        <mat-label>Número para o pedido</mat-label>
+        <input matInput formControlName="numero_wpp">
+        <mat-error *ngIf="catalogoForm.controls['numero_wpp'].hasError('required')">
+          Informe o número para o <strong>pedido</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-slide-toggle formControlName="atual"
+      class="example-margin">
+        Tornar este catálogo como atual.
+      </mat-slide-toggle>
+   </div>    
+  </div>
+  <div class="row">
+      <div class="col">
+        <mat-card-actions>
+          <button mat-button mat-raised-button color="default" type="button" (click)="openDialog()">Abrir lista</button>  
+          <button mat-button mat-raised-button color="default" type="button" (click)="gerarTotal()" >Total de pedidos</button>
+        </mat-card-actions>
+        <div fxFlex="100%" style="height: 40px;"></div>
+        <mat-card-content >
+          <mat-list cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+            <mat-list-item *ngIf="list.length==0">
+              Nenhum item adicionado
+            </mat-list-item>
+            <mat-list-item *ngFor="let prod of list" cdkDrag>
+              <button mat-icon-button color="accent">
+                <mat-icon (click)="remover(prod)">delete</mat-icon>
+              </button>
+              <span style="cursor: move;">{{ prod.descricao }}</span>
+            </mat-list-item>
+          </mat-list>
+          <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let prod of list" cdkDrag>
+              <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              {{prod.descricao}}
+            </div>
+          </div> -->
+        </mat-card-content>      
+    </div>
+  </div>  
+  <mat-card-actions>
+    <button mat-raised-button color="primary" type="submit">Salvar</button>
+    <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Voltar</button>    
+  </mat-card-actions>
+</mat-card>
+</form>
