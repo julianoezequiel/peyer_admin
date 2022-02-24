@@ -96,7 +96,7 @@ export class CadastroUsuariosComponent implements OnInit {
     this.auth.SignUp(userFirebase).then((result)=>{
       userFirebase.uid = result.uid;
       this.toastr.success('Usuário cadastrado com sucesso, email de verificação enviado para ' + userFirebase.email,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-      // this.updateUser(userFirebase);    
+      this.updateUser(userFirebase);    
    }).catch((error)=>{
     this.toastr.warning(error,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
    })
