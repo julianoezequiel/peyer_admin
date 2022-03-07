@@ -47,7 +47,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './views/login/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { ToastrModule } from 'ngx-toastr';
 import { AuthGuard } from './views/guard/auth.guard';
@@ -104,6 +104,8 @@ import { CadastroClientesComponent } from './views/cadastros/cadastro-clientes/c
 import { ClientesService } from './views/cadastros/services/clientes.service';
 import { ListaClientesBuscaComponent } from './views/cadastros/cadastro-pedidos/lista-clientes-busca/lista-clientes-busca.component';
 import { FilterPipe } from './views/filter-pipe.pipe';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -154,6 +156,13 @@ const maskConfig: Partial<IConfig> = {
     NgxLoadingModule.forRoot({}),
     DragDropModule,
     NgxMaskModule.forRoot(maskConfig),    
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+  })
   ],
   declarations: [
     AppComponent,
@@ -208,3 +217,8 @@ const maskConfig: Partial<IConfig> = {
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}
