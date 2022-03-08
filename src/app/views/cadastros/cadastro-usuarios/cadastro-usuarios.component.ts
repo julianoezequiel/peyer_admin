@@ -9,6 +9,7 @@ import { UserFirebase } from "../../login/userfirebase.model";
 import { AuthData } from '../model/AuthData.model';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-cadastro-usuarios",
@@ -16,11 +17,11 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
   styleUrls: ["./cadastro-usuarios.component.css"],
 })
 export class CadastroUsuariosComponent implements OnInit {
-  
+
   private subscriptions: Subscription[] = [];
   userForm: FormGroup;
 
-  dataimage:any;
+  dataimage: any;
 
   // @ViewChild('fileInput') fileInput: ElementRef;
   fileAttr = 'Choose File';
@@ -31,8 +32,8 @@ export class CadastroUsuariosComponent implements OnInit {
     displayName: "",
     photoURL: "",
     emailVerified: true,
-    password:'',
-    password2:''
+    password: '',
+    password2: ''
   };
 
   constructor(
@@ -42,27 +43,28 @@ export class CadastroUsuariosComponent implements OnInit {
     private toastr: ToastrService,
     private usuarioService: UsuarioService,
     private activatedRoute: ActivatedRoute,
-    public auth: AuthService
-  ) {}
+    public auth: AuthService,
+    public translate: TranslateService
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
     const routeSubscription = this.activatedRoute.params.subscribe(
-			(params) => {
-				const id = params.id;
-				if (id && id.length > 0) {
-					const material = this.usuarioService
-						.read(id)
-            .valueChanges();            
-					material.subscribe((value) => {
-						this.userData = value;
-						this.userData.uid = id;
+      (params) => {
+        const id = params.id;
+        if (id && id.length > 0) {
+          const material = this.usuarioService
+            .read(id)
+            .valueChanges();
+          material.subscribe((value) => {
+            this.userData = value;
+            this.userData.uid = id;
             this.createForm();
-					});						
-				} 
-			}
-		);
-		this.subscriptions.push(routeSubscription);
+          });
+        }
+      }
+    );
+    this.subscriptions.push(routeSubscription);
   }
 
   createForm() {
@@ -71,10 +73,10 @@ export class CadastroUsuariosComponent implements OnInit {
       email: [this.userData.email, [Validators.required, Validators.email]],
       senha: [this.userData.password, [Validators.required, Validators.minLength(6)]],
       senha_confirma: [
-        this.userData.password2,[
-        Validators.required,
-        Validators.minLength(6),
-      ]],
+        this.userData.password2, [
+          Validators.required,
+          Validators.minLength(6),
+        ]],
     });
   }
 
@@ -98,48 +100,48 @@ export class CadastroUsuariosComponent implements OnInit {
     this.addUser(userFirebase);
   }
 
-  addUser(userFirebase: UserFirebase) {    
-    this.auth.SignUp(userFirebase).then((result)=>{
+  addUser(userFirebase: UserFirebase) {
+    this.auth.SignUp(userFirebase).then((result) => {
       userFirebase.uid = result.uid;
-      this.toastr.success('Usuário cadastrado com sucesso, email de verificação enviado para ' + userFirebase.email,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+      this.toastr.success(this.translate.instant('cadastros.usuarios.msg.sucesso', { 'value': userFirebase.email }), this.translate.instant('alerta.title.atencao'), { closeButton: true, progressAnimation: "decreasing", progressBar: true });
       // this.updateUser(userFirebase);    
-   }).catch((error)=>{
-    this.toastr.warning(error,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-   })
-  }
-
-  excluir(userFirebase:UserFirebase){
-    this.usuarioService.delete(userFirebase.uid).then(()=>{
-      this.toastr.success('Usuário excluído com sucesso','Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-    }).catch((error)=>{
-      this.toastr.warning(error,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+    }).catch((error) => {
+      this.toastr.warning(error, this.translate.instant('alerta.title.atencao'), { closeButton: true, progressAnimation: "decreasing", progressBar: true });
     })
   }
 
-  updateUser(userFirebase:UserFirebase) {   
-    this.usuarioService.update(userFirebase.uid,userFirebase).then((result)=>{
-      this.toastr.success('Usuário cadastrado com sucesso, email de verificação enviado para ' + userFirebase.email,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-     }).catch((error)=>{
-      this.toastr.warning(error,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-     })
+  excluir(userFirebase: UserFirebase) {
+    this.usuarioService.delete(userFirebase.uid).then(() => {
+      this.toastr.success(this.translate.instant('cadastros.usuarios.msg.exclusao'), this.translate.instant('alerta.title.atencao'), { closeButton: true, progressAnimation: "decreasing", progressBar: true });
+    }).catch((error) => {
+      this.toastr.warning(error, this.translate.instant('alerta.title.atencao'), { closeButton: true, progressAnimation: "decreasing", progressBar: true });
+    })
+  }
+
+  updateUser(userFirebase: UserFirebase) {
+    this.usuarioService.update(userFirebase.uid, userFirebase).then((result) => {
+      this.toastr.success(this.translate.instant('cadastros.usuarios.msg.sucesso', { 'value': userFirebase.email }), this.translate.instant('alerta.title.atencao'), { closeButton: true, progressAnimation: "decreasing", progressBar: true });
+    }).catch((error) => {
+      this.toastr.warning(error, this.translate.instant('alerta.title.atencao'), { closeButton: true, progressAnimation: "decreasing", progressBar: true });
+    })
   }
 
   prepareUser(): UserFirebase {
     const controls = this.userForm.controls;
-    const userFirebase : UserFirebase = {
-      uid : this.userData.uid,
+    const userFirebase: UserFirebase = {
+      uid: this.userData.uid,
       displayName: controls.usuario.value,
-      email:controls.email.value,
-      photoURL:'',
-      emailVerified:false,
-      password:controls.senha.value,
-      password2:controls.senha_confirma.value,
+      email: controls.email.value,
+      photoURL: '',
+      emailVerified: false,
+      password: controls.senha.value,
+      password2: controls.senha_confirma.value,
     }
 
     return userFirebase;
   }
 
-  voltar(){
+  voltar() {
     this.router.navigate(["../lista-de-usuario"], {});
   }
 
@@ -147,7 +149,7 @@ export class CadastroUsuariosComponent implements OnInit {
     if (imgFile.target.files && imgFile.target.files[0]) {
       this.fileAttr = '';
       Array.from(imgFile.target.files).forEach((file: File) => {
-        this.fileAttr += file.name ;
+        this.fileAttr += file.name;
       });
 
       // HTML5 FileReader API
@@ -162,7 +164,7 @@ export class CadastroUsuariosComponent implements OnInit {
         };
       };
       reader.readAsDataURL(imgFile.target.files[0]);
-      
+
     } else {
       this.fileAttr = 'Choose File';
     }

@@ -1,16 +1,16 @@
 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-      <mat-card-title>{{'cadastros.usuarios'|translate}}</mat-card-title>
+      <mat-card-title>{{'cadastros.usuarios.titulo'|translate}}</mat-card-title>
       <!-- <mat-card-title>Título </mat-card-title> -->
     </mat-card-header>
     <div class="row">
       <div class="col-md-5">
         <mat-form-field appearance="fill" >
-          <mat-label>Nome de Usuário</mat-label>
+          <mat-label>{{'cadastros.usuarios.nomeusuario'|translate}}</mat-label>
           <input matInput  formControlName="usuario">
           <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
-            Nome usuário é <strong>obrigatório</strong>
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
           </mat-error>
         </mat-form-field>
       </div>
@@ -18,13 +18,13 @@
     <div class="row">
       <div class="col-6">
         <mat-form-field appearance="fill" >
-          <mat-label>E-mail</mat-label>
+          <mat-label>{{'cadastros.usuarios.email'|translate}}</mat-label>
           <input matInput formControlName="email" type="email">
           <mat-error *ngIf="userForm.controls['email'].hasError('required')">
-            E-mail é <strong>obrigatório</strong>
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
           </mat-error>
           <mat-error *ngIf="userForm.controls['email'].hasError('email')">
-            E-mail é <strong>inválido</strong>
+            <strong>{{'cadastros.campo.invalido'|translate}}</strong>
           </mat-error>
         </mat-form-field>
       </div>
@@ -33,13 +33,13 @@
     <div class="row">
       <div class="col">
         <mat-form-field appearance="fill" >
-          <mat-label>Senha</mat-label>
+          <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
           <input matInput formControlName="senha" type="password">
           <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
-            Senha é <strong>obrigatória</strong>
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
           </mat-error>
           <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
-           Tamanho mínimo  <strong>6 dígitos</strong>
+           {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
           </mat-error>
         </mat-form-field>
       </div>   
@@ -47,13 +47,13 @@
     <div class="row">
         <div class="col">
           <mat-form-field appearance="fill" >
-            <mat-label>Senha</mat-label>
+            <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
             <input matInput formControlName="senha_confirma"  type="password">
             <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
-              Senha é <strong>obrigatória</strong>
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
             </mat-error>
             <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
-              Tamanho mínimo  <strong>6 dígitos</strong>
+              {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
             </mat-error>
           </mat-form-field>
       </div>
@@ -68,8 +68,8 @@
       <div><img src="{{dataimage}}" width="300px"></div>
     </div>
     <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Salvar</button>
-      <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Voltar</button>
+      <button mat-raised-button color="primary" type="submit">{{'cadastros.salvar'|translate}}</button>
+      <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">{{'cadastros.voltar'|translate}}</button>
     </mat-card-actions>
   </mat-card>
   </form>
