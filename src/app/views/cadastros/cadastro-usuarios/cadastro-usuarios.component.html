@@ -1,7 +1,7 @@
 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-      <mat-card-title>Cadastro de Usuários </mat-card-title>
+      <mat-card-title>{{'cadastros.usuarios'|translate}}</mat-card-title>
       <!-- <mat-card-title>Título </mat-card-title> -->
     </mat-card-header>
     <div class="row">
@@ -58,6 +58,15 @@
           </mat-form-field>
       </div>
     </div>  
+    <div>
+        <div>
+      
+          <!-- Fetch selected filed on change -->
+          <input type="file"   #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"
+            accept="image/*" />
+        </div>
+      <div><img src="{{dataimage}}" width="300px"></div>
+    </div>
     <mat-card-actions>
       <button mat-raised-button color="primary" type="submit">Salvar</button>
       <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Voltar</button>

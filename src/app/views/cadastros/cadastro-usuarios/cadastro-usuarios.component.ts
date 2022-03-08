@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -8,6 +8,7 @@ import { AuthService } from "../../login/auth.service";
 import { UserFirebase } from "../../login/userfirebase.model";
 import { AuthData } from '../model/AuthData.model';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { AngularFirestoreModule } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-cadastro-usuarios",
@@ -18,6 +19,11 @@ export class CadastroUsuariosComponent implements OnInit {
   
   private subscriptions: Subscription[] = [];
   userForm: FormGroup;
+
+  dataimage:any;
+
+  // @ViewChild('fileInput') fileInput: ElementRef;
+  fileAttr = 'Choose File';
 
   userData: UserFirebase = {
     uid: "",
@@ -135,5 +141,30 @@ export class CadastroUsuariosComponent implements OnInit {
 
   voltar(){
     this.router.navigate(["../lista-de-usuario"], {});
+  }
+
+  uploadFileEvt(imgFile: any) {
+    if (imgFile.target.files && imgFile.target.files[0]) {
+      this.fileAttr = '';
+      Array.from(imgFile.target.files).forEach((file: File) => {
+        this.fileAttr += file.name ;
+      });
+
+      // HTML5 FileReader API
+      let reader = new FileReader();
+      reader.onload = (e: any) => {
+        let image = new Image();
+        image.src = e.target.result;
+        image.onload = rs => {
+          let imgBase64Path = e.target.result;
+          console.log(imgBase64Path);
+          this.dataimage = imgBase64Path;
+        };
+      };
+      reader.readAsDataURL(imgFile.target.files[0]);
+      
+    } else {
+      this.fileAttr = 'Choose File';
+    }
   }
 }
