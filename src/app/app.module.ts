@@ -107,6 +107,9 @@ import { FilterPipe } from './views/filter-pipe.pipe';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import 'firebase/storage';
+
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -132,6 +135,7 @@ const maskConfig: Partial<IConfig> = {
     AngularFireModule.initializeApp(environment.firebase),   
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
     FormsModule,
     ReactiveFormsModule,    
     HttpClientModule,
@@ -162,7 +166,8 @@ const maskConfig: Partial<IConfig> = {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient]
       }
-  })
+  }),
+  
   ],
   declarations: [
     AppComponent,
