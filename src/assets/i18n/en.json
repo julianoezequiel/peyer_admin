@@ -1,3 +1,29 @@
 {
-    "cadastros.usuarios":"Users"
+    
+    "cadastros.usuarios.msg.sucesso": "User successfully registered, verification email sent to {{value}}",
+    "cadastros.usuarios.msg.exclusao": "User successfully deleted",
+    "alerta.title.atencao": "Attention!",
+   
+    "cadastros.lista.usuario": "User",
+    "cadastros.lista.email": "Email",
+    "cadastros.lista.acoes": "Actions",
+    
+    "cadastros": {
+        "salvar":"Save",
+        "voltar": "Back",
+        "adicionar": "New",
+        "buscar": "Search",
+        "usuarios": {
+            "titulo":"Users",
+            "nomeusuario":"Username",
+            "email":"Email",
+            "senha": "Password"
+        },
+        "campo":{
+            "obrigatorio": "required",
+            "invalido": "invalid",
+            "min-length":"Min. length",
+            "6-digitos": "6 digits"
+        }
+    }
 }

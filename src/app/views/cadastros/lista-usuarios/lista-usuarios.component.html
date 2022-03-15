@@ -1,54 +1,43 @@
 <mat-card class="shipping-card">
   <mat-card-header>
     <!-- <mat-card-title>Produtos</mat-card-title>    -->
-    <mat-card-title>Usuários</mat-card-title>   
+    <mat-card-title>{{'cadastros.usuarios.titulo'|translate}}</mat-card-title>
   </mat-card-header>
   <div class="mat-elevation-z8">
     <div class="row">
       <div class="col" style="margin: 15px 15px 15px 15px;">
-        <button  style="float: left;margin: 15px;" mat-raised-button color="primary" 
-        type="button" (click)="adicionar()">Adicionar</button>
+        <button style="float: left;margin: 15px;" mat-raised-button color="primary" type="button"
+          (click)="adicionar()">{{'cadastros.adicionar'| translate}}</button>
       </div>
       <div class="col" style="margin: 15px 15px 15px 15px;">
-        <mat-form-field class="input-full-width"  style="width: 100%;">
-          <mat-label>Buscar</mat-label>
+        <mat-form-field class="input-full-width" style="width: 100%;">
+          <mat-label>{{'cadastros.buscar'| translate}}</mat-label>
           <mat-icon matPrefix>search</mat-icon>
           <input matInput (keyup)="applyFilter($event.target.value)" type="search" placeholder="Buscar">
         </mat-form-field>
-     </div>
+      </div>
     </div>
     <div class=" table-responsive">
       <table mat-table class="full-width-table" aria-label="Elements" matSort [dataSource]="dataSource">
         <!-- Id Column -->
         <ng-container matColumnDef="displayName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuário</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >{{'cadastros.lista.usuario'| translate}}</th>
           <td mat-cell *matCellDef="let row">{{ row.displayName }}</td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.lista.email'|translate}}</th>
           <td mat-cell *matCellDef="let row">{{ row.email }}</td>
         </ng-container>
 
         <ng-container matColumnDef="acoes">
-          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <th mat-header-cell *matHeaderCellDef>{{'cadastros.lista.acoes'|translate}}</th>
           <td mat-cell *matCellDef="let m">
-            <button
-              (click)="editar(m.uid)"
-              mat-icon-button
-              color="primary"
-              matTooltip="Editar"
-            >
-              <mat-icon>create</mat-icon></button
-            >&nbsp;
-            <button
-              mat-icon-button
-              color="warn"
-              matTooltip="Excluir"
-              type="button"
-              (click)="confirmDialog(m)"
-            >
+            <button (click)="editar(m.uid)" mat-icon-button color="primary" matTooltip="Editar">
+              <mat-icon>create</mat-icon>
+            </button>&nbsp;
+            <button mat-icon-button color="warn" matTooltip="Excluir" type="button" (click)="confirmDialog(m)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -58,13 +47,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-    <mat-paginator
-      #paginator
-      [length]="dataSource?.data.length"
-      [pageIndex]="0"
-      [pageSize]="5"
-      [pageSizeOptions]="[5,25, 50, 100, 250]"
-    >
+    <mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+      [pageSizeOptions]="[5,25, 50, 100, 250]">
     </mat-paginator>
   </div>
 </mat-card>

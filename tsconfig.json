@@ -9,7 +9,6 @@
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "target": "es5",
     "typeRoots": [
