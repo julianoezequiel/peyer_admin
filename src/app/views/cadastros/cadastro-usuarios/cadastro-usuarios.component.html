@@ -1,76 +1,98 @@
 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
-  <mat-card class="shipping-card">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>{{'cadastros.usuarios.titulo'|translate}}</mat-card-title>
       <!-- <mat-card-title>Título </mat-card-title> -->
     </mat-card-header>
-    <div class="row">
-      <div class="col-md-5">
-        <mat-form-field appearance="fill" >
-          <mat-label>{{'cadastros.usuarios.nomeusuario'|translate}}</mat-label>
-          <input matInput  formControlName="usuario">
-          <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
-            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <mat-form-field appearance="fill" >
-          <mat-label>{{'cadastros.usuarios.email'|translate}}</mat-label>
-          <input matInput formControlName="email" type="email">
-          <mat-error *ngIf="userForm.controls['email'].hasError('required')">
-            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-          </mat-error>
-          <mat-error *ngIf="userForm.controls['email'].hasError('email')">
-            <strong>{{'cadastros.campo.invalido'|translate}}</strong>
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
 
     <div class="row">
+
+
       <div class="col">
-        <mat-form-field appearance="fill" >
-          <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
-          <input matInput formControlName="senha" type="password">
-          <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
-            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-          </mat-error>
-          <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
-           {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
-          </mat-error>
-        </mat-form-field>
-      </div>   
-    </div>
-    <div class="row">
-        <div class="col">
-          <mat-form-field appearance="fill" >
-            <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
-            <input matInput formControlName="senha_confirma"  type="password">
-            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
-              {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
-            </mat-error>
-          </mat-form-field>
-      </div>
-    </div>  
-    <div>
-        <div>
-      
-          <!-- Fetch selected filed on change -->
-          <input type="file"   #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"
-            accept="image/*" />
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'cadastros.usuarios.nomeusuario'|translate}}</mat-label>
+              <input matInput formControlName="usuario">
+              <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
+                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
-      <div><img src="{{dataimage}}" width="300px"></div>
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'cadastros.usuarios.email'|translate}}</mat-label>
+              <input matInput formControlName="email" type="email">
+              <mat-error *ngIf="userForm.controls['email'].hasError('required')">
+                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+              </mat-error>
+              <mat-error *ngIf="userForm.controls['email'].hasError('email')">
+                <strong>{{'cadastros.campo.invalido'|translate}}</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
+              <input matInput formControlName="senha" type="password">
+              <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
+                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+              </mat-error>
+              <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
+                {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
+              <input matInput formControlName="senha_confirma" type="password" >
+              <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
+                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+              </mat-error>
+              <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
+                {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        
+          <div class="container"><img *ngIf="dataimage" src="{{dataimage}}" width="300px"></div>
+          <div class="container" *ngIf="!dataimage && downloadURL | async; let url">
+            <img [src]="url" alt="Image from AngularFireStorage" width="300px">
+          </div>
+       
+          <!-- Readonly Input to show File names -->
+          <input matInput [(ngModel)]="fileAttr" readonly name="memberContactNo" />
+
+          <!-- Browse Button -->
+          <button mat-flat-button color="primary">
+            {{'cadastros.upload'|translate}}
+          </button>
+
+
+          <!-- Fetch selected filed on change -->
+          <input type="file" #UploadFileInput id="fileUpload" (change)="uploadFileEvt($event)" name="fileUpload"
+            multiple="multiple" accept="image/*" />
+
+      </div>
+
     </div>
+
     <mat-card-actions>
       <button mat-raised-button color="primary" type="submit">{{'cadastros.salvar'|translate}}</button>
-      <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">{{'cadastros.voltar'|translate}}</button>
+      <button style="float: right;" mat-raised-button color="danger" type="button"
+        (click)="voltar()">{{'cadastros.voltar'|translate}}</button>
     </mat-card-actions>
   </mat-card>
-  </form>
-  
+</form>

@@ -10,6 +10,8 @@ import { AuthData } from '../model/AuthData.model';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { TranslateService } from "@ngx-translate/core";
+import { AngularFireStorage } from '@angular/fire/storage';
+
 
 @Component({
   selector: "app-cadastro-usuarios",
@@ -22,6 +24,9 @@ export class CadastroUsuariosComponent implements OnInit {
   userForm: FormGroup;
 
   dataimage: any;
+  contentType: any;
+  imageFile: any;
+  downloadURL:any;
 
   // @ViewChild('fileInput') fileInput: ElementRef;
   fileAttr = 'Choose File';
@@ -44,7 +49,8 @@ export class CadastroUsuariosComponent implements OnInit {
     private usuarioService: UsuarioService,
     private activatedRoute: ActivatedRoute,
     public auth: AuthService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private angularFireStorage: AngularFireStorage
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +66,7 @@ export class CadastroUsuariosComponent implements OnInit {
             this.userData = value;
             this.userData.uid = id;
             this.createForm();
+            this.downloadPhoto(this.userData);
           });
         }
       }
@@ -80,7 +87,7 @@ export class CadastroUsuariosComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     const controls = this.userForm.controls;
     /** check form */
     if (this.userForm.invalid) {
@@ -92,12 +99,17 @@ export class CadastroUsuariosComponent implements OnInit {
 
     const userFirebase: UserFirebase = this.prepareUser();
 
+     await this.uploadPhoto();
+
     if (userFirebase.uid) {
       this.updateUser(userFirebase);
-      return;
+    } else {
+      this.addUser(userFirebase);
+
     }
 
-    this.addUser(userFirebase);
+
+
   }
 
   addUser(userFirebase: UserFirebase) {
@@ -132,7 +144,7 @@ export class CadastroUsuariosComponent implements OnInit {
       uid: this.userData.uid,
       displayName: controls.usuario.value,
       email: controls.email.value,
-      photoURL: '',
+      photoURL: this.userData.photoURL,
       emailVerified: false,
       password: controls.senha.value,
       password2: controls.senha_confirma.value,
@@ -145,12 +157,43 @@ export class CadastroUsuariosComponent implements OnInit {
     this.router.navigate(["../lista-de-usuario"], {});
   }
 
+  async uploadPhoto() {
+    if (this.imageFile) {
+      try {
+
+        let nomeFoto = this.fileAttr;
+
+        const storageRef = this.angularFireStorage.ref('user-images/' + nomeFoto);
+
+        const task = storageRef.put(this.imageFile);
+
+        const urlPhoto = (await task.task).ref.fullPath;
+     
+        this.userData.photoURL = urlPhoto;
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+   downloadPhoto(userData: UserFirebase){
+   
+    this.downloadURL = this.angularFireStorage.ref('/'+ userData.photoURL).getDownloadURL();
+    
+    console.log(this.downloadURL);  
+
+  }
+
   uploadFileEvt(imgFile: any) {
     if (imgFile.target.files && imgFile.target.files[0]) {
       this.fileAttr = '';
       Array.from(imgFile.target.files).forEach((file: File) => {
         this.fileAttr += file.name;
+        this.contentType = file.type;
       });
+
+      this.imageFile = imgFile.target.files[0];
 
       // HTML5 FileReader API
       let reader = new FileReader();
@@ -159,12 +202,11 @@ export class CadastroUsuariosComponent implements OnInit {
         image.src = e.target.result;
         image.onload = rs => {
           let imgBase64Path = e.target.result;
-          console.log(imgBase64Path);
+          // console.log(imgBase64Path);
           this.dataimage = imgBase64Path;
         };
       };
       reader.readAsDataURL(imgFile.target.files[0]);
-
     } else {
       this.fileAttr = 'Choose File';
     }
