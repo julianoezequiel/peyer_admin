@@ -1,7 +1,10 @@
 {
     
     "alerta.title.atencao": "Attention!",
-    
+    "menu":{
+        "dashboard":"Dashboard",
+        "usuarios": "Users"
+    },
     "cadastros": {
         "salvar":"Save",
         "voltar": "Back",

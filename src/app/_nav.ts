@@ -1,8 +1,9 @@
 import { INavData } from "@coreui/angular";
 
+
 export const navItems: INavData[] = [
   {
-    name: "Dashboard",
+    name:"menu.dashboard",
     url: "/dashboard",
     icon: "icon-speedometer",
     // badge: {
@@ -10,49 +11,49 @@ export const navItems: INavData[] = [
     //   text: "NEW",
     // },
   },
+  // {
+  //   name: 'Pedidos',
+  //   // name: "1",
+  //   url: "/lista-de-pedidos",
+  //   icon: "fa fa-cart-arrow-down ",
+  // },
+  // {
+  //   name: 'Produtos',
+  //   // name: "1",
+  //   url: "/lista-de-produtos",
+  //   icon: "fa fa-list",
+  // },
+  // {
+  //   name: 'Catálogos',
+  //   // name: "2",
+  //   url: "/lista-de-catalogo",
+  //   icon: "fa fa-shopping-cart",
+  // },
+  // {
+  //   name: 'Clientes',
+  //   // name: "2",
+  //   url: "/lista-de-clientes",
+  //   icon: "fa fa-address-card",
+  // },
   {
-    name: 'Pedidos',
-    // name: "1",
-    url: "/lista-de-pedidos",
-    icon: "fa fa-cart-arrow-down ",
-  },
-  {
-    name: 'Produtos',
-    // name: "1",
-    url: "/lista-de-produtos",
-    icon: "fa fa-list",
-  },
-  {
-    name: 'Catálogos',
-    // name: "2",
-    url: "/lista-de-catalogo",
-    icon: "fa fa-shopping-cart",
-  },
-  {
-    name: 'Clientes',
-    // name: "2",
-    url: "/lista-de-clientes",
-    icon: "fa fa-address-card",
-  },
-  {
-    name: 'Usuários',
+    name: 'menu.usuarios',
     // name: "4",
     url: "/lista-de-usuario",
     icon: "fa fa-user",
   },
-  {
-    name: 'Histórico',
-    // name: "6",
-    url: "/lista-de-historico",
-    icon: "fa fa-archive",
-  },
+  // {
+  //   name: 'Histórico',
+  //   // name: "6",
+  //   url: "/lista-de-historico",
+  //   icon: "fa fa-archive",
+  // },
   
-  {
-    name: 'Meu Pedido',
-    // name: "5",
-    url: "/pedido",
-    icon: "fa fa-shopping-basket",
-  },
+  // {
+  //   name: 'Meu Pedido',
+  //   // name: "5",
+  //   url: "/pedido",
+  //   icon: "fa fa-shopping-basket",
+  // },
 
   // {
   //   title: true,
