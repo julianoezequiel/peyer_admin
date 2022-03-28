@@ -1,0 +1,19 @@
+tela de login.
+
+campos  :
+username
+email
+senha
+cargo
+data nascimento
+foto
+permissao: empregado ou administrativo
+
+sub tela : contatos emergencia
+usar como chave o id do usuario.
+ campos:
+nome
+telefone
+
+
+    
