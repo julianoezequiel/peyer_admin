@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Router, ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { UsuarioService } from "../services/usuario.service";
 import { AuthService } from "../../login/auth.service";
@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { TranslateService } from "@ngx-translate/core";
 import { AngularFireStorage } from '@angular/fire/storage';
+import moment from "moment";
+import { ContentObserver } from "@angular/cdk/observers";
 
 
 @Component({
@@ -28,6 +30,8 @@ export class CadastroUsuariosComponent implements OnInit {
   imageFile: any;
   downloadURL:any;
 
+  maxDate: Date = new Date();
+
   // @ViewChild('fileInput') fileInput: ElementRef;
   fileAttr = 'Choose File';
 
@@ -38,7 +42,10 @@ export class CadastroUsuariosComponent implements OnInit {
     photoURL: "",
     emailVerified: true,
     password: '',
-    password2: ''
+    password2: '',
+    jobTitle: '',
+    birthDate: '',
+    permission: '',
   };
 
   constructor(
@@ -84,6 +91,9 @@ export class CadastroUsuariosComponent implements OnInit {
           Validators.required,
           Validators.minLength(6),
         ]],
+      cargo: [this.userData.jobTitle, [Validators.required]],
+      dataNascimento: [this.userData.birthDate, [Validators.required]],
+      permissao: [this.userData.permission, [Validators.required]]
     });
   }
 
@@ -99,7 +109,9 @@ export class CadastroUsuariosComponent implements OnInit {
 
     const userFirebase: UserFirebase = this.prepareUser();
 
-     await this.uploadPhoto();
+    //console.log(controls);
+    
+    await this.uploadPhoto();
 
     if (userFirebase.uid) {
       this.updateUser(userFirebase);
@@ -148,6 +160,9 @@ export class CadastroUsuariosComponent implements OnInit {
       emailVerified: false,
       password: controls.senha.value,
       password2: controls.senha_confirma.value,
+      jobTitle: controls.cargo.value,
+      birthDate: new Date (controls.dataNascimento.value).toLocaleDateString(),
+      permission: controls.permissao.value
     }
 
     return userFirebase;
@@ -211,4 +226,5 @@ export class CadastroUsuariosComponent implements OnInit {
       this.fileAttr = 'Choose File';
     }
   }
+
 }

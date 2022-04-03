@@ -53,7 +53,10 @@ export class UsuarioService {
            photoURL: e.payload.doc.data()["photoURL"],
            emailVerified:e.payload.doc.data()["emailVerified"],
            password:'',
-           password2:''
+           password2:'',
+           jobTitle: e.payload.doc.data()["jobTitle"],
+           birthDate: e.payload.doc.data()["birthDate"],
+           permission: e.payload.doc.data()["permission"],
          }
        })
        acept(lista);

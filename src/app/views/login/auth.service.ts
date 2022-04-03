@@ -99,8 +99,11 @@ export class AuthService implements OnInit{
               displayName: userFirebase.displayName,
               photoURL: result.user.photoURL,
               emailVerified: result.user.emailVerified,
-              password: "",
-              password2: "",
+              password: userFirebase.password,
+              password2: userFirebase.password2,
+              jobTitle: userFirebase.jobTitle,
+              birthDate: userFirebase.birthDate,
+              permission: userFirebase.permission
             };
             this.SetUserData(userData);
             resolve(userData);
@@ -177,8 +180,11 @@ export class AuthService implements OnInit{
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      password: "",
-      password2: "",
+      password: user.password,
+      password2: user.password2,
+      jobTitle: user.jobTitle,
+      birthDate: user.birthDate,
+      permission: user.permission
     };
 
     return userRef.set(userData, {

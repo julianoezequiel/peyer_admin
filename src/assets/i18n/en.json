@@ -18,6 +18,9 @@
             "nomeusuario":"Username",
             "email":"Email",
             "senha": "Password",
+            "cargo": "Job Title",
+            "dataNascimento": "Birth Date",
+            "permissao": "Permission",
             "lista.email": "Email",
             "lista.acoes": "Actions",
             "lista.usuario": "User"

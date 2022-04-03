@@ -5,5 +5,8 @@ export interface UserFirebase {
     photoURL: string;
     emailVerified: boolean;
     password:string;
-    password2:string
+    password2:string;
+    jobTitle: string;
+    birthDate: string;
+    permission: string;
  }
