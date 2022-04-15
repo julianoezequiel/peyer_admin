@@ -1,3 +1,5 @@
+import { MaterialModule } from './material.module';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -159,6 +161,7 @@ const maskConfig: Partial<IConfig> = {
     MatSlideToggleModule,
     NgxLoadingModule.forRoot({}),
     DragDropModule,
+    MatGridListModule,
     NgxMaskModule.forRoot(maskConfig),    
     TranslateModule.forRoot({
       loader: {
@@ -166,7 +169,7 @@ const maskConfig: Partial<IConfig> = {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient]
       }
-  }),
+  }), MaterialModule,
   
   ],
   declarations: [
@@ -197,7 +200,7 @@ const maskConfig: Partial<IConfig> = {
     ListaClientesComponent,
     CadastroClientesComponent,
     ListaClientesBuscaComponent,
-    FilterPipe
+    FilterPipe,
   ],
   providers: [{
     provide: LocationStrategy,
@@ -210,9 +213,9 @@ const maskConfig: Partial<IConfig> = {
   ProdutosService,
   PedidosHistoricoService,
   { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
-  {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
-  { provide: LOCALE_ID, useValue: 'pt-BR' }  ,
-  {provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
+  {provide: MAT_DATE_LOCALE, useValue: 'en-US'},
+  { provide: LOCALE_ID, useValue: 'en-US' }  ,
+  //{provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
   CurrencyPipe,
   SearchFilterPipe,
   ClientesService

@@ -1,0 +1,21 @@
+(--) - Tela de login:
+
+campos:
+(OK) - username
+(OK) - email
+(OK) - senha
+(OK) - cargo
+(OK) - data nascimento
+(OK) - foto
+() - permissao: empregado ou administrativo
+
+(--) - Sub tela: Contatos de Emergência
+OBS: usar como chave o id do usuario.
+
+campos:
+(--) - nome
+(--) - telefone
+
+31/12/1110
+
+01/01/111111

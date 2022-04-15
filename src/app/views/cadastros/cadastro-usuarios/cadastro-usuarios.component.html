@@ -1,16 +1,18 @@
 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{'cadastros.usuarios.titulo'|translate}}</mat-card-title>
-      <!-- <mat-card-title>Título </mat-card-title> -->
-    </mat-card-header>
-
     <div class="row">
-
-
       <div class="col">
-        <div class="row">
-          <div class="col-12">
+        <!-- CARD USER -->
+        <mat-card class="card-user">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="peyer-color-green">person</mat-icon>
+            <span class="card-title">{{'cadastros.usuarios.titulos.usuario'|translate}}</span>
+          </mat-card-header>
+
+          <mat-divider></mat-divider>
+
+          <!-- USERNAME -->
+          <div class="col">
             <mat-form-field appearance="fill">
               <mat-label>{{'cadastros.usuarios.nomeusuario'|translate}}</mat-label>
               <input matInput formControlName="usuario">
@@ -18,10 +20,8 @@
                 <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
               </mat-error>
             </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
+
+            <!-- EMAIL -->
             <mat-form-field appearance="fill">
               <mat-label>{{'cadastros.usuarios.email'|translate}}</mat-label>
               <input matInput formControlName="email" type="email">
@@ -32,14 +32,11 @@
                 <strong>{{'cadastros.campo.invalido'|translate}}</strong>
               </mat-error>
             </mat-form-field>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col-12">
+            <!-- PASSWORD -->
             <mat-form-field appearance="fill">
               <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
-              <input matInput formControlName="senha" type="password">
+              <input matInput formControlName="senha" type="password" autocomplete>
               <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
                 <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
               </mat-error>
@@ -47,25 +44,25 @@
                 {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
               </mat-error>
             </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
+
+            <!-- CONFIRM PASSWORD -->
             <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
-              <input matInput formControlName="senha_confirma" type="password" >
+              <mat-label>{{'cadastros.usuarios.senha.confirma'|translate}}</mat-label>
+              <input matInput formControlName="senha_confirma" type="password" autocomplete>
               <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
                 <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
               </mat-error>
               <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
                 {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
               </mat-error>
+              <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('confirmPassInvalid')">
+                <strong>
+                  {{'cadastros.campo.senha-confirma-invalido'|translate}}
+                </strong>
+              </mat-error>
             </mat-form-field>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col-12">
+            <!-- JOB TITLE -->
             <mat-form-field appearance="fill">
               <mat-label>{{'cadastros.usuarios.cargo'|translate}}</mat-label>
               <input matInput formControlName="cargo">
@@ -73,63 +70,94 @@
                 <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
               </mat-error>
             </mat-form-field>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col-12">
+            <!-- BIRTH DATE -->
             <mat-form-field>
               <mat-label>{{'cadastros.usuarios.dataNascimento'|translate}}</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="dataNascimento" [max]="maxDate">
-              <mat-hint>(DD/MM/YYYY)</mat-hint>
+              <input matInput [matDatepicker]="picker" formControlName="dataNascimento">
+              <mat-hint>(M/D/Y)</mat-hint>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
               <mat-error *ngIf="userForm.controls['dataNascimento'].hasError('required')">
                 <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
               </mat-error>
             </mat-form-field>
-          </div>
-        </div>
 
-        <div style="margin-top: 25px; margin-bottom: 18px;">
-          <mat-label>Select user permission:</mat-label>
-          <div style="margin-top: 5px;">
-            <mat-radio-group formControlName="permissao" color="primary">
-              <mat-radio-button checked value="employee" style="margin-right: 25px;">Employee</mat-radio-button>
-              <mat-radio-button value="administrative">Administrative</mat-radio-button>
-            </mat-radio-group>        
-          </div>
-        </div>
+            <!-- PERMISSIONS -->
+            <div class="permissions" formGroupName="permissao">
+              <span>{{'cadastros.usuarios.permissoes.titulo'|translate}}</span>
 
+              <div class="checkboxs-align">
+                <!-- Employee -->
+                <mat-checkbox id="employee" value="employee" formControlName="employee">
+                  <mat-label for="employee">{{'cadastros.usuarios.permissoes.funcionario'|translate}}</mat-label>
+                </mat-checkbox>
+                <!---->
+
+                <!-- Administrative -->
+                <mat-checkbox id="administrative" value="administrative" formControlName="administrative">
+                  <mat-label for="administrative">{{'cadastros.usuarios.permissoes.administrativo'|translate}}</mat-label>
+                </mat-checkbox>
+                <!---->
+
+                <!-- Driver -->
+                <mat-checkbox id="driver" value="driver" formControlName="driver">
+                  <mat-label for="driver">{{'cadastros.usuarios.permissoes.motorista'|translate}}</mat-label>
+                </mat-checkbox>
+                <!---->
+              </div>
+
+            </div>
+          </div>
+        </mat-card>
       </div>
 
       <div class="col">
-        
-          <div class="container"><img *ngIf="dataimage" src="{{dataimage}}" width="300px"></div>
-          <div class="container" *ngIf="!dataimage && downloadURL | async; let url">
-            <img [src]="url" alt="Image from AngularFireStorage" width="300px">
-          </div>
-       
-          <!-- Readonly Input to show File names -->
-          <input matInput [(ngModel)]="fileAttr" readonly name="memberContactNo" />
+        <!-- CARD PHOTO -->
+        <mat-card class="card-photo">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="peyer-color-green">add_a_photo</mat-icon>
+            <span class="card-title">{{'cadastros.usuarios.titulos.foto'|translate}}</span>
+          </mat-card-header>
+          <mat-divider></mat-divider>
 
-          <!-- Browse Button -->
-          <button mat-flat-button color="primary">
-            {{'cadastros.upload'|translate}}
-          </button>
+          <mat-card-content>
+            <img *ngIf="dataimage" src="{{dataimage}}">
+            <img *ngIf="!dataimage && downloadURL | async; let url" [src]="url" alt="Image from AngularFireStorage">
+          </mat-card-content>
 
+          <mat-divider></mat-divider>
 
-          <!-- Fetch selected filed on change -->
-          <input type="file" #UploadFileInput id="fileUpload" (change)="uploadFileEvt($event)" name="fileUpload"
-            multiple="multiple" accept="image/*" />
+          <mat-card-actions>
+            <!-- Browse Button File -->
+            <button mat-raised-button class="peyer-background-color-yellow file-upload">
+              <label for='file-upload' style="margin: 0;">{{'cadastros.upload'|translate}}</label>
+              <input style="display: none;" type="file" #UploadFileInput id="file-upload"
+                (change)="uploadFileEvt($event)" name="file-upload" multiple="multiple" accept="image/*" />
+            </button>
+          </mat-card-actions>
+        </mat-card>
 
+        <!-- CARD EMERGENCY CONTACTS -->
+        <mat-card class="card-emergency-contacts">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="peyer-color-green">contact_phone</mat-icon>
+            <span class="card-title">{{'cadastros.usuarios.titulos.contatos-emergencia'|translate}}</span>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+
+          <mat-list role="list">
+            <mat-list-item role="listitem">Item 1</mat-list-item>
+            <mat-list-item role="listitem">Item 2</mat-list-item>
+            <mat-list-item role="listitem">Item 3</mat-list-item>
+          </mat-list>
+        </mat-card>
       </div>
-
     </div>
 
-    <mat-card-actions>
+    <mat-card-actions align="end">
       <button mat-raised-button color="primary" type="submit">{{'cadastros.salvar'|translate}}</button>
-      <button style="float: right;" mat-raised-button color="danger" type="button"
+      <button mat-raised-button color="danger" type="button"
         (click)="voltar()">{{'cadastros.voltar'|translate}}</button>
     </mat-card-actions>
   </mat-card>

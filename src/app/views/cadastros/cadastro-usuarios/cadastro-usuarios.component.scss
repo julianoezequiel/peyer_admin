@@ -1,0 +1,80 @@
+mat-form-field {
+  width: 100%;
+  padding-top: 10px;
+}
+
+mat-card-header {
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+mat-icon[mat-card-avatar] {
+  font-size: 33px;
+  height: 33px;
+  width: 33px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+button {
+  width: 120px;
+  height: 40px;
+}
+
+/* CARD USER */
+.card-user {
+  height: 100%;
+
+  .permissions {
+    padding-top: 20px;
+  }
+
+  .checkboxs-align {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+}
+
+/* CARD PHOTO */
+.card-photo {
+  height: 50%;
+
+  mat-card-content {
+    margin-bottom: 0px;
+    height: 75%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  mat-card-actions {
+    padding-top: 10px;
+
+    .file-upload {
+      height: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+/* CARD EMERGENCY CONTACTS */
+.card-emergency-contacts {
+  margin-top: 6px;
+  height: 49%;
+}
+
+/* IMAGEM */
+img {
+  height: 210px;
+  border-radius: 50%;
+  width: 250px;
+}

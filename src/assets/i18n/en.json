@@ -1,35 +1,46 @@
 {
-    
-    "alerta.title.atencao": "Attention!",
-    "menu":{
-        "dashboard":"Dashboard",
-        "usuarios": "Users"
+  "alerta.title.atencao": "Attention!",
+  "menu": {
+    "dashboard": "Dashboard",
+    "usuarios": "Users"
+  },
+  "cadastros": {
+    "salvar": "Save",
+    "voltar": "Back",
+    "adicionar": "New",
+    "buscar": "Search",
+    "upload": "Choose a file",
+    "usuarios": {
+      "msg.sucesso": "User successfully registered, verification email sent to {{value}}",
+      "msg.exclusao": "User successfully deleted",
+      "nomeusuario": "Username",
+      "email": "Email",
+      "senha": "Password",
+      "senha.confirma": "Confirm Password",
+      "cargo": "Job Title",
+      "dataNascimento": "Birth Date",
+      "permissao": "Permission",
+      "lista.email": "Email",
+      "lista.acoes": "Actions",
+      "lista.usuario": "User",
+      "titulos": {
+        "usuario": "User",
+        "foto": "Photo",
+        "contatos-emergencia": "Emergency Contacts"
+      },
+      "permissoes": {
+          "titulo": "Select user permissions:",
+          "funcionario": "Employee",
+          "administrativo": "Administrative",
+          "motorista": "Driver"
+      }
     },
-    "cadastros": {
-        "salvar":"Save",
-        "voltar": "Back",
-        "adicionar": "New",
-        "buscar": "Search",
-        "upload": "Choose a file",
-        "usuarios": {
-            "msg.sucesso":"User successfully registered, verification email sent to {{value}}",
-            "msg.exclusao":"User successfully deleted",
-            "titulo":"Users",
-            "nomeusuario":"Username",
-            "email":"Email",
-            "senha": "Password",
-            "cargo": "Job Title",
-            "dataNascimento": "Birth Date",
-            "permissao": "Permission",
-            "lista.email": "Email",
-            "lista.acoes": "Actions",
-            "lista.usuario": "User"
-        },
-        "campo":{
-            "obrigatorio": "required",
-            "invalido": "invalid",
-            "min-length":"Min. length",
-            "6-digitos": "6 digits"
-        }
+    "campo": {
+      "obrigatorio": "Required",
+      "invalido": "Invalid",
+      "min-length": "Min. length is",
+      "6-digitos": "6 digits",
+      "senha-confirma-invalido": "Passwords do not match"
     }
+  }
 }

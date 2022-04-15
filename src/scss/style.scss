@@ -13,3 +13,31 @@ button.active:focus {
   outline: none !important;
   outline-style: none !important;
 }
+
+.peyer-color-green {
+  color: #00747a;
+}
+
+.peyer-background-color-green {
+  background-color: #00747a;
+}
+
+.peyer-color-yellow {
+  color: #ffe40c;
+}
+
+.peyer-background-color-yellow {
+  background-color: #ffe40c;
+}
+
+/* CHECKBOX */
+  // estado = checked (v)
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: #00747a !important;
+  }
+
+  // estado = indeterminate (-)
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #00747a !important;
+  }
+//------

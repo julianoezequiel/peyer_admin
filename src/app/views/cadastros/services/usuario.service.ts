@@ -56,7 +56,7 @@ export class UsuarioService {
            password2:'',
            jobTitle: e.payload.doc.data()["jobTitle"],
            birthDate: e.payload.doc.data()["birthDate"],
-           permission: e.payload.doc.data()["permission"],
+           permissions: e.payload.doc.data()["permissions"],
          }
        })
        acept(lista);
