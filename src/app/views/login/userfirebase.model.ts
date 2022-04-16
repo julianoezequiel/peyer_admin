@@ -1,3 +1,6 @@
+import { EmergencyContacts } from "../cadastros/model/emergencyContacts.model";
+import { Permissions } from "../cadastros/model/permissions.model";
+
 export interface UserFirebase {
   uid: string;
   email: string;
@@ -7,9 +10,6 @@ export interface UserFirebase {
   password: string;
   jobTitle: string;
   birthDate: string;
-  permissions: {
-    employee: boolean;
-    administrative: boolean;
-    driver: boolean;
-  };
+  permissions: Permissions;
+  emergencyContacts: EmergencyContacts[];
 }

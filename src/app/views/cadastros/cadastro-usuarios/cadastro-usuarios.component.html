@@ -96,7 +96,8 @@
 
                 <!-- Administrative -->
                 <mat-checkbox id="administrative" value="administrative" formControlName="administrative">
-                  <mat-label for="administrative">{{'cadastros.usuarios.permissoes.administrativo'|translate}}</mat-label>
+                  <mat-label for="administrative">{{'cadastros.usuarios.permissoes.administrativo'|translate}}
+                  </mat-label>
                 </mat-checkbox>
                 <!---->
 
@@ -146,11 +147,53 @@
           </mat-card-header>
           <mat-divider></mat-divider>
 
-          <mat-list role="list">
-            <mat-list-item role="listitem">Item 1</mat-list-item>
-            <mat-list-item role="listitem">Item 2</mat-list-item>
-            <mat-list-item role="listitem">Item 3</mat-list-item>
-          </mat-list>
+          <div class="table-conf">
+            <!-- TABELA -->
+            <table mat-table [dataSource]="dataSourceEC" matSort matSortActive="nome" matSortDirection="asc"
+              matSortDisableClear>
+
+              <!-- Definindo cabeçalho e linhas da tabela -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <!---->
+
+              <!-- Coluna NAME -->
+              <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                <td mat-cell *matCellDef="let ec">
+                  <span [matTooltip]="ec.nome" matTooltipPosition="above">{{ec.nome}}</span>
+                </td>
+              </ng-container>
+              <!---->
+
+              <!-- Coluna PHONE -->
+              <ng-container matColumnDef="telefone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+                <td mat-cell *matCellDef="let ec">
+                  <span [matTooltip]="ec.telefone" matTooltipPosition="above">{{ec.telefone}}</span>
+                </td>
+              </ng-container>
+              <!---->
+              <!-- Coluna de ações -->
+              <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef>
+                  Editar
+                </th>
+                <td mat-cell *matCellDef="let ec">
+                  <button mat-icon-button matTooltip="Editar" matTooltipPosition="right" type="button">
+                    <mat-icon>edit</mat-icon>
+                  </button>&nbsp;
+                </td>
+              </ng-container>
+              <!---->
+            </table>
+          </div>
+          <!-- Paginação -->
+          <!-- <mat-spinner [diameter]="20" *ngIf="carregandoLista"></mat-spinner> -->
+          <mat-paginator #paginator [length]="dataSourceEC?.data.length" [pageIndex]="0" [pageSize]="5"
+            [pageSizeOptions]="[5,25, 50, 100, 250]" sticky>
+          </mat-paginator>
+          <!---->
         </mat-card>
       </div>
     </div>

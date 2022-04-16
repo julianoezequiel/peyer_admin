@@ -1,3 +1,4 @@
+import { EmergencyContacts } from './../model/emergencyContacts.model';
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -19,6 +20,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { AngularFireStorage } from "@angular/fire/storage";
 import moment from "moment";
 import { ContentObserver } from "@angular/cdk/observers";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: "app-cadastro-usuarios",
@@ -52,7 +56,14 @@ export class CadastroUsuariosComponent implements OnInit {
       administrative: false,
       driver: false,
     },
+    emergencyContacts: [{telefone: null, nome: ""}]
   };
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  
+  dataSourceEC: MatTableDataSource<EmergencyContacts>;
+  displayedColumns = ['nome','telefone','acoes'];
 
   constructor(
     public dialog: MatDialog,
@@ -74,8 +85,17 @@ export class CadastroUsuariosComponent implements OnInit {
       if (id && id.length > 0) {
         const material = this.usuarioService.read(id).valueChanges();
         material.subscribe((value) => {
+
           this.userData = value;
+          
+          if (!this.userData.emergencyContacts) {
+            this.userData.emergencyContacts = [];
+          }
+                   
           console.log("this.userData", this.userData);
+
+          this.buildEmergencyContacts();
+
           this.userData.uid = id;
           this.createForm();
           this.downloadPhoto(this.userData);
@@ -83,6 +103,12 @@ export class CadastroUsuariosComponent implements OnInit {
       }
     });
     this.subscriptions.push(routeSubscription);
+  }
+
+  buildEmergencyContacts() {
+    this.dataSourceEC = new MatTableDataSource(this.userData.emergencyContacts);
+    this.dataSourceEC.sort = this.sort;
+    this.dataSourceEC.paginator = this.paginator;
   }
 
   createForm() {
@@ -178,6 +204,7 @@ export class CadastroUsuariosComponent implements OnInit {
             progressBar: true,
           }
         );
+        this.router.navigate(["../lista-de-usuario"], {});
       })
       .catch((error) => {
         this.toastr.warning(
@@ -207,6 +234,7 @@ export class CadastroUsuariosComponent implements OnInit {
             progressBar: true,
           }
         );
+        this.router.navigate(["../lista-de-usuario"], {});
       })
       .catch((error) => {
         this.toastr.warning(
@@ -233,6 +261,7 @@ export class CadastroUsuariosComponent implements OnInit {
       jobTitle: controls.cargo.value,
       birthDate: new Date(controls.dataNascimento.value).toLocaleDateString(),
       permissions: controls.permissao.value,
+      emergencyContacts: this.userData.emergencyContacts
     };
 
     return userFirebase;

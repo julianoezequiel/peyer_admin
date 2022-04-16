@@ -102,7 +102,8 @@ export class AuthService implements OnInit{
               password: userFirebase.password,
               jobTitle: userFirebase.jobTitle,
               birthDate: userFirebase.birthDate,
-              permissions: userFirebase.permissions
+              permissions: userFirebase.permissions,
+              emergencyContacts: userFirebase.emergencyContacts,
             };
             this.SetUserData(userData);
             resolve(userData);
@@ -182,7 +183,8 @@ export class AuthService implements OnInit{
       password: user.password,
       jobTitle: user.jobTitle,
       birthDate: user.birthDate,
-      permissions: user.permissions
+      permissions: user.permissions,
+      emergencyContacts: user.emergencyContacts
     };
 
     return userRef.set(userData, {

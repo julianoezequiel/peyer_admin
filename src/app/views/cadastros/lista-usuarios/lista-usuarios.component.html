@@ -17,7 +17,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div class=" table-responsive">
+    
       <table mat-table class="full-width-table" aria-label="Elements" matSort [dataSource]="dataSource">
         <!-- Id Column -->
         <ng-container matColumnDef="displayName">
@@ -50,5 +50,5 @@
     <mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
       [pageSizeOptions]="[5,25, 50, 100, 250]">
     </mat-paginator>
-  </div>
+  
 </mat-card>

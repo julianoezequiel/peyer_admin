@@ -57,6 +57,7 @@ export class UsuarioService {
            jobTitle: e.payload.doc.data()["jobTitle"],
            birthDate: e.payload.doc.data()["birthDate"],
            permissions: e.payload.doc.data()["permissions"],
+           emergencyContacts: e.payload.doc.data()["emergencyContacts"],
          }
        })
        acept(lista);
