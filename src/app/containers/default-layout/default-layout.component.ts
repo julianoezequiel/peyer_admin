@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { navItems } from '../../_nav'
 import { Router } from '@angular/router'
@@ -6,7 +7,8 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './default-layout.component.html'
+  templateUrl: './default-layout.component.html',
+  styleUrls: ['./default-layout.component.scss']
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
   

@@ -7,6 +7,19 @@
 // If you want to add something do it here
 @import "custom";
 
+/* Customizing Angular Material Theme (Indigo & Pink) */
+@import "@angular/material/theming";
+@include mat-core();
+
+$custom-app-primary: mat-palette($peyer-green);
+$custom-app-accent: mat-palette($peyer-yellow);
+$custom-app-warn: mat-palette($peyer-warn);
+
+$custom-theme: mat-light-theme($custom-app-primary, $custom-app-accent, $custom-app-warn);
+
+@include angular-material-theme($custom-theme);
+/*---------------------------------------------*/
+
 button:focus,
 button:active:focus,
 button.active:focus {
@@ -14,30 +27,110 @@ button.active:focus {
   outline-style: none !important;
 }
 
-.peyer-color-green {
-  color: #00747a;
-}
-
-.peyer-background-color-green {
-  background-color: #00747a;
-}
-
-.peyer-color-yellow {
-  color: #ffe40c;
-}
-
-.peyer-background-color-yellow {
-  background-color: #ffe40c;
-}
-
 /* CHECKBOX */
-  // estado = checked (v)
-  .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-    background-color: #00747a !important;
-  }
+// estado = checked (v)
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #00747a !important;
+}
 
-  // estado = indeterminate (-)
-  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background-color: #00747a !important;
-  }
+// estado = indeterminate (-)
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #00747a !important;
+}
 //------
+
+/* SCROLLBAR */
+::-webkit-scrollbar-track {
+  background-color: #f4f4f4;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  background: #f4f4f4;
+}
+::-webkit-scrollbar-thumb {
+  background: #dad7d7;
+}
+
+/* PROGRESS SPINNER COLOR */
+.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: $peyer-color-green;
+}
+
+/* ICONS  */
+.icon-add {
+  color: $peyer-color-green;
+}
+
+.icon-danger {
+  color: $color-warn;
+}
+
+.icon-edit {
+  color: $peyer-color-green;
+}
+
+/* BEGIN (FORMULÁRIO) */
+.text-danger {
+  color: $color-warn !important;
+}
+
+.mat-form-field-ripple {
+  background-color: $peyer-color-green !important;
+}
+
+// Input (appearance=outline)
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #797878;
+  //opacity: 0.5 !important;
+}
+
+// Input focado (appearance=outline)
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: $peyer-color-green !important;
+}
+
+// Input with erro - linha (appearance=outline)
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid
+  .mat-form-field-outline-thick {
+  color: $color-warn;
+}
+
+// Input with erro - label
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: $color-warn;
+}
+
+// Label de erro
+.mat-error {
+  color: $color-warn;
+}
+
+// Label
+mat-form-field {
+  .mat-hint,
+  input,
+  ::placeholder,
+  .mat-form-field-label {
+    color: #797878;
+  }
+}
+
+// Label focused
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: $peyer-color-green !important;
+}
+
+// Quando o campo está readonly
+mat-form-field.mat-form-field-appearance-outline.isReadOnly {
+  .mat-form-field-outline {
+    background-color: #ccc !important;
+    color: rgba(0, 0, 0, 0.349) !important;
+    border-radius: 5px;
+  }
+  .mat-form-field-label {
+    color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+//---END (FORMULÁRIO)---

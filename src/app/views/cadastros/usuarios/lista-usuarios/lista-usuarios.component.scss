@@ -1,0 +1,19 @@
+.full-width-table {
+  width: 100%;
+}
+
+.mat-column-displayName {
+  width: 50%;
+}
+
+.mat-column-email {
+  width: 50%;
+}
+
+.mat-column-acoes {
+  text-align: center;
+
+  .buttons-align {
+    display: flex;
+  }
+}

@@ -1,3 +1,5 @@
+import { CadastroUsuariosComponent } from './views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component';
+import { ListaUsuariosComponent } from './views/cadastros/usuarios/lista-usuarios/lista-usuarios.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -11,8 +13,7 @@ import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './views/guard/auth.guard';
 import { CadastroPedidosComponent } from './views/cadastros/cadastro-pedidos/cadastro-pedidos.component';
 import { CadastroProdutosComponent } from './views/cadastros/cadastro-produtos/cadastro-produtos.component';
-import { CadastroUsuariosComponent } from './views/cadastros/cadastro-usuarios/cadastro-usuarios.component';
-import { ListaUsuariosComponent } from './views/cadastros/lista-usuarios/lista-usuarios.component';
+
 import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-pedidos.component';
 import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
 import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista-catalogos.component';

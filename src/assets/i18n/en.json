@@ -4,10 +4,16 @@
     "dashboard": "Dashboard",
     "usuarios": "Users"
   },
+  "titulo": {
+    "confirmar": "Do you want to confirm an operation?"
+  },
   "cadastros": {
     "salvar": "Save",
     "voltar": "Back",
     "adicionar": "New",
+    "remover": "Remove",
+    "editar": "Edit",
+    "acoes": "Actions",
     "buscar": "Search",
     "upload": "Choose a file",
     "usuarios": {
@@ -26,13 +32,15 @@
       "titulos": {
         "usuario": "User",
         "foto": "Photo",
+        "nome": "Name",
+        "telefone": "Phone",
         "contatos-emergencia": "Emergency Contacts"
       },
       "permissoes": {
-          "titulo": "Select user permissions:",
-          "funcionario": "Employee",
-          "administrativo": "Administrative",
-          "motorista": "Driver"
+        "titulo": "Select user permissions:",
+        "funcionario": "Employee",
+        "administrativo": "Administrative",
+        "motorista": "Driver"
       }
     },
     "campo": {
@@ -40,7 +48,14 @@
       "invalido": "Invalid",
       "min-length": "Min. length is",
       "6-digitos": "6 digits",
-      "senha-confirma-invalido": "Passwords do not match"
+      "senha-confirma-invalido": "Passwords do not match",
+      "formato-invalido": "Format is invalid",
+      "existe": "Value already exists",
+      "existe-invalidos": "Exists fields invalid in form"
+    },
+    "opcao": {
+      "sim": "Yes",
+      "nao": "No"
     }
   }
 }

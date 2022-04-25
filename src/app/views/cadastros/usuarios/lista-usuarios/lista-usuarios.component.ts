@@ -3,19 +3,19 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ListaUsuariosDataSource, ListaUsuariosItem } from './lista-usuarios-datasource';
-import { UserFirebase } from '../../login/userfirebase.model';
+import { UserFirebase } from '../../../login/userfirebase.model';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { UsuarioService } from '../services/usuario.service';
-import { AuthService } from '../../login/auth.service';
-import { ConfirmDialogModel, ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { UsuarioService } from '../../services/usuario.service';
+import { AuthService } from '../../../login/auth.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'lista-usuarios',
   templateUrl: './lista-usuarios.component.html',
-  styleUrls: ['./lista-usuarios.component.css']
+  styleUrls: ['./lista-usuarios.component.scss']
 })
 export class ListaUsuariosComponent implements AfterViewInit, OnInit {
 

@@ -1,19 +1,16 @@
-tela de login.
+(--) - Tela de login
+campos:
+(OK)	username
+(OK)	email
+(OK)	senha
+(OK)	cargo
+(--)	data nascimento
+(--)	foto
+(--)	codigo
+(--)	contato
+(OK)	permissao: empregado / administrativo / motorista
 
-campos  :
-username
-email
-senha
-cargo
-data nascimento
-foto
-permissao: empregado ou administrativo
-
-sub tela : contatos emergencia
-usar como chave o id do usuario.
- campos:
-nome
-telefone
-
-
-    
+(OK) - sub tela : contatos emergencia
+campos:
+(OK) - nome
+(OK) - telefone
