@@ -13,7 +13,7 @@ export class ConfirmDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
     // Update view with given values
-    this.title = data.title;
+    // this.title = data.title;
     this.message = data.message;
   }
 
@@ -38,6 +38,8 @@ export class ConfirmDialogComponent implements OnInit {
  */
 export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string) {
+  // constructor(public title: string, public message: string) {
+  // }
+  constructor(public message: string) {
   }
 }

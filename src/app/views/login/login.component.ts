@@ -1,16 +1,17 @@
-import { Component, ChangeDetectorRef, OnInit, OnDestroy } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { AuthService } from "./auth.service";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Subject, Observable } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
+import { ToastrService } from "ngx-toastr";
+import { Observable, Subject } from "rxjs";
 
-import { finalize, takeUntil, tap } from "rxjs/operators";
-import { AuthNoticeService } from "./auth-notice/auth-notice.service";
-import { ToastrService } from 'ngx-toastr';
+import { UsuarioService } from "../cadastros/services/usuario.service";
+import { AuthService } from "./auth.service";
 
 @Component({
   selector: "app-dashboard",
   templateUrl: "login.component.html",
+  styleUrls: ["login.component.scss"],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   // Public params
@@ -23,14 +24,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private returnUrl: any;
 
+  hideSenha: boolean;
+
   constructor(
     private router: Router,
     public auth: AuthService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-	private authNoticeService: AuthNoticeService,
-	private toastr: ToastrService
+    private usuarioService: UsuarioService,
+    private toastr: ToastrService,
+    public translate: TranslateService
   ) {
     this.unsubscribe = new Subject();
   }
@@ -42,6 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.returnUrl = params.returnUrl || "/";
     });
+
+    this.hideSenha = true;
   }
 
   ngOnDestroy(): void {
@@ -52,25 +58,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initLoginForm() {
     this.loginForm = this.fb.group({
-      email: ["",
-        Validators.compose([
-          Validators.required,
-          // Validators.email,
-          Validators.minLength(3),
-          Validators.maxLength(320), // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-        ]),
-      ],
-      password: ["",
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(100),
-        ]),
+      email: ["", Validators.compose([Validators.required, Validators.email])],
+      password: [
+        "",
+        Validators.compose([Validators.required, Validators.minLength(6)]),
       ],
     });
   }
 
-  submit() {
+  async onSubmit() {
     const controls = this.loginForm.controls;
     /** check form */
     if (this.loginForm.invalid) {
@@ -89,17 +85,50 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.auth
       .SignIn(authData.email, authData.password)
-      .then((result) => {
-		// localStorage.setItem("user", JSON.stringify(result));
-		this.router.navigate(["dashboard"]);
+      .then((result: any) => {
+        this.checkPermission(result.user.uid);
       })
-      .catch(() => {
-	  	this.toastr.warning('Usuário ou senha inválidos','Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+      .catch((error) => {
+        this.toastr.warning(
+          error,
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
       })
-      .finally(() => {
+      .finally(async () => {
         this.loading = false;
         this.cdr.markForCheck();
       });
+  }
+
+  checkPermission(userId: number) {
+    let userSub = this.usuarioService.read(userId).get();
+
+    userSub.subscribe((x) => {
+      let userAuth = x.data();
+
+      if (!userAuth.permissions.administrative) {
+        this.toastr.warning(
+          this.translate.instant("login.semPermissao"),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+        this.loading = false;
+        this.cdr.markForCheck();
+
+        return;
+      } else {
+        this.router.navigate(["dashboard"]);
+      }
+    });
   }
 
   isControlHasError(controlName: string, validationType: string): boolean {
@@ -113,22 +142,49 @@ export class LoginComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  esqueceuSenha(){
-
+  esqueceuSenha() {
     const controls = this.loginForm.controls;
 
     let email = controls.email.value;
-    if(!email){
-      this.toastr.warning("Informe um email.",'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});   
-      return; 
+    if (!email) {
+      this.toastr.warning(
+        this.translate.instant("login.informarEmail"),
+        this.translate.instant("alerta.atencao"),
+        {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        }
+      );
+      return;
     }
     this.loading = true;
-    this.auth.ForgotPassword(email).then((r)=>{
-      this.toastr.success('Link de recuperação enviado para seu email.','Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-    }).catch((e)=>{
-      this.toastr.warning(e,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
-    }).finally(()=>{
-      this.loading = false;
-    })
+    this.auth
+      .ForgotPassword(email)
+      .then((r) => {
+        this.toastr.success(
+          this.translate.instant("login.enviadoLinkRecuperacao"),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+      })
+      .catch((error) => {
+        this.toastr.warning(error, this.translate.instant("alerta.atencao"), {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+  }
+
+  changeCampoSenha($event) {
+    this.hideSenha = !this.hideSenha;
   }
 }

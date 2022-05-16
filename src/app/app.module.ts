@@ -5,28 +5,33 @@ import { LayoutModule } from "@angular/cdk/layout";
 import {
   CurrencyPipe,
   HashLocationStrategy,
-  LocationStrategy,
   LOCATION_INITIALIZED,
-  registerLocaleData,
+  LocationStrategy,
 } from "@angular/common";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
-import localePt from "@angular/common/locales/pt";
 import { APP_INITIALIZER, Injector, LOCALE_ID, NgModule } from "@angular/core";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { AngularFireStorageModule } from "@angular/fire/storage";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
-import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
-import { MatDatepickerModule } from "@angular/material/datepicker";
+import {
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+} from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatListModule } from "@angular/material/list";
-import { MatPaginatorModule } from "@angular/material/paginator";
+import {
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from "@angular/material/paginator";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
@@ -43,10 +48,15 @@ import {
   AppHeaderModule,
   AppSidebarModule,
 } from "@coreui/angular";
-import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { ChartsModule } from "ng2-charts";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { ModalModule } from "ngx-bootstrap/modal";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { NgxLoadingModule } from "ngx-loading";
 import { IConfig, NgxMaskModule } from "ngx-mask";
@@ -60,43 +70,18 @@ import { environment } from "../environments/environment";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app.routing";
 import { DefaultLayoutComponent } from "./containers";
+import { getDutchPaginatorIntl } from "./dutch-paginator-intl";
 import { MaterialModule } from "./material.module";
-import { CatalogoComponent } from "./views/cadastros/cadastro-catalogo/catalogo.component";
-import { ListaProdutosCatalogoComponent } from "./views/cadastros/cadastro-catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component";
-import { CadastroClientesComponent } from "./views/cadastros/cadastro-clientes/cadastro-clientes.component";
-import { CadastroPedidosComponent } from "./views/cadastros/cadastro-pedidos/cadastro-pedidos.component";
-import { ListaClientesBuscaComponent } from "./views/cadastros/cadastro-pedidos/lista-clientes-busca/lista-clientes-busca.component";
-import { CadastroProdutosComponent } from "./views/cadastros/cadastro-produtos/cadastro-produtos.component";
-import { HistoricoPedidosComponent } from "./views/cadastros/historico-pedidos/historico-pedidos.component";
-import { ListaCatalogosComponent } from "./views/cadastros/lista-catalogos/lista-catalogos.component";
-import { ListaClientesComponent } from "./views/cadastros/lista-clientes/lista-clientes.component";
-import { ListaHistoricoPedidosComponent } from "./views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component";
-import { ListaPedidosComponent } from "./views/cadastros/lista-pedidos/lista-pedidos.component";
-import { ListaProdutosComponent } from "./views/cadastros/lista-produtos/lista-produtos.component";
+import { FilterPipe } from "./shared/filter-pipe.pipe";
 import { PaginaSucessoComponent } from "./views/cadastros/pagina-sucesso/pagina-sucesso.component";
-import {
-  PedidoClienteComponent,
-  SearchFilterPipe,
-} from "./views/cadastros/pedido-cliente/pedido-cliente.component";
-import { PedidosHistoricoViewComponent } from "./views/cadastros/pedidos-historico-view/pedidos-historico-view.component";
-import { CatalogoService } from "./views/cadastros/services/catalogo.service";
-import { ClientesService } from "./views/cadastros/services/clientes.service";
-import { PedidosHistoricoService } from "./views/cadastros/services/pedidos-historico.service";
-import { PedidosService } from "./views/cadastros/services/pedidos.service";
-import { ProdutosService } from "./views/cadastros/services/produtos.service";
-import { TesteFormComponent } from "./views/cadastros/teste-form/teste-form.component";
-import { TesteNavComponent } from "./views/cadastros/teste-nav/teste-nav.component";
 import { CadastroUsuariosComponent } from "./views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component";
 import { ListaUsuariosComponent } from "./views/cadastros/usuarios/lista-usuarios/lista-usuarios.component";
 import { ConfirmDialogComponent } from "./views/confirm-dialog/confirm-dialog.component";
 import { P404Component } from "./views/error/404.component";
 import { P500Component } from "./views/error/500.component";
-import { FilterPipe } from "./views/filter-pipe.pipe";
 import { AuthGuard } from "./views/guard/auth.guard";
 import { AuthService } from "./views/login/auth.service";
 import { LoginComponent } from "./views/login/login.component";
-import { RegisterComponent } from "./views/register/register.component";
-import { ModalModule } from "ngx-bootstrap/modal";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -150,7 +135,7 @@ const maskConfig: Partial<IConfig> = {
     MatRadioModule,
     MatCardModule,
     MatDialogModule,
-    MatDatepickerModule,
+    //MatDatepickerModule,
     MatNativeDateModule,
     MatSlideToggleModule,
     NgxLoadingModule.forRoot({}),
@@ -166,6 +151,9 @@ const maskConfig: Partial<IConfig> = {
     }),
     MaterialModule,
     ModalModule.forRoot(),
+    MatMomentDateModule,
+    MatNativeDateModule,
+    PerfectScrollbarModule,
   ],
   declarations: [
     AppComponent,
@@ -173,28 +161,10 @@ const maskConfig: Partial<IConfig> = {
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent,
     CadastroUsuariosComponent,
-    CadastroProdutosComponent,
-    HistoricoPedidosComponent,
-    CadastroPedidosComponent,
     ListaUsuariosComponent,
-    TesteNavComponent,
-    TesteFormComponent,
-    ListaProdutosComponent,
-    ListaPedidosComponent,
-    ListaHistoricoPedidosComponent,
     ConfirmDialogComponent,
-    CatalogoComponent,
-    ListaProdutosCatalogoComponent,
-    ListaCatalogosComponent,
-    PedidoClienteComponent,
     PaginaSucessoComponent,
-    PedidosHistoricoViewComponent,
-    SearchFilterPipe,
-    ListaClientesComponent,
-    CadastroClientesComponent,
-    ListaClientesBuscaComponent,
     FilterPipe,
   ],
   providers: [
@@ -204,29 +174,37 @@ const maskConfig: Partial<IConfig> = {
     },
     AuthService,
     AuthGuard,
-    CatalogoService,
-    PedidosService,
-    ProdutosService,
-    PedidosHistoricoService,
     //{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
-    { provide: MAT_DATE_LOCALE, useValue: "en-US" },
-    { provide: LOCALE_ID, useValue: "en-US" },
+    { provide: LOCALE_ID, useValue: "de-CH" },
+    { provide: MAT_DATE_LOCALE, useValue: "de-CH" },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: "DD/MM/YYYY",
+        },
+        display: {
+          dateInput: "DD/MM/YYYY",
+          monthYearLabel: "MMMM YYYY",
+          dateA11yLabel: "LL",
+          monthYearA11yLabel: "MMMM YYYY",
+        },
+      },
+    },
     //{provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
     CurrencyPipe,
-    SearchFilterPipe,
-    ClientesService,
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFactory,
       deps: [TranslateService, Injector],
-      multi: true
-    }
+      multi: true,
+    },
+    {
+      provide: MatPaginatorIntl,
+      useValue: getDutchPaginatorIntl(),
+    },
   ],
-  entryComponents: [
-    ConfirmDialogComponent,
-    ListaProdutosCatalogoComponent,
-    ListaClientesBuscaComponent,
-  ],
+  entryComponents: [ConfirmDialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
@@ -237,19 +215,32 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 // for the application to wait for the translations to be initialized before rendering the page
-export function appInitializerFactory(translate: TranslateService, injector: Injector) {
-  return () => new Promise<any>((resolve: any) => {
-    const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
-    locationInitialized.then(() => {
-      const langToSet = 'en'
-      translate.setDefaultLang('en');
-      translate.use(langToSet).subscribe(() => {
-        console.info(`Successfully initialized '${langToSet}' language.'`);
-      }, err => {
-        console.error(`Problem with '${langToSet}' language initialization.'`);
-      }, () => {
-        resolve(null);
+export function appInitializerFactory(
+  translate: TranslateService,
+  injector: Injector
+) {
+  return () =>
+    new Promise<any>((resolve: any) => {
+      const locationInitialized = injector.get(
+        LOCATION_INITIALIZED,
+        Promise.resolve(null)
+      );
+      locationInitialized.then(() => {
+        const langToSet = "en";
+        translate.setDefaultLang("en");
+        translate.use(langToSet).subscribe(
+          () => {
+            console.info(`Successfully initialized '${langToSet}' language.'`);
+          },
+          (err) => {
+            console.error(
+              `Problem with '${langToSet}' language initialization.'`
+            );
+          },
+          () => {
+            resolve(null);
+          }
+        );
       });
     });
-  });
 }

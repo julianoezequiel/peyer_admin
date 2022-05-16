@@ -1,21 +1,34 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs/internal/Subscription';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { AngularFireStorage } from "@angular/fire/storage";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
+import moment from "moment";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ToastrService } from "ngx-toastr";
+import { Subscription } from "rxjs/internal/Subscription";
 
-import { AuthService } from '../../../login/auth.service';
-import { UserFirebase } from '../../../login/userfirebase.model';
-import { UsuarioService } from '../../services/usuario.service';
-import { EmergencyContacts } from './../../model/emergencyContacts.model';
-import { rowsAnimation } from './animations';
+import { rowsAnimation } from "../../../../shared/animations";
+import { AuthService } from "../../../login/auth.service";
+import { UserFirebase } from "../../model/userfirebase.model";
+import { UsuarioService } from "../../services/usuario.service";
+import { EmergencyContacts } from "./../../model/emergencyContacts.model";
 
 @Component({
   selector: "app-cadastro-usuarios",
@@ -23,9 +36,10 @@ import { rowsAnimation } from './animations';
   styleUrls: ["./cadastro-usuarios.component.scss"],
   animations: [rowsAnimation],
 })
-export class CadastroUsuariosComponent implements OnInit {
+export class CadastroUsuariosComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   userForm: FormGroup;
+  pageTitle: string;
 
   // PHOTO AUX
   dataimage: any;
@@ -33,6 +47,10 @@ export class CadastroUsuariosComponent implements OnInit {
   imageFile: any;
   downloadURL: any;
   fileAttr = "Choose File";
+  loadingPhoto;
+  //isRemovePhoto = false;
+  photoInitial = "";
+  //replacePhoto = false;
 
   maxDate: Date = new Date();
 
@@ -45,6 +63,7 @@ export class CadastroUsuariosComponent implements OnInit {
     password: "",
     jobTitle: "",
     birthDate: "",
+    contact: "",
     permissions: {
       employee: false,
       administrative: false,
@@ -78,31 +97,44 @@ export class CadastroUsuariosComponent implements OnInit {
     private modalService: BsModalService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.createForm();
 
-    const routeSubscription = this.activatedRoute.params.subscribe((params) => {
-      const id = params.id;
-      if (id && id.length > 0) {
-        const material = this.usuarioService.read(id).valueChanges();
-        material.subscribe((value) => {
-          this.userData = value;
-          this.userData.uid = id;
-          console.log("this.userData", this.userData);
+    const routeSubscription = await this.activatedRoute.params.subscribe(
+      (params) => {
+        const id = params.id;
 
-          this.createForm();
-          this.downloadPhoto(this.userData);
-        });
+        this.pageTitle = id ? "titulo.editarRegistro" : "titulo.novoRegistro";
+
+        if (id && id.length > 0) {
+          const material = this.usuarioService.read(id).valueChanges();
+          const subMaterial = material.subscribe(async (value) => {
+            this.userData = value;
+            this.userData.uid = id;
+            this.photoInitial = value.photoURL;
+            //console.log("this.userData", this.userData);
+
+            this.createForm();
+            await this.downloadPhoto(this.userData);
+          });
+
+          this.subscriptions.push(subMaterial);
+        }
       }
-    });
+    );
 
-    console.log("FORM", this.userForm);
+    //console.log("FORM", this.userForm);
 
     this.subscriptions.push(routeSubscription);
   }
 
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((x) => x.unsubscribe());
+    this.downloadURL = null;
   }
 
   createForm() {
@@ -114,7 +146,7 @@ export class CadastroUsuariosComponent implements OnInit {
         [Validators.required, Validators.minLength(6)],
       ],
       senha_confirma: [
-        "",
+        this.userData.password,
         [
           Validators.required,
           Validators.minLength(6),
@@ -123,8 +155,12 @@ export class CadastroUsuariosComponent implements OnInit {
       ],
       cargo: [this.userData.jobTitle, [Validators.required]],
       dataNascimento: [
-        new Date(this.userData.birthDate),
-        [Validators.required],
+        moment(this.userData.birthDate, "DD/MM/YYYY"),
+        Validators.required,
+      ],
+      contato: [
+        this.userData.contact,
+        Validators.compose([Validators.required]),
       ],
       permissao: this.fb.group({
         employee: this.userData.permissions.employee,
@@ -135,6 +171,250 @@ export class CadastroUsuariosComponent implements OnInit {
     });
   }
 
+  async onSubmit() {
+    const controls = this.userForm.controls;
+    console.log(controls);
+
+    /* check form */
+    if (this.userForm.invalid) {
+      Object.keys(controls).forEach((controlName) =>
+        controls[controlName].markAsTouched()
+      );
+      return;
+    }
+
+    /* check table emergency contacts */
+    if (this.checkEmergencyContacts()) {
+      this.toastr.warning(
+        this.translate.instant("cadastros.campo.existeInvalidos"),
+        this.translate.instant("alerta.atencao"),
+        {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        }
+      );
+      return;
+    }
+
+    this.checkPermissions(controls);
+
+    const userFirebase: UserFirebase = this.prepareUser();
+
+    if (userFirebase.uid) {
+      await this.checkPhoto();
+      await this.uploadPhoto();
+
+      console.log("Updating...");
+      this.updateUser(userFirebase);
+    } else {
+      await this.uploadPhoto();
+
+      console.log("Adding...");
+      this.addUser(userFirebase);
+    }
+  }
+
+  checkPermissions(controls) {
+    if (
+      !controls.permissao.get("administrative").value &&
+      !controls.permissao.get("driver").value
+    ) {
+      controls.permissao.get("employee").setValue(true);
+    }
+  }
+
+  addUser(userFirebase: UserFirebase) {
+    this.usuarioService
+      .create(userFirebase)
+      .then((x) => {
+        this.toastr.success(
+          this.translate.instant("mensagem.sucesso.adicionado"),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+        this.router.navigate(["../users"], {});
+      })
+      .catch((error) => {
+        this.toastr.warning(error, this.translate.instant("alerta.atencao"), {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+      });
+  }
+
+  updateUser(userFirebase: UserFirebase) {
+    this.usuarioService
+      .update(userFirebase.uid, userFirebase)
+      .then((result) => {
+        this.toastr.success(
+          this.translate.instant("mensagem.sucesso.alterado"),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+        this.router.navigate(["../users"], {});
+      })
+      .catch((error) => {
+        this.toastr.warning(error, this.translate.instant("alerta.atencao"), {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+      });
+  }
+
+  prepareUser(): UserFirebase {
+    const controls = this.userForm.controls;
+    const userFirebase: UserFirebase = {
+      uid: this.userData.uid,
+      displayName: controls.usuario.value,
+      email: controls.email.value,
+      photoURL: this.userData.photoURL,
+      emailVerified: false,
+      password: controls.senha.value,
+      jobTitle: controls.cargo.value,
+      birthDate: new Date(controls.dataNascimento.value).toLocaleDateString(),
+      contact: controls.contato.value,
+      permissions: controls.permissao.value,
+      emergencyContacts: controls.contatosEmergencia.value,
+    };
+
+    return userFirebase;
+  }
+
+  voltar() {
+    this.router.navigate(["../users"], {});
+  }
+
+  confirmPassValidator(otherField: string) {
+    // campo que será utilizado para validação (ex: 'senha confirmação')
+    const validator = (formControl: FormControl) => {
+      if (otherField == null) {
+        throw new Error("cadastros.campo.obrigatorio");
+      }
+
+      // validação para certificar primeiro a inicialização do formulário
+      // Pois é possível que o FORMULARIO ou CAMPO ainda não estejam pronto para uso
+      if (!formControl.root || !(<FormGroup>formControl.root).controls) {
+        return null;
+      }
+
+      // campo a ser "comparado" (ex: 'senha')
+      const field = (<FormGroup>formControl.root).get(otherField);
+
+      if (!field) {
+        throw new Error("cadastros.campo.invalid");
+      }
+
+      // comparação
+      if (field.value !== formControl.value) {
+        return { confirmPassInvalid: true };
+      }
+
+      // campo valido
+      return null;
+    };
+
+    return validator;
+  }
+
+  /*---------------------
+  |         PHOTO       |
+  ----------------------*/
+  async uploadPhoto() {
+    if (this.imageFile) {
+      try {
+        console.log("UPLOAD", this.userData.photoURL);
+
+        const storageRef = this.angularFireStorage.ref(this.userData.photoURL);
+
+        const task = storageRef.put(this.imageFile);
+
+        const urlPhoto = (await task.task).ref.fullPath;
+
+        this.userData.photoURL = urlPhoto;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  downloadPhoto(userData: UserFirebase) {
+    if (userData.photoURL) {
+      this.loadingPhoto = true;
+      setTimeout(() => {
+        this.downloadURL = this.angularFireStorage
+          .ref("/" + userData.photoURL)
+          .getDownloadURL();
+
+        console.log(this.downloadURL);
+
+        this.loadingPhoto = false;
+      }, 2000);
+    }
+  }
+
+  removePhoto() {
+    this.dataimage = null;
+    this.userData.photoURL = null;
+    this.downloadURL = null;
+    this.imageFile = null;
+  }
+
+  checkPhoto() {
+    if (this.photoInitial) {
+      this.usuarioService
+        .deletePhotoFromStorage(this.photoInitial)
+        .then(() => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  uploadFileEvt(imgFile: any) {
+    if (imgFile.target.files && imgFile.target.files[0]) {
+      this.fileAttr = "";
+      Array.from(imgFile.target.files).forEach((file: File) => {
+        this.fileAttr += file.name;
+        this.contentType = file.type;
+      });
+
+      this.imageFile = imgFile.target.files[0];
+
+      // HTML5 FileReader API
+      let reader = new FileReader();
+      reader.onload = (e: any) => {
+        let image = new Image();
+        image.src = e.target.result;
+        image.onload = (rs) => {
+          let imgBase64Path = e.target.result;
+          this.dataimage = imgBase64Path;
+        };
+      };
+      reader.readAsDataURL(imgFile.target.files[0]);
+
+      let id = Math.random().toString(36).substr(2, 5);
+
+      this.userData.photoURL = `user-images/${id}_${this.imageFile.name}`;
+    } else {
+      this.fileAttr = "Choose File";
+    }
+  }
+  /*--------- PHOTO ---------*/
+
+  /*--------------------
+  | EMERGENCY CONTACTS |
+  ---------------------*/
   buildEmergencyContacts() {
     this.loadingTable = true;
     // console.log("BUILDING EMERGENCY CONTACTS...");
@@ -154,28 +434,6 @@ export class CadastroUsuariosComponent implements OnInit {
     return this.fb.array(row);
   }
 
-  onChangeField(row, field, isPhoneNumber) {
-    if (isPhoneNumber) {
-      row.telefone = field as Number;
-    } else {
-      row.nome = field as String;
-    }
-
-    const form = this.userForm.get("contatosEmergencia") as FormArray;
-    form.clear();
-
-    let list = this.dataSourceEC.data.map((v) =>
-      this.fb.group({
-        nome: [v.nome],
-        telefone: [v.telefone],
-      })
-    );
-
-    list.forEach((x) => {
-      form.push(x);
-    });
-  }
-
   addEmergencyContact() {
     const form = this.userForm.get("contatosEmergencia") as FormArray;
 
@@ -189,82 +447,14 @@ export class CadastroUsuariosComponent implements OnInit {
     this.dataSourceEC.data.push({ nome: "", telefone: null });
     this.dataSourceEC.filter = "";
 
-    console.log("FORM", this.userForm);
-    console.log("DATA SOURCE", this.dataSourceEC.data);
+    //console.log("FORM", this.userForm);
+    //console.log("DATA SOURCE", this.dataSourceEC.data);
   }
 
   removeEmergencyContact(template) {
-    this.modalRef = this.modalService.show(template, {class: 'modal-dialog-centered modal-sm', });
-  }
-
-  confirm(row): void {
-    this.modalRef?.hide();
-
-    if (this.checkEmergencyContacts()) {
-      this.toastr.warning(
-        this.translate.instant("cadastros.campo.existe-invalidos"),
-        this.translate.instant("alerta.title.atencao"),
-        {
-          closeButton: true,
-          progressAnimation: "decreasing",
-          progressBar: true,
-        }
-      );
-    } else {
-      const form = this.userForm.get("contatosEmergencia") as FormArray;
-
-      let index = null;
-
-      form.value.forEach((x, i) => {
-        if (x.telfone === row.telefone || x.nome == row.nome) {
-          index = i;
-        }
-      });
-
-      form.removeAt(index);
-      this.dataSourceEC.data.splice(index, 1);
-      this.dataSourceEC.filter = "";
-    }
-  }
-
-  async onSubmit() {
-    const controls = this.userForm.controls;
-    console.log(controls);
-
-    /* check form */
-    if (this.userForm.invalid) {
-      Object.keys(controls).forEach((controlName) =>
-        controls[controlName].markAsTouched()
-      );
-      return;
-    }
-
-    /* check table emergency contacts */
-    if (this.checkEmergencyContacts()) {
-      this.toastr.warning(
-        this.translate.instant("cadastros.campo.existe-invalidos"),
-        this.translate.instant("alerta.title.atencao"),
-        {
-          closeButton: true,
-          progressAnimation: "decreasing",
-          progressBar: true,
-        }
-      );
-      return;
-    }
-
-    const userFirebase: UserFirebase = this.prepareUser();
-
-    console.log("CONTROLS", controls);
-    console.log("USER", userFirebase);
-
-    await this.uploadPhoto();
-
-    if (userFirebase.uid) {
-      this.updateUser(userFirebase);
-    } else {
-      this.addUser(userFirebase);
-    }
+    this.modalRef = this.modalService.show(template, {
+      class: "modal-dialog-centered modal-sm",
+    });
   }
 
   /* return true if invalid */
@@ -313,6 +503,28 @@ export class CadastroUsuariosComponent implements OnInit {
     return exist;
   }
 
+  onChangeField(row, field, isPhoneNumber) {
+    if (isPhoneNumber) {
+      row.telefone = field as Number;
+    } else {
+      row.nome = field as String;
+    }
+
+    const form = this.userForm.get("contatosEmergencia") as FormArray;
+    form.clear();
+
+    let list = this.dataSourceEC.data.map((v) =>
+      this.fb.group({
+        nome: [v.nome],
+        telefone: [v.telefone],
+      })
+    );
+
+    list.forEach((x) => {
+      form.push(x);
+    });
+  }
+
   /* return phone number without formatting */
   phoneWithoutFormatting(field: string) {
     return field.replace(/[-() ]/g, "");
@@ -325,7 +537,7 @@ export class CadastroUsuariosComponent implements OnInit {
     }
 
     if (field && this.phoneWithoutFormatting(field).length < 9) {
-      return "cadastros.campo.formato-invalido";
+      return "cadastros.campo.formatoInvalido";
     }
 
     if (this.findByPhone(field)) {
@@ -333,203 +545,34 @@ export class CadastroUsuariosComponent implements OnInit {
     }
   }
 
-  addUser(userFirebase: UserFirebase) {
-    this.auth
-      .SignUp(userFirebase)
-      .then((result) => {
-        userFirebase.uid = result.uid;
-        this.toastr.success(
-          this.translate.instant("cadastros.usuarios.msg.sucesso", {
-            value: userFirebase.email,
-          }),
-          this.translate.instant("alerta.title.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-        this.updateUser(userFirebase);
-      })
-      .catch((error) => {
-        this.toastr.warning(
-          error,
-          this.translate.instant("alerta.title.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-      });
-  }
+  confirm(row): void {
+    this.modalRef?.hide();
 
-  excluir(userFirebase: UserFirebase) {
-    this.usuarioService
-      .delete(userFirebase.uid)
-      .then(() => {
-        this.toastr.success(
-          this.translate.instant("cadastros.usuarios.msg.exclusao"),
-          this.translate.instant("alerta.title.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-        this.router.navigate(["../lista-de-usuario"], {});
-      })
-      .catch((error) => {
-        this.toastr.warning(
-          error,
-          this.translate.instant("alerta.title.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-      });
-  }
-
-  updateUser(userFirebase: UserFirebase) {
-    this.usuarioService
-      .update(userFirebase.uid, userFirebase)
-      .then((result) => {
-        this.toastr.success(
-          this.translate.instant("cadastros.usuarios.msg.sucesso", {
-            value: userFirebase.email,
-          }),
-          this.translate.instant("alerta.title.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-        this.router.navigate(["../lista-de-usuario"], {});
-      })
-      .catch((error) => {
-        this.toastr.warning(
-          error,
-          this.translate.instant("alerta.title.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-      });
-  }
-
-  prepareUser(): UserFirebase {
-    const controls = this.userForm.controls;
-    const userFirebase: UserFirebase = {
-      uid: this.userData.uid,
-      displayName: controls.usuario.value,
-      email: controls.email.value,
-      photoURL: this.userData.photoURL,
-      emailVerified: false,
-      password: controls.senha.value,
-      jobTitle: controls.cargo.value,
-      birthDate: new Date(controls.dataNascimento.value).toLocaleDateString(),
-      permissions: controls.permissao.value,
-      emergencyContacts: controls.contatosEmergencia.value,
-    };
-
-    return userFirebase;
-  }
-
-  voltar() {
-    this.router.navigate(["../lista-de-usuario"], {});
-  }
-
-  async uploadPhoto() {
-    if (this.imageFile) {
-      try {
-        let nomeFoto = this.fileAttr;
-
-        const storageRef = this.angularFireStorage.ref(
-          "user-images/" + nomeFoto
-        );
-
-        const task = storageRef.put(this.imageFile);
-
-        const urlPhoto = (await task.task).ref.fullPath;
-
-        this.userData.photoURL = urlPhoto;
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-
-  downloadPhoto(userData: UserFirebase) {
-    if (userData.photoURL) {
-      this.downloadURL = this.angularFireStorage
-        .ref("/" + userData.photoURL)
-        .getDownloadURL();
-
-      console.log(this.downloadURL);
-    }
-  }
-
-  uploadFileEvt(imgFile: any) {
-    if (imgFile.target.files && imgFile.target.files[0]) {
-      this.fileAttr = "";
-      Array.from(imgFile.target.files).forEach((file: File) => {
-        this.fileAttr += file.name;
-        this.contentType = file.type;
-      });
-
-      this.imageFile = imgFile.target.files[0];
-
-      // HTML5 FileReader API
-      let reader = new FileReader();
-      reader.onload = (e: any) => {
-        let image = new Image();
-        image.src = e.target.result;
-        image.onload = (rs) => {
-          let imgBase64Path = e.target.result;
-          // console.log(imgBase64Path);
-          this.dataimage = imgBase64Path;
-        };
-      };
-      reader.readAsDataURL(imgFile.target.files[0]);
+    if (this.checkEmergencyContacts()) {
+      this.toastr.warning(
+        this.translate.instant("cadastros.campo.existeInvalidos"),
+        this.translate.instant("alerta.atencao"),
+        {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        }
+      );
     } else {
-      this.fileAttr = "Choose File";
+      const form = this.userForm.get("contatosEmergencia") as FormArray;
+
+      let index = null;
+
+      form.value.forEach((x, i) => {
+        if (x.telfone === row.telefone || x.nome == row.nome) {
+          index = i;
+        }
+      });
+
+      form.removeAt(index);
+      this.dataSourceEC.data.splice(index, 1);
+      this.dataSourceEC.filter = "";
     }
   }
-
-  confirmPassValidator(otherField: string) {
-    // campo que será utilizado para validação (ex: 'confirmarEmail')
-    const validator = (formControl: FormControl) => {
-      if (otherField == null) {
-        throw new Error("É necessário informar um campo.");
-      }
-
-      // validação para certificar primeiro a inicialização do formulário
-      // Pois é possível que o FORMULARIO ou CAMPO ainda não estejam pronto para uso
-      if (!formControl.root || !(<FormGroup>formControl.root).controls) {
-        return null;
-      }
-
-      // campo a ser "comparado" (ex: 'email')
-      const field = (<FormGroup>formControl.root).get(otherField);
-
-      if (!field) {
-        throw new Error("É necessário informar um campo válido.");
-      }
-
-      // comparação
-      if (field.value !== formControl.value) {
-        return { confirmPassInvalid: true };
-      }
-
-      // campo valido
-      return null;
-    };
-
-    return validator;
-  }
+  /*----- EMERGENCY CONTACTS -----*/
 }

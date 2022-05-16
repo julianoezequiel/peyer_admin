@@ -1,252 +1,283 @@
-<form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
-  <mat-card class="card-main">
+<form [formGroup]="userForm" novalidate>
 
-    <div class="row">
+  <mat-card-header class="principal">
+    <mat-card-title>
+      <span class="title">{{ 'menu.usuarios' | translate}}</span>
+      <span class="sub-title">{{ pageTitle | translate}}</span>
+    </mat-card-title>
+  </mat-card-header>
 
-      <div class="col">
-        <!-- CARD USER -->
-        <mat-card class="card-user mat-elevation-z2">
-          <mat-card-header>
-            <mat-icon mat-card-avatar color="primary">person</mat-icon>
-            <span class="card-title">{{'cadastros.usuarios.titulos.usuario'|translate}}</span>
-          </mat-card-header>
+  <div class="row">
 
-          <mat-divider></mat-divider>
+    <div class="col">
+      <!-- CARD USER -->
+      <mat-card class="card-user mat-elevation-z2">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">person</mat-icon>
+          <span class="card-title">{{'cadastros.usuarios.titulo.usuario'|translate}}</span>
+        </mat-card-header>
 
-          <!-- USERNAME -->
-          <div class="col">
-            <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.nomeusuario'|translate}}</mat-label>
-              <input matInput formControlName="usuario">
-              <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-              </mat-error>
-            </mat-form-field>
+        <mat-divider></mat-divider>
 
-            <!-- EMAIL -->
-            <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.email'|translate}}</mat-label>
-              <input matInput formControlName="email" type="email">
-              <mat-error *ngIf="userForm.controls['email'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-              </mat-error>
-              <mat-error *ngIf="userForm.controls['email'].hasError('email')">
-                <strong>{{'cadastros.campo.invalido'|translate}}</strong>
-              </mat-error>
-            </mat-form-field>
+        <!-- USERNAME -->
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>{{'cadastros.usuarios.campo.nomeUsuario'|translate}}</mat-label>
+            <input matInput formControlName="usuario">
+            <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
 
-            <!-- PASSWORD -->
-            <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.senha'|translate}}</mat-label>
-              <input matInput formControlName="senha" type="password" autocomplete>
-              <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-              </mat-error>
-              <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
-                {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
-              </mat-error>
-            </mat-form-field>
+          <!-- EMAIL -->
+          <mat-form-field appearance="fill">
+            <mat-label>{{'cadastros.usuarios.campo.email'|translate}}</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="userForm.controls['email'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['email'].hasError('email')">
+              <strong>{{'cadastros.campo.invalido'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
 
-            <!-- CONFIRM PASSWORD -->
-            <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.senha.confirma'|translate}}</mat-label>
-              <input matInput formControlName="senha_confirma" type="password" autocomplete>
-              <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-              </mat-error>
-              <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
-                {{'cadastros.campo.min-length'|translate}} <strong>{{'cadastros.campo.6-digitos'| translate}}</strong>
-              </mat-error>
-              <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('confirmPassInvalid')">
-                <strong>
-                  {{'cadastros.campo.senha-confirma-invalido'|translate}}
-                </strong>
-              </mat-error>
-            </mat-form-field>
+          <!-- PASSWORD -->
+          <mat-form-field appearance="fill">
+            <mat-label>{{'cadastros.usuarios.campo.senha'|translate}}</mat-label>
+            <input matInput formControlName="senha" type="password" autocomplete>
+            <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
+              <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
+            </mat-error>
+          </mat-form-field>
 
-            <!-- JOB TITLE -->
-            <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.cargo'|translate}}</mat-label>
-              <input matInput formControlName="cargo">
-              <mat-error *ngIf="userForm.controls['cargo'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-              </mat-error>
-            </mat-form-field>
+          <!-- CONFIRM PASSWORD -->
+          <mat-form-field appearance="fill">
+            <mat-label>{{'cadastros.usuarios.campo.senhaConfirma'|translate}}</mat-label>
+            <input matInput formControlName="senha_confirma" type="password" autocomplete>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
+              <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('confirmPassInvalid')">
+              <strong>{{'cadastros.campo.senhaConfirmaInvalido'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
 
-            <!-- BIRTH DATE -->
-            <mat-form-field appearance="fill">
-              <mat-label>{{'cadastros.usuarios.dataNascimento'|translate}}</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="dataNascimento">
-              <mat-hint>(M/D/Y)</mat-hint>
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-              <mat-error *ngIf="userForm.controls['dataNascimento'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-              </mat-error>
-            </mat-form-field>
+          <!-- JOB TITLE -->
+          <mat-form-field appearance="fill">
+            <mat-label>{{'cadastros.usuarios.campo.cargo'|translate}}</mat-label>
+            <input matInput formControlName="cargo">
+            <mat-error *ngIf="userForm.controls['cargo'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
 
-            <!-- PERMISSIONS -->
-            <div class="permissions" formGroupName="permissao">
-              <span>{{'cadastros.usuarios.permissoes.titulo'|translate}}</span>
+          <!-- BIRTH DATE -->
+          <mat-form-field appearance="fill">
+            <mat-label>{{'cadastros.usuarios.campo.dataNascimento'|translate}}</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dataNascimento">
+            <mat-hint>(DD/MM/YYYY)</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="userForm.controls['dataNascimento'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
 
-              <div class="checkboxs-align">
-                <!-- Employee -->
-                <mat-checkbox id="employee" value="employee" formControlName="employee">
-                  <mat-label for="employee">{{'cadastros.usuarios.permissoes.funcionario'|translate}}</mat-label>
-                </mat-checkbox>
-                <!---->
+          <!-- CONTACT -->
+          <mat-form-field appearance="fill" class="field-whith-prefix">
+            <mat-label>{{'cadastros.usuarios.campo.contato'|translate}}</mat-label>
+            <span matPrefix>+41&nbsp;</span>
+            <input matInput formControlName="contato" mask="(00) 000-00-00" maxlength="14" [validation]="true">
+            <mat-error *ngIf="userForm.controls['contato'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['contato'].hasError('mask')">
+              <strong>{{'cadastros.campo.formatoInvalido'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
 
-                <!-- Administrative -->
-                <mat-checkbox id="administrative" value="administrative" formControlName="administrative">
-                  <mat-label for="administrative">{{'cadastros.usuarios.permissoes.administrativo'|translate}}
-                  </mat-label>
-                </mat-checkbox>
-                <!---->
+          <!-- PERMISSIONS -->
+          <div class="permissions" formGroupName="permissao">
+            <span>{{'cadastros.usuarios.titulo.permissao'|translate}}</span>
 
-                <!-- Driver -->
-                <mat-checkbox id="driver" value="driver" formControlName="driver">
-                  <mat-label for="driver">{{'cadastros.usuarios.permissoes.motorista'|translate}}</mat-label>
-                </mat-checkbox>
-                <!---->
-              </div>
+            <div class="checkboxs-align">
+              <!-- Employee -->
+              <mat-checkbox id="employee" value="employee" formControlName="employee">
+                <mat-label for="employee">{{'cadastros.usuarios.campo.permissao.funcionario'|translate}}</mat-label>
+              </mat-checkbox>
+              <!---->
 
+              <!-- Administrative -->
+              <mat-checkbox id="administrative" value="administrative" formControlName="administrative">
+                <mat-label for="administrative">{{'cadastros.usuarios.campo.permissao.administrativo'|translate}}
+                </mat-label>
+              </mat-checkbox>
+              <!---->
+
+              <!-- Driver -->
+              <mat-checkbox id="driver" value="driver" formControlName="driver">
+                <mat-label for="driver">{{'cadastros.usuarios.campo.permissao.motorista'|translate}}</mat-label>
+              </mat-checkbox>
+              <!---->
             </div>
+
           </div>
-        </mat-card>
-      </div>
+        </div>
+      </mat-card>
+    </div>
 
 
-      <div class="col">
-        <!-- CARD PHOTO -->
-        <mat-card class="card-photo mat-elevation-z2">
-          <mat-card-header>
-            <mat-icon mat-card-avatar color="primary">add_a_photo</mat-icon>
-            <span class="card-title">{{'cadastros.usuarios.titulos.foto'|translate}}</span>
-          </mat-card-header>
-          <mat-divider></mat-divider>
+    <div class="col">
+      <!-- CARD PHOTO -->
+      <mat-card class="card-photo mat-elevation-z2">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">add_a_photo</mat-icon>
+          <span class="card-title">{{'cadastros.usuarios.titulo.foto'|translate}}</span>
+        </mat-card-header>
+        <mat-divider></mat-divider>
 
-          <mat-card-content>
-            <img *ngIf="dataimage" src="{{dataimage}}">
-            <img *ngIf="!dataimage && downloadURL | async; let url" [src]="url" alt="Image from AngularFireStorage">
-          </mat-card-content>
+        <div class="loading" *ngIf="loadingPhoto">
+          <mat-spinner diameter="60"></mat-spinner>
+        </div>
 
-          <mat-divider></mat-divider>
+        <mat-card-content *ngIf="!loadingPhoto">
+          <img *ngIf="dataimage" src="{{dataimage}}">
+          <img *ngIf="!dataimage && downloadURL | async; let url" [src]="url" alt="Image from AngularFireStorage">
+        </mat-card-content>
 
-          <mat-card-actions>
+        <mat-divider></mat-divider>
+
+        <mat-card-actions>
+          <div style="display: flex; justify-content: space-between;">
             <!-- Browse Button File -->
-            <button mat-raised-button color="accent" class="file-upload">
-              <label for='file-upload' style="margin: 0;">{{'cadastros.upload'|translate}}</label>
-              <input style="display: none;" type="file" #UploadFileInput id="file-upload"
-                (change)="uploadFileEvt($event)" name="file-upload" multiple="multiple" accept="image/*" />
+            <button mat-raised-button color="accent" class="buttons" matTooltip="{{'titulo.upload'|translate}}"
+              matTooltipPosition="below">
+              <mat-icon>add_to_photos</mat-icon>
+              <label for='buttons' style="margin: 0;">{{'titulo.upload'|translate}}</label>
+              <input style="display: none;" type="file" #UploadFileInput id="buttons" (change)="uploadFileEvt($event)"
+                name="buttons" multiple="multiple" accept="image/*" />
             </button>
-          </mat-card-actions>
-        </mat-card>
 
-        <!-- CARD EMERGENCY CONTACTS -->
-        <mat-card class="card-emergency-contacts mat-elevation-z2">
-          <mat-card-header>
-            <mat-icon mat-card-avatar color="primary">contact_phone</mat-icon>
-            <span class="card-title">{{'cadastros.usuarios.titulos.contatos-emergencia'|translate}}</span>
-          </mat-card-header>
-          <mat-divider></mat-divider>
-
-          <div class="loading" *ngIf="loadingTable">
-            <mat-spinner diameter="60"></mat-spinner>
+            <button mat-raised-button matTooltip="{{'titulo.remover'|translate}}" matTooltipPosition="below"
+              type="button" (click)="removePhoto()" color="warn" class="buttons" [disabled]="!userData.photoURL">
+              <mat-icon>delete</mat-icon>
+              {{'titulo.remover' | translate}}
+            </button>
           </div>
+        </mat-card-actions>
+      </mat-card>
 
-          <div class="table-conf" *ngIf="!loadingTable">
-            <!-- TABELA -->
-            <table mat-table [dataSource]="dataSourceEC" matSort matSortActive="nome" matSortDirection="asc"
-              matSortDisableClear formArrayName="contatosEmergencia">
+      <!-- CARD EMERGENCY CONTACTS -->
+      <mat-card class="card-emergency-contacts mat-elevation-z2">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">contact_phone</mat-icon>
+          <span class="card-title">{{'cadastros.usuarios.titulo.contatosEmergencia'|translate}}</span>
+        </mat-card-header>
+        <mat-divider></mat-divider>
 
-              <!-- Row definitions -->
-              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-              <tr mat-row [@rowsAnimation]="" *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
-              <!---->
+        <div class="loading" *ngIf="loadingTable">
+          <mat-spinner diameter="60"></mat-spinner>
+        </div>
 
-              <!-- Coluna NAME -->
-              <ng-container matColumnDef="nome">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.titulos.nome'|translate}}
-                </th>
-                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
-                  <mat-form-field appearance="outline">
-                    <input matInput formControlName="nome" [value]="row.nome" #nome
-                      (ngModelChange)="onChangeField(row, nome.value, false)">
-                    <mat-icon matSuffix class="icon-danger" *ngIf="!nome.value"
-                      matTooltip="{{'cadastros.campo.obrigatorio'|translate}}" matTooltipPosition="above">error_outline
-                    </mat-icon>
-                  </mat-form-field>
-                </td>
-              </ng-container>
-              <!---->
+        <div class="table-conf" *ngIf="!loadingTable">
+          <!-- TABELA -->
+          <table mat-table [dataSource]="dataSourceEC" matSort matSortActive="nome" matSortDirection="asc"
+            matSortDisableClear formArrayName="contatosEmergencia">
 
-              <!-- Coluna PHONE -->
-              <ng-container matColumnDef="telefone">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                  {{'cadastros.usuarios.titulos.telefone'|translate}}</th>
-                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
-                  <mat-form-field appearance="outline">
-                    <span matPrefix>+41&nbsp;</span>
-                    <input matInput formControlName="telefone" [value]="row.telefone | mask: '(00) 000-00-00'" #telefone
-                      (ngModelChange)="onChangeField(row, telefone.value, true)" mask="(00) 000-00-00" maxlength="14">
-                    <mat-icon matSuffix class="icon-danger" *ngIf="validPhoneNumber(telefone.value)"
-                      matTooltip="{{getErrorPhone(telefone.value) | translate}}" matTooltipPosition="above">
-                      error_outline
-                    </mat-icon>
-                  </mat-form-field>
-                </td>
-              </ng-container>
-              <!---->
-              <!-- Coluna de ações -->
-              <ng-container matColumnDef="acoes">
-                <th mat-header-cell *matHeaderCellDef>{{'cadastros.acoes'|translate}}</th>
-                <td mat-cell *matCellDef="let row; let index = index">
-                  <div class="buttons-align">
-                    <!-- <button mat-icon-button matTooltip="{{'cadastros.editar'|translate}}" matTooltipPosition="below"
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row [@rowsAnimation]="" *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
+            <!---->
+
+            <!-- Coluna NAME -->
+            <ng-container matColumnDef="nome">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.titulo.nome'|translate}}
+              </th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="nome" [value]="row.nome" #nome
+                    (ngModelChange)="onChangeField(row, nome.value, false)">
+                  <mat-icon matSuffix class="icon-danger" *ngIf="!nome.value"
+                    matTooltip="{{'cadastros.campo.obrigatorio'|translate}}" matTooltipPosition="above">error_outline
+                  </mat-icon>
+                </mat-form-field>
+              </td>
+            </ng-container>
+            <!---->
+
+            <!-- Coluna PHONE -->
+            <ng-container matColumnDef="telefone">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{'cadastros.usuarios.titulo.telefone'|translate}}</th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <mat-form-field appearance="outline">
+                  <span matPrefix>+41&nbsp;</span>
+                  <input matInput formControlName="telefone" [value]="row.telefone | mask: '(00) 000-00-00'" #telefone
+                    (ngModelChange)="onChangeField(row, telefone.value, true)" mask="(00) 000-00-00" maxlength="14">
+                  <mat-icon matSuffix class="icon-danger" *ngIf="validPhoneNumber(telefone.value)"
+                    matTooltip="{{getErrorPhone(telefone.value) | translate}}" matTooltipPosition="above">
+                    error_outline
+                  </mat-icon>
+                </mat-form-field>
+              </td>
+            </ng-container>
+            <!---->
+            <!-- Coluna de ações -->
+            <ng-container matColumnDef="acoes">
+              <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+              <td mat-cell *matCellDef="let row; let index = index">
+                <div class="buttons-align">
+                  <!-- <button mat-icon-button matTooltip="{{'titulo.editar'|translate}}" matTooltipPosition="below"
                       type="button">
                       <mat-icon class="icon-edit">edit</mat-icon>
                     </button>&nbsp; -->
-                    <button mat-icon-button matTooltip="{{'cadastros.remover'|translate}}" matTooltipPosition="below"
-                      type="button" (click)="removeEmergencyContact(template)">
-                      <mat-icon class="icon-danger">delete</mat-icon>
-                    </button>
+                  <button mat-icon-button matTooltip="{{'titulo.remover'|translate}}" matTooltipPosition="below"
+                    type="button" (click)="removeEmergencyContact(template)">
+                    <mat-icon class="icon-danger">delete</mat-icon>
+                  </button>
+                </div>
+
+                <ng-template #template>
+                  <div class="text-center" style="padding: 12px 0;">
+                    <span>{{'mensagem.confirmar' | translate}}</span>
+                    <mat-divider style="margin: 7px 0;"></mat-divider>
+                    <button mat-button (click)="confirm(row)">{{'opcao.sim' | translate}}</button>
+                    <button mat-raised-button color="primary" (click)="this.modalRef?.hide()">{{'opcao.nao'
+                      | translate}}</button>
                   </div>
+                </ng-template>
+              </td>
+            </ng-container>
+            <!---->
+          </table>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-footer>
+          <button mat-icon-button matTooltip="{{'titulo.adicionar'|translate}}" matTooltipPosition="below" type="button"
+            (click)="addEmergencyContact()">
+            <mat-icon class="icon-add">add_circle_outline</mat-icon>
+          </button>
+          <!-- Paginação -->
+          <!-- <mat-spinner [diameter]="20" *ngIf="carregandoLista"></mat-spinner> -->
+          <mat-paginator #paginator [length]="dataSourceEC?.data.length" [pageIndex]="0" [pageSize]="5"
+            [pageSizeOptions]="[5,10,20]" sticky>
+          </mat-paginator>
+        </mat-card-footer>
 
-
-                  <ng-template #template>
-                    <div class="text-center" style="padding: 12px 0;">
-                      <span>{{'titulo.confirmar' | translate}}</span>
-                      <mat-divider style="margin: 7px 0;"></mat-divider>
-                      <button mat-button (click)="confirm(row)">{{'cadastros.opcao.sim' | translate}}</button>
-                      <button mat-raised-button color="primary" (click)="this.modalRef?.hide()">{{'cadastros.opcao.nao' | translate}}</button>
-                    </div>
-                  </ng-template>
-                </td>
-              </ng-container>
-              <!---->
-            </table>
-          </div>
-          <mat-divider></mat-divider>
-          <mat-card-footer>
-            <button mat-icon-button matTooltip="{{'cadastros.adicionar'|translate}}" matTooltipPosition="below"
-              type="button" (click)="addEmergencyContact()">
-              <mat-icon class="icon-add">add_circle_outline</mat-icon>
-            </button>
-            <!-- Paginação -->
-            <!-- <mat-spinner [diameter]="20" *ngIf="carregandoLista"></mat-spinner> -->
-            <mat-paginator #paginator [length]="dataSourceEC?.data.length" [pageIndex]="0" [pageSize]="5"
-              [pageSizeOptions]="[5,10,20]" sticky>
-            </mat-paginator>
-          </mat-card-footer>
-
-        </mat-card>
-      </div>
+      </mat-card>
     </div>
+  </div>
 
-    <mat-card-actions align="end">
-      <button mat-raised-button color="primary" type="submit">{{'cadastros.salvar'|translate}}</button>
-      <button mat-raised-button color="danger" type="button"
-        (click)="voltar()">{{'cadastros.voltar'|translate}}</button>
-    </mat-card-actions>
-  </mat-card>
+  <mat-card-actions align="end" class="principal">
+    <button mat-raised-button color="primary" (click)="onSubmit()">{{'titulo.salvar'|translate}}</button>
+    <button mat-raised-button color="danger" type="button" (click)="voltar()" style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+    </button>
+  </mat-card-actions>
+  
 </form>

@@ -1,51 +1,36 @@
 import { Injectable, NgZone, OnInit } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, of } from "rxjs";
-import { Router } from "@angular/router";
-
-import { auth } from "firebase/app";
 import { AngularFireAuth } from "@angular/fire/auth";
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-} from "@angular/fire/firestore";
-import { environment } from "../../../environments/environment";
-import { UserFirebase } from "./userfirebase.model";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { Router } from "@angular/router";
+import { Observable, of } from "rxjs";
+
+import { UserFirebase } from "../cadastros/model/userfirebase.model";
+import { ErrorFirebaseService } from "../cadastros/services/error-firebase.service";
 
 @Injectable()
-export class AuthService implements OnInit{
+export class AuthService implements OnInit {
   userData: any; // Save logged in user data
   constructor(
-    private http: HttpClient,
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning) {},
+    public ngZone: NgZone, // NgZone service to remove outside scope warning)
+    public errorFB: ErrorFirebaseService
   ) {
     /* Saving user data in localstorage when 
 		logged in and setting up null when logged out */
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.userData = user;
-        localStorage.setItem("user", JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem("user"));
+        // this.userData = user;
+        // localStorage.setItem("user", JSON.stringify(this.userData));
+        // JSON.parse(localStorage.getItem("user"));
       } else {
-        localStorage.setItem("user", null);
-        JSON.parse(localStorage.getItem("user"));
+        // localStorage.setItem("user", null);
+        // JSON.parse(localStorage.getItem("user"));
       }
     });
   }
-  ngOnInit(): void {
-      // var admin = require("firebase-admin");
-
-      // var serviceAccount = require("c:/organicossaojose-19c51-firebase-adminsdk-ej113-3a441338fe.json");
-
-      // admin.initializeApp({
-      //   credential: admin.credential.cert(serviceAccount),
-      //   databaseURL: "https://organicossaojose-19c51.firebaseio.com",
-      // });
-
-  }
+  ngOnInit(): void {}
 
   /*
    * Handle Http operation that failed.
@@ -72,19 +57,103 @@ export class AuthService implements OnInit{
       this.afAuth
         .signInWithEmailAndPassword(email, password)
         .then((result) => {
-          // this.SetUserData(result.user);
           localStorage.setItem("user", JSON.stringify(result.user));
           resolve(result);
         })
+        .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+    });
+  }
+
+  /* Create User in Authentication */
+  createUserAuthentication(userFirebase: UserFirebase): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.afAuth
+        .createUserWithEmailAndPassword(
+          userFirebase.email,
+          userFirebase.password
+        )
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+    });
+  }
+  /* Delete user from Authentication */
+  deleteFromAuthentication(userToBeRemoved: UserFirebase) {
+    return new Promise((resolve, reject) => {
+      this.afAuth
+        .signInWithEmailAndPassword(
+          userToBeRemoved.email,
+          userToBeRemoved.password
+        )
+        .then(() => {
+          this.afAuth.currentUser
+            .then((x) => {
+              x.delete()
+                .then(() => resolve(true))
+                .catch((error) => {
+                  console.log(error);
+                  reject(this.errorFB.getErrorByCode(error.code));
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+              reject(this.errorFB.getErrorByCode(error.code));
+            });
+        })
         .catch((error) => {
-          reject(error);
-          // window.alert(error.message);
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error.code));
         });
     });
   }
 
-  // Sign up with email/password
-  async SignUp(userFirebase: UserFirebase): Promise<UserFirebase> {
+  // Reset Forggot password
+  ForgotPassword(passwordResetEmail) {
+    return new Promise((acept, reject) => {
+      this.afAuth
+        .sendPasswordResetEmail(passwordResetEmail)
+        .then((success) => {
+          acept(success);
+        })
+        .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+    });
+  }
+
+  // Returns true when user is looged in and email is verified
+  /*get isLoggedIn(): boolean {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user !== null && user.emailVerified !== false ? true : false;
+  }*/
+
+  /* Setting up user data when sign in with username/password, 
+      sign up with username/password and sign in with social auth  
+      provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
+  /*SetUserData(user) {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
+    const userData: UserFirebase = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+      password: user.password,
+      jobTitle: user.jobTitle,
+      birthDate: user.birthDate,
+      contact: user.contact,
+      permissions: user.permissions,
+      emergencyContacts: user.emergencyContacts,
+    };
+
+    return userRef.set(userData, {
+      merge: true,
+    });
+  }*/
+
+  // Inscrever-se - Sign up with email/password
+  /*async SignUp(userFirebase: UserFirebase): Promise<UserFirebase> {
     return new Promise((resolve, reject) => {
       this.afAuth
         .createUserWithEmailAndPassword(
@@ -102,6 +171,7 @@ export class AuthService implements OnInit{
               password: userFirebase.password,
               jobTitle: userFirebase.jobTitle,
               birthDate: userFirebase.birthDate,
+              contact: userFirebase.contact,
               permissions: userFirebase.permissions,
               emergencyContacts: userFirebase.emergencyContacts,
             };
@@ -113,45 +183,25 @@ export class AuthService implements OnInit{
           reject(error);
         });
     });
-  }
+  }*/
 
   // Send email verfificaiton when new user sign up
-  SendVerificationMail() {
+  /*SendVerificationMail() {
     return this.afAuth.currentUser.then((u) => {
       u.sendEmailVerification().then((result) => {
         console.log(result);
       });
       // this.router.navigate(["verify-email-address"]);
     });
-  }
-
-  // Reset Forggot password
-  ForgotPassword(passwordResetEmail) {
-    return new Promise((acept, reject) => {
-      this.afAuth
-        .sendPasswordResetEmail(passwordResetEmail)
-        .then((success) => {
-          acept(success);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  // Returns true when user is looged in and email is verified
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user !== null && user.emailVerified !== false ? true : false;
-  }
+  }*/
 
   // Sign in with Google
-  GoogleAuth() {
+  /*GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider());
-  }
+  }*/
 
   // Auth logic to run auth providers
-  AuthLogin(provider) {
+  /*AuthLogin(provider) {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
@@ -165,51 +215,13 @@ export class AuthService implements OnInit{
       .catch((error) => {
         window.alert(error);
       });
-  }
-
-  /* Setting up user data when sign in with username/password, 
-	  sign up with username/password and sign in with social auth  
-	  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(user) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `users/${user.uid}`
-    );
-    const userData: UserFirebase = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-      password: user.password,
-      jobTitle: user.jobTitle,
-      birthDate: user.birthDate,
-      permissions: user.permissions,
-      emergencyContacts: user.emergencyContacts
-    };
-
-    return userRef.set(userData, {
-      merge: true,
-    });
-  }
+  }*/
 
   // Sign out
-  SignOut() {
-    return this.afAuth.signOut().then(() => {
-      localStorage.removeItem("user");
-      this.router.navigate(["sign-in"]);
-    });
-  }
-
-  excluir(uid) {
-    return null;
-    //  admin
-    //   .auth()
-    //   .deleteUser(uid)
-    //   .then(function () {
-    //     console.log("Successfully deleted user");
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Error deleting user:", error);
-    //   });
-  }
+  /* SignOut() {
+     return this.afAuth.signOut().then(() => {
+       localStorage.removeItem("user");
+       this.router.navigate(["login"]);
+     });
+   }*/
 }

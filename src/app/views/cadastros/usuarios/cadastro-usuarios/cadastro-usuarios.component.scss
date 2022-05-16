@@ -29,12 +29,13 @@ mat-icon[mat-card-avatar] {
 }
 
 mat-card-actions {
+  
   button {
-    width: 120px;
+    width: 140px;
     height: 40px;
+    margin: 0;
   }
 }
-
 /* CARD USER */
 .card-user {
   height: 100%;
@@ -66,8 +67,7 @@ mat-card-actions {
   mat-card-actions {
     padding-top: 10px;
 
-    .file-upload {
-      height: 30px;
+    .buttons {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -77,6 +77,13 @@ mat-card-actions {
         cursor: pointer;
       }
     }
+  }
+
+  /* IMAGEM */
+  img {
+    height: 235px;
+    width: 235px;
+    border-radius: 50%;
   }
 }
 
@@ -90,13 +97,6 @@ mat-card-actions {
   mat-card-header {
     padding-left: 16px;
   }
-}
-
-/* IMAGEM */
-img {
-  height: 210px;
-  border-radius: 50%;
-  width: 250px;
 }
 
 .loading {

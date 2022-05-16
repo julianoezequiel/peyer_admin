@@ -1,12 +1,13 @@
-<h3 mat-dialog-title>
-  {{ title }}
+<h3 mat-dialog-title style="text-align: center;">
+  {{ message }}
 </h3>
+<mat-divider></mat-divider>
 
-<div mat-dialog-content>
+<!-- <div mat-dialog-content>
   <p>{{ message }}</p>
-</div>
+</div> -->
 
-<div mat-dialog-actions>
-  <button mat-button (click)="onDismiss()">Não</button>
-  <button mat-raised-button color="primary" (click)="onConfirm()">Sim</button>
+<div mat-dialog-actions align="center">
+  <button mat-button (click)="onDismiss()">{{'opcao.nao' | translate}}</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()">{{'opcao.sim' | translate}}</button>
 </div>

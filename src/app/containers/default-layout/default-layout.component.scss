@@ -1,14 +1,103 @@
-// ::ng-deep {
-//   app-header {
-//     height: 66px !important;
+@import "src/scss/_variables.scss";
 
-//     a {
-//       height: 66px !important;
-//     }
+.elevation {
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.57);
+}
 
-//     img:first-of-type {
-//       height: 100% !important;
-//       width: 100% !important;
-//     }
-//   }
-// }
+/* HEADER */
+app-header {
+  height: 71px;
+  background-color: $peyer-color-green;
+  border: 0;
+
+  ::ng-deep {
+    a img {
+      height: 71px;
+    }
+
+    .navbar-toggler {
+      background: $peyer-color-yellow;
+      min-width: 40px;
+    }
+  }
+}
+
+::ng-deep .breadcrumb {
+  background: #2f353a;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.app-body {
+  margin-top: 70px;
+}
+
+/* SIDEBAR */
+app-sidebar {
+  padding-top: 10px;
+
+  app-sidebar-nav {
+
+    ::ng-deep app-sidebar-nav-items {
+      padding: 0px 5px;
+
+      app-sidebar-nav-link {
+        margin-bottom: 2px;
+
+        i {
+          font-size: 20px !important;
+          vertical-align: middle !important;
+          color: $peyer-color-yellow !important;
+        }
+
+        .nav-link {
+          border-radius: 10px;
+
+          &:hover {
+            background-color: #3a4248 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* CONTENT MAIN */
+main.main {
+  padding: 15px;
+
+  mat-card.principal {
+    height: 100%;
+    padding-top: 0;
+
+    ::ng-deep mat-card-header.principal {
+      background-color: #2f353a;
+      margin: 0 -16px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      margin-bottom: 10px;
+
+      mat-card-title {
+        margin-top: 12px;
+        font-size: 18px;
+
+        .title {
+          color: $peyer-color-yellow;
+        }
+        .sub-title {
+          color: gray;
+        }
+      }
+    }
+
+    ::ng-deep mat-card-content.principal {
+      height: calc(100vh - 230px);
+    }
+
+    ::ng-deep mat-card-actions.principal {
+      margin: 0;
+      padding-bottom: 0;
+      padding-top: 16px;
+    }
+  }
+}

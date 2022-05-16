@@ -1,0 +1,48 @@
+@import "src/scss/_variables.scss";
+
+mat-card {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0;
+  border: 3px solid $peyer-color-green;
+  border-radius: 10px;
+
+  mat-card-content {
+    margin: 0px 15px;
+  }
+
+  mat-card-actions {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    margin: 16px !important;
+    padding: 0;
+
+    .mat-raised-button {
+      margin: 0;
+    }
+  }
+}
+
+.esqueceu-senha {
+  background-color: $color-ligth;
+  margin-top: 10px !important;
+}
+
+.logo-header {
+  background: $peyer-color-green;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+
+  ::ng-deep .mat-form-field-flex .mat-form-field-outline {
+    .mat-form-field-outline-start,
+    .mat-form-field-outline-gap,
+    .mat-form-field-outline-end {
+      border-width: 3px;
+    }
+  }
+}

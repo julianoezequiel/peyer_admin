@@ -1,22 +1,49 @@
-import { Injectable } from "@angular/core";
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-} from "@angular/fire/firestore";
-import { Produto } from "../model/produto.model";
-import { UserFirebase } from '../../login/userfirebase.model';
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
+
+import { AuthService } from '../../login/auth.service';
+import { UserFirebase } from './../model/userfirebase.model';
+import { ErrorFirebaseService } from './error-firebase.service';
 
 @Injectable({
   providedIn: "root",
 })
 export class UsuarioService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private authService: AuthService,
+    private fireStorage: AngularFireStorage,
+    private errorFB: ErrorFirebaseService
+  ) {}
 
   collectionName = "users";
 
-  create(record: UserFirebase) {
-    console.log(record);
-    return this.firestore.collection(this.collectionName).add(record);
+  async create(userToBeCreated: UserFirebase) {
+    return new Promise((resolve, reject) => {
+      console.log("Creating in Authentication...");
+      this.authService
+        .createUserAuthentication(userToBeCreated)
+        .then((x) => {
+          userToBeCreated.uid = x.user.uid;
+
+          console.log("Creating in Database...");
+          this.firestore
+            .doc(`${this.collectionName}/${userToBeCreated.uid}`)
+            .set(userToBeCreated, { merge: true })
+            .then(() => resolve(null))
+            .catch((error) => {
+              console.log(error);
+              reject(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
   }
 
   update(recordID, record: UserFirebase) {
@@ -38,30 +65,52 @@ export class UsuarioService {
     return this.firestore.collection(this.collectionName).valueChanges();
   }
 
-  delete(record_id) {
-    return this.firestore.collection(this.collectionName).doc(record_id).delete();
+  delete(userToBeRemoved: UserFirebase) {
+    return new Promise(async (resolve, reject) => {
+      if (userToBeRemoved.photoURL) {
+        console.log("Deleting photo from Storage...");
+        this.deletePhotoFromStorage(userToBeRemoved.photoURL)
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+      }
+
+      console.log("Deleting from Authentication");
+      this.authService
+        .deleteFromAuthentication(userToBeRemoved)
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+
+      console.log("Deleting from Database");
+      this.firestore
+        .collection(this.collectionName)
+        .doc(userToBeRemoved.uid)
+        .delete()
+        .then(() => resolve(null))
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
   }
 
-  listar():Promise<UserFirebase[]>{
-    return new Promise<UserFirebase[]>((acept,reject)=>{
-     this.read_all().subscribe((data)=>{
-        let lista:UserFirebase[]= data.map((e)=>{
-         return {
-           uid: e.payload.doc.id,
-           email: e.payload.doc.data()["email"],
-           displayName: e.payload.doc.data()["displayName"],
-           photoURL: e.payload.doc.data()["photoURL"],
-           emailVerified:e.payload.doc.data()["emailVerified"],
-           password:'',
-           password2:'',
-           jobTitle: e.payload.doc.data()["jobTitle"],
-           birthDate: e.payload.doc.data()["birthDate"],
-           permissions: e.payload.doc.data()["permissions"],
-           emergencyContacts: e.payload.doc.data()["emergencyContacts"],
-         }
-       })
-       acept(lista);
-     });
-    })
-   }
+  /* Delete user photo from firebase storage */
+  deletePhotoFromStorage(photoUrl: string) {
+    return new Promise((resolve, reject) => {
+      this.fireStorage
+        .ref(photoUrl)
+        .delete()
+        .toPromise()
+        .then(() => {
+          resolve(null);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error.code));
+        });
+    });
+  }
 }

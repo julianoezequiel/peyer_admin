@@ -17,3 +17,28 @@
     display: flex;
   }
 }
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 15px;
+  padding-bottom: 0;
+
+  button {
+    height: 45px;
+    width: 100px;
+  }
+
+  mat-form-field {
+    width: 40%;
+    font-size: 13px;
+  }
+}
+
+.scroll {
+  height: calc(100vh - 317px);
+  overflow-y: auto;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+}
+

@@ -1,23 +1,24 @@
 // Variable overrides
-$peyer-color-green: #00747a;
-$peyer-color-yellow: #ffe40c;
+$peyer-color-green: #2d7278;
+$peyer-color-yellow: #fddf4e;
 $color-warn: #d32f2f;
+$color-ligth: #e4e5e6;
 
 $peyer-green: (
-    50 : #e0eeef,
-    100 : #b3d5d7,
-    200 : #80babd,
-    300 : #4d9ea2,
-    400 : #26898e,
-    500 : #00747a,
-    600 : #006c72,
-    700 : #006167,
-    800 : #00575d,
-    900 : #00444a,
-    A100 : #7ef2ff,
-    A200 : #4becff,
-    A400 : #18e7ff,
-    A700 : #00e3fd,
+    50 : #e6eeef,
+    100 : #c0d5d7,
+    200 : #96b9bc,
+    300 : #6c9ca1,
+    400 : #4d878c,
+    500 : #2d7278,
+    600 : #286a70,
+    700 : #225f65,
+    800 : #1c555b,
+    900 : #114248,
+    A100 : #82f0ff,
+    A200 : #4fe9ff,
+    A400 : #1ce3ff,
+    A700 : #03e0ff,
     contrast: (
         50 : #000000,
         100 : #000000,
@@ -36,22 +37,21 @@ $peyer-green: (
     )
 );
 
-/* For use in src/lib/core/theming/_palette.scss */
 $peyer-yellow: (
-    50 : #fffce2,
-    100 : #fff7b6,
-    200 : #fff286,
-    300 : #ffec55,
-    400 : #ffe830,
-    500 : #ffe40c,
-    600 : #ffe10a,
-    700 : #ffdd08,
-    800 : #ffd906,
-    900 : #ffd103,
+    50 : #fffbea,
+    100 : #fef5ca,
+    200 : #feefa7,
+    300 : #fee983,
+    400 : #fde469,
+    500 : #fddf4e,
+    600 : #fddb47,
+    700 : #fcd73d,
+    800 : #fcd235,
+    900 : #fcca25,
     A100 : #ffffff,
-    A200 : #fffcf2,
-    A400 : #fff2bf,
-    A700 : #ffeda6,
+    A200 : #ffffff,
+    A400 : #fff3cf,
+    A700 : #ffedb6,
     contrast: (
         50 : #000000,
         100 : #000000,
