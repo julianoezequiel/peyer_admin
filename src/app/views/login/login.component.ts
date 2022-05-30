@@ -1,12 +1,14 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import { ToastrService } from "ngx-toastr";
-import { Observable, Subject } from "rxjs";
+import { UserFirebase } from './../cadastros/model/userfirebase.model';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { UsuarioService } from "../cadastros/services/usuario.service";
-import { AuthService } from "./auth.service";
+import { UsuarioService } from '../cadastros/services/usuario.service';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: "app-dashboard",
@@ -47,6 +49,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.returnUrl = params.returnUrl || "/";
     });
 
+    localStorage.clear();
+
     this.hideSenha = true;
   }
 
@@ -85,35 +89,58 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.auth
       .SignIn(authData.email, authData.password)
-      .then((result: any) => {
-        this.checkPermission(result.user.uid);
+      .then((result) => {
+        this.checkPermission(result, authData);
       })
       .catch((error) => {
-        this.toastr.warning(
-          error,
-          this.translate.instant("alerta.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
+        this.toastr.warning(error, this.translate.instant("alerta.atencao"), {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
       })
-      .finally(async () => {
+      .finally(() => {
         this.loading = false;
         this.cdr.markForCheck();
       });
   }
 
-  checkPermission(userId: number) {
-    let userSub = this.usuarioService.read(userId).get();
+  checkPermission(result, authData) {
+    let userSub = this.usuarioService.read(result.user.uid).get().toPromise();
 
-    userSub.subscribe((x) => {
-      let userAuth = x.data();
+    userSub.then(x => {
+      let userData = x.data() as UserFirebase;
 
-      if (!userAuth.permissions.administrative) {
+      if (userData) {
+        if (!userData.permissions.administrative) {
+          this.toastr.warning(
+            this.translate.instant("login.semPermissao"),
+            this.translate.instant("alerta.atencao"),
+            {
+              closeButton: true,
+              progressAnimation: "decreasing",
+              progressBar: true,
+            }
+          );
+          this.loading = false;
+          this.cdr.markForCheck();
+  
+          return;
+        } else {
+          let userLocal = {
+            displayName: userData.displayName,
+            email: userData.email,
+            photoURL: userData.photoURL,
+            uid: userData.uid,
+          };
+
+          localStorage.setItem("user_firebase", JSON.stringify(userLocal));
+          this.router.navigate(["dashboard"]);
+        }
+      } else {        
+        this.auth.deleteFromAuthentication(authData);
         this.toastr.warning(
-          this.translate.instant("login.semPermissao"),
+          this.translate.instant("errorFirebase.user-not-found"),
           this.translate.instant("alerta.atencao"),
           {
             closeButton: true,
@@ -121,13 +148,24 @@ export class LoginComponent implements OnInit, OnDestroy {
             progressBar: true,
           }
         );
+
         this.loading = false;
         this.cdr.markForCheck();
 
         return;
-      } else {
-        this.router.navigate(["dashboard"]);
       }
+
+    })
+    .catch(error => {
+      this.toastr.warning(error, this.translate.instant("alerta.atencao"), {
+        closeButton: true,
+        progressAnimation: "decreasing",
+        progressBar: true,
+      });
+    })
+    .finally(() => {
+      this.loading = false;
+      this.cdr.markForCheck();
     });
   }
 

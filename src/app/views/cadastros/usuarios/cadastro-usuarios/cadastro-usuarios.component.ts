@@ -1,3 +1,4 @@
+import { AngularFireAuth } from '@angular/fire/auth';
 import {
   ChangeDetectorRef,
   Component,
@@ -29,6 +30,7 @@ import { AuthService } from "../../../login/auth.service";
 import { UserFirebase } from "../../model/userfirebase.model";
 import { UsuarioService } from "../../services/usuario.service";
 import { EmergencyContacts } from "./../../model/emergencyContacts.model";
+import { $ } from 'protractor';
 
 @Component({
   selector: "app-cadastro-usuarios",
@@ -48,10 +50,8 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
   downloadURL: any;
   fileAttr = "Choose File";
   loadingPhoto;
-  //isRemovePhoto = false;
   photoInitial = "";
-  //replacePhoto = false;
-
+  
   maxDate: Date = new Date();
 
   userData: UserFirebase = {
@@ -59,7 +59,7 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
     email: "",
     displayName: "",
     photoURL: "",
-    emailVerified: true,
+    // emailVerified: true,
     password: "",
     jobTitle: "",
     birthDate: "",
@@ -73,6 +73,14 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
   };
 
   modalRef: BsModalRef;
+  newUser = true;
+  disableBtn = false;
+  
+  emailReadOnly = false;
+  emailInit = '';
+
+  passwordReadOnly = false;
+  passwordInit = '';
 
   // TABLE EMERGENCY CONTACTS
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -93,6 +101,7 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
     public auth: AuthService,
     public translate: TranslateService,
     private angularFireStorage: AngularFireStorage,
+    public afAuth: AngularFireAuth,
     private changeDetectorRef: ChangeDetectorRef,
     private modalService: BsModalService
   ) {}
@@ -105,12 +114,18 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
         const id = params.id;
 
         this.pageTitle = id ? "titulo.editarRegistro" : "titulo.novoRegistro";
+        this.newUser = id ? false : true;
+        this.emailReadOnly = !this.newUser;
+        this.passwordReadOnly = !this.newUser;
 
         if (id && id.length > 0) {
           const material = this.usuarioService.read(id).valueChanges();
           const subMaterial = material.subscribe(async (value) => {
             this.userData = value;
             this.userData.uid = id;
+
+            this.emailInit = value.email;
+            this.passwordInit = value.password;
             this.photoInitial = value.photoURL;
             //console.log("this.userData", this.userData);
 
@@ -171,14 +186,31 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
     });
   }
 
-  async onSubmit() {
+  async onSubmit($event) {
     const controls = this.userForm.controls;
-    console.log(controls);
+
+    controls['senha'].updateValueAndValidity();
+    controls['senha_confirma'].updateValueAndValidity();
+
+    //console.log(controls);
 
     /* check form */
     if (this.userForm.invalid) {
-      Object.keys(controls).forEach((controlName) =>
-        controls[controlName].markAsTouched()
+      Object.keys(controls).forEach((controlName) => {
+        controls[controlName].markAsTouched();
+    });
+      return;
+    }
+
+    if (!this.newUser && (!this.emailReadOnly || !this.passwordReadOnly)) {
+      this.toastr.warning(
+        this.translate.instant("cadastros.usuarios.msg.finalizar-edicao"),
+        this.translate.instant("alerta.atencao"),
+        {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        }
       );
       return;
     }
@@ -202,16 +234,24 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
     const userFirebase: UserFirebase = this.prepareUser();
 
     if (userFirebase.uid) {
-      await this.checkPhoto();
-      await this.uploadPhoto();
+      
+      let userValid = await this.checkOwnUser(userFirebase);
 
-      console.log("Updating...");
-      this.updateUser(userFirebase);
+      if(userValid) {
+        await this.checkPhoto(userFirebase.photoURL);
+        await this.uploadPhoto();
+  
+        this.disableBtn = true;
+        console.log("Updating...");
+        this.updateUser(userFirebase, $event);
+      }
+
     } else {
       await this.uploadPhoto();
-
+      
+      this.disableBtn = true;
       console.log("Adding...");
-      this.addUser(userFirebase);
+      this.addUser(userFirebase, $event);
     }
   }
 
@@ -224,7 +264,26 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
     }
   }
 
-  addUser(userFirebase: UserFirebase) {
+  async checkOwnUser(user: UserFirebase): Promise<boolean> {
+    return this.afAuth.currentUser.then((res) => {
+      if (res.uid == user.uid) {
+        this.toastr.warning(
+          this.translate.instant("cadastros.usuarios.msg.alterar-proprio-usuario"),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+        return false;
+      } else {
+        return true;
+      }
+    });
+  }
+
+  addUser(userFirebase: UserFirebase, $event) {
     this.usuarioService
       .create(userFirebase)
       .then((x) => {
@@ -245,12 +304,14 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
           progressAnimation: "decreasing",
           progressBar: true,
         });
-      });
+      })
+      .finally(() => this.disableBtn = false);
   }
 
-  updateUser(userFirebase: UserFirebase) {
+  updateUser(userFirebase: UserFirebase, $event) {
+    
     this.usuarioService
-      .update(userFirebase.uid, userFirebase)
+      .update(userFirebase.uid, userFirebase, this.emailInit, this.passwordInit)
       .then((result) => {
         this.toastr.success(
           this.translate.instant("mensagem.sucesso.alterado"),
@@ -269,7 +330,8 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
           progressAnimation: "decreasing",
           progressBar: true,
         });
-      });
+      })
+      .finally(() => this.disableBtn = false);
   }
 
   prepareUser(): UserFirebase {
@@ -279,7 +341,7 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
       displayName: controls.usuario.value,
       email: controls.email.value,
       photoURL: this.userData.photoURL,
-      emailVerified: false,
+      // emailVerified: false,
       password: controls.senha.value,
       jobTitle: controls.cargo.value,
       birthDate: new Date(controls.dataNascimento.value).toLocaleDateString(),
@@ -293,6 +355,15 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
 
   voltar() {
     this.router.navigate(["../users"], {});
+  }
+
+  enableEditField(isEmail: boolean) {
+    if (isEmail) {
+      this.emailReadOnly = !this.emailReadOnly;
+    } else {
+      this.passwordReadOnly = !this.passwordReadOnly;
+    }
+
   }
 
   confirmPassValidator(otherField: string) {
@@ -356,10 +427,8 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
           .ref("/" + userData.photoURL)
           .getDownloadURL();
 
-        console.log(this.downloadURL);
-
         this.loadingPhoto = false;
-      }, 2000);
+      }, 2500);
     }
   }
 
@@ -370,8 +439,8 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
     this.imageFile = null;
   }
 
-  checkPhoto() {
-    if (this.photoInitial) {
+  checkPhoto(urlPhotoForm: string) {   
+    if (this.photoInitial && (this.photoInitial != urlPhotoForm)) {
       this.usuarioService
         .deletePhotoFromStorage(this.photoInitial)
         .then(() => {})

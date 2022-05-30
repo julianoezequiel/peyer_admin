@@ -11,7 +11,8 @@
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
         dropdownToggle (click)="false">
-        <img src="assets/img/avatars/default.jpg" class="img-avatar" alt="julianoezequiel@gmail.com" />
+        <img class="img-avatar" *ngIf="downloadURL" [src]="downloadURL" alt="Image from AngularFireStorage">
+        <img class="img-avatar" *ngIf="!downloadURL" src="assets/img/avatars/default.jpg" alt="julianoezequiel@gmail.com" />
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <a class="dropdown-item" href="#" (click)="logout()">
@@ -25,7 +26,7 @@
 <div class="app-body">
   <app-sidebar #appSidebar [fixed]="true" [display]="'lg'" [minimized]="sidebarMinimized"
     (minimizedChange)="toggleMinimize()" class="elev">
-    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="appSidebar.minimized"></app-sidebar-nav>
+    <app-sidebar-nav [navItems]="navItems"></app-sidebar-nav>
     <!-- <app-sidebar-minimizer></app-sidebar-minimizer> -->
     <!-- <button class="sidebar-minimizer brand-minimizer" type="button"></button> -->
   </app-sidebar>

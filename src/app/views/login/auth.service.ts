@@ -1,11 +1,12 @@
-import { Injectable, NgZone, OnInit } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/auth";
-import { AngularFirestore } from "@angular/fire/firestore";
-import { Router } from "@angular/router";
-import { Observable, of } from "rxjs";
+import { Injectable, NgZone, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
-import { UserFirebase } from "../cadastros/model/userfirebase.model";
-import { ErrorFirebaseService } from "../cadastros/services/error-firebase.service";
+import { UserFirebase } from '../cadastros/model/userfirebase.model';
+import { ErrorFirebaseService } from '../cadastros/services/error-firebase.service';
+import firebase from 'firebase'
 
 @Injectable()
 export class AuthService implements OnInit {
@@ -52,12 +53,11 @@ export class AuthService implements OnInit {
   //################################################################
 
   // Sign in with email/password
-  SignIn(email, password) {
+  SignIn(email, password): Promise<firebase.auth.UserCredential> {
     return new Promise((resolve, reject) => {
       this.afAuth
         .signInWithEmailAndPassword(email, password)
         .then((result) => {
-          localStorage.setItem("user", JSON.stringify(result.user));
           resolve(result);
         })
         .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
@@ -111,12 +111,23 @@ export class AuthService implements OnInit {
   // Reset Forggot password
   ForgotPassword(passwordResetEmail) {
     return new Promise((acept, reject) => {
+
       this.afAuth
         .sendPasswordResetEmail(passwordResetEmail)
         .then((success) => {
           acept(success);
         })
         .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+    });
+  }
+
+  // Sign out
+  SignOut() {
+    return this.afAuth.signOut().then(() => {
+      localStorage.removeItem("user_firebase");
+      this.router.navigate(["login"]);
+      console.log("Leaving...");
+      
     });
   }
 
@@ -216,12 +227,4 @@ export class AuthService implements OnInit {
         window.alert(error);
       });
   }*/
-
-  // Sign out
-  /* SignOut() {
-     return this.afAuth.signOut().then(() => {
-       localStorage.removeItem("user");
-       this.router.navigate(["login"]);
-     });
-   }*/
 }

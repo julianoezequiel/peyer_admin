@@ -30,9 +30,15 @@
           </mat-form-field>
 
           <!-- EMAIL -->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && emailReadOnly">
             <mat-label>{{'cadastros.usuarios.campo.email'|translate}}</mat-label>
-            <input matInput formControlName="email" type="email">
+            <input matInput formControlName="email" type="email" [readonly]="!newUser && emailReadOnly">
+            <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(true)" color="primary">
+              <mat-icon class="animation" *ngIf="emailReadOnly" matTooltip="{{'titulo.editar'|translate}}" 
+                matTooltipPosition="below">edit</mat-icon>
+              <mat-icon class="animation" *ngIf="!emailReadOnly" matTooltip="{{'titulo.pronto'|translate}}" 
+                matTooltipPosition="below">done</mat-icon>
+            </button>
             <mat-error *ngIf="userForm.controls['email'].hasError('required')">
               <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
             </mat-error>
@@ -42,9 +48,15 @@
           </mat-form-field>
 
           <!-- PASSWORD -->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
             <mat-label>{{'cadastros.usuarios.campo.senha'|translate}}</mat-label>
-            <input matInput formControlName="senha" type="password" autocomplete>
+            <input matInput formControlName="senha" type="password" autocomplete [readonly]="!newUser && passwordReadOnly">
+            <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(false)" color="primary">
+              <mat-icon class="animation" *ngIf="passwordReadOnly" matTooltip="{{'titulo.editar'|translate}}" 
+                matTooltipPosition="below">edit</mat-icon>
+              <mat-icon class="animation" *ngIf="!passwordReadOnly" matTooltip="{{'titulo.pronto'|translate}}" 
+                matTooltipPosition="below">done</mat-icon>
+            </button>
             <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
               <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
             </mat-error>
@@ -54,9 +66,9 @@
           </mat-form-field>
 
           <!-- CONFIRM PASSWORD -->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
             <mat-label>{{'cadastros.usuarios.campo.senhaConfirma'|translate}}</mat-label>
-            <input matInput formControlName="senha_confirma" type="password" autocomplete>
+            <input matInput formControlName="senha_confirma" type="password" autocomplete [readonly]="!newUser && passwordReadOnly">
             <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
               <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
             </mat-error>
@@ -104,7 +116,7 @@
 
           <!-- PERMISSIONS -->
           <div class="permissions" formGroupName="permissao">
-            <span>{{'cadastros.usuarios.titulo.permissao'|translate}}</span>
+            <span>{{'cadastros.usuarios.titulo.permissao.selecionar'|translate}}</span>
 
             <div class="checkboxs-align">
               <!-- Employee -->
@@ -156,7 +168,7 @@
         <mat-card-actions>
           <div style="display: flex; justify-content: space-between;">
             <!-- Browse Button File -->
-            <button mat-raised-button color="accent" class="buttons" matTooltip="{{'titulo.upload'|translate}}"
+            <button mat-raised-button type="button" color="accent" class="buttons" matTooltip="{{'titulo.upload'|translate}}"
               matTooltipPosition="below">
               <mat-icon>add_to_photos</mat-icon>
               <label for='buttons' style="margin: 0;">{{'titulo.upload'|translate}}</label>
@@ -275,7 +287,8 @@
   </div>
 
   <mat-card-actions align="end" class="principal">
-    <button mat-raised-button color="primary" (click)="onSubmit()">{{'titulo.salvar'|translate}}</button>
+    <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)"[disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
     <button mat-raised-button color="danger" type="button" (click)="voltar()" style="margin-left: 10px;">{{'titulo.voltar'|translate}}
     </button>
   </mat-card-actions>

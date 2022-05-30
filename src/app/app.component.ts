@@ -1,25 +1,41 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router, NavigationEnd } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import * as admin from "firebase-admin";
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+
+import { UsuarioService } from './views/cadastros/services/usuario.service';
+import { AuthService } from './views/login/auth.service';
 
 @Component({
-  // tslint:disable-next-line
   selector: "body",
-  template: "<router-outlet></router-outlet>",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"],
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router,private translate: TranslateService) {
-    translate.setDefaultLang('en');
+  checkingUser = true;
+
+  constructor(
+    private router: Router,
+    private translate: TranslateService,
+    public usuarioService: UsuarioService,
+    public authService: AuthService,
+    private toastr: ToastrService
+  ) {
+    translate.setDefaultLang("en");
   }
 
-  ngOnInit() {
-    
-      this.router.events.subscribe((evt) => {
-        if (!(evt instanceof NavigationEnd)) {
-          return;
-        }
-        window.scrollTo(0, 0);
-      });
+  async ngOnInit() {
+
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0);
+    });
+
+    setTimeout(() => {
+      this.checkingUser = false;
+    }, 2000);
   }
 }

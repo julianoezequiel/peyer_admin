@@ -28,7 +28,14 @@ mat-icon[mat-card-avatar] {
   margin-bottom: 0;
 }
 
+.row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
 mat-card-actions {
+  align-items: center;
   
   button {
     width: 140px;
@@ -36,6 +43,15 @@ mat-card-actions {
     margin: 0;
   }
 }
+
+.animation {
+  transition: transform .7s ease-in-out;
+}
+
+button:focus .animation {
+  transform: rotate(360deg);
+}
+
 /* CARD USER */
 .card-user {
   height: 100%;
@@ -47,6 +63,7 @@ mat-card-actions {
   .checkboxs-align {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 5px;
   }
 }
@@ -62,6 +79,8 @@ mat-card-actions {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    width: 20em;
+    margin: 0px auto;
   }
 
   mat-card-actions {
@@ -82,8 +101,8 @@ mat-card-actions {
   /* IMAGEM */
   img {
     height: 235px;
-    width: 235px;
-    border-radius: 50%;
+    width: 90%;
+    border-radius: 50em;
   }
 }
 

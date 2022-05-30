@@ -1,63 +1,56 @@
-<div class="app-body app-body1">
-  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
-  <main class="main d-flex align-items-center">
-    <div class="container">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
 
-      <form [formGroup]="loginForm" style="padding: 5px;" (submit)="onSubmit()" novalidate>
-        <mat-card class="mat-elevation-z12">
+<form [formGroup]="loginForm" (submit)="onSubmit()" novalidate>
+  <mat-card class="mat-elevation-z12">
 
-          <div class="logo-header">
-            <img src="assets/img/brand/peyer_logo.png" />
-            <mat-divider></mat-divider>
-          </div>
-
-          <mat-card-content>
-            <mat-form-field appearance="outline">
-              <mat-label>{{'cadastros.usuarios.campo.email' | translate}}</mat-label>
-              <mat-icon matPrefix>person</mat-icon>
-              <input matInput formControlName="email" />
-
-              <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio' | translate}}</strong>
-              </mat-error>
-              <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
-                <strong>{{'cadastros.campo.emailInvalido' | translate}}</strong>
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>{{'cadastros.usuarios.campo.senha' | translate}}</mat-label>
-              <mat-icon matPrefix>lock</mat-icon>
-              <input matInput formControlName="password" [type]="hideSenha ? 'password' : 'text'" autocomplete />
-
-              <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
-                <strong>{{'cadastros.campo.obrigatorio' | translate}}</strong>
-              </mat-error>
-              <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
-                <strong>{{'cadastros.campo.minLength' | translate}} 6</strong>
-              </mat-error>
-
-              <button type="button" mat-icon-button matSuffix (click)="changeCampoSenha($event)">
-                <mat-icon>{{hideSenha ? "visibility_off" : "visibility"}}</mat-icon>
-              </button>
-            </mat-form-field>
-          </mat-card-content>
-
-          <mat-divider></mat-divider>
-
-          <mat-card-actions>
-            <button mat-raised-button color="primary" type="submit">
-              {{'titulo.entrar' | translate}}
-              <mat-icon>login</mat-icon>
-            </button>
-
-            <button mat-raised-button (click)="esqueceuSenha()" class="esqueceu-senha">
-              {{'titulo.esqueceuSenha' | translate}}
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </form>
-
+    <div class="logo-header">
+      <img src="assets/img/brand/peyer_logo.png" />
+      <mat-divider></mat-divider>
     </div>
-  </main>
-</div>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>{{'cadastros.usuarios.campo.email' | translate}}</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="email" />
+
+        <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+          <strong>{{'cadastros.campo.obrigatorio' | translate}}</strong>
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+          <strong>{{'cadastros.campo.emailInvalido' | translate}}</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{'cadastros.usuarios.campo.senha' | translate}}</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input matInput formControlName="password" [type]="hideSenha ? 'password' : 'text'" autocomplete />
+
+        <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+          <strong>{{'cadastros.campo.obrigatorio' | translate}}</strong>
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+          <strong>{{'cadastros.campo.minLength' | translate}} 6</strong>
+        </mat-error>
+
+        <button type="button" mat-icon-button matSuffix (click)="changeCampoSenha($event)">
+          <mat-icon>{{hideSenha ? "visibility_off" : "visibility"}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">
+        {{'titulo.entrar' | translate}}
+        <mat-icon>login</mat-icon>
+      </button>
+
+      <button mat-raised-button (click)="esqueceuSenha()" type="button" class="esqueceu-senha">
+        {{'titulo.esqueceuSenha' | translate}}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

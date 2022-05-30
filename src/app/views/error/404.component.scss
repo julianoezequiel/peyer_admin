@@ -1,0 +1,41 @@
+@import "src/scss/_variables.scss";
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+  
+  background-image: url(assets/img/brand/bg6.png);
+  background-position: center;
+  background-size: contain;
+}
+
+.brand {
+  height: 71px;
+  width: 100%;
+  background-color: $peyer-color-green;
+}
+
+.container {
+  margin-bottom: 80px;
+}
+
+.row.header {
+    margin-bottom: 30px;
+}
+
+.code {
+     font-size: 5em;
+     font-weight: 700;
+     color: $color-warn;
+}
+
+.msgTitle{
+    font-size: 3em;
+    font-weight: 700;
+}
+
+.msgDesc {
+    font-size: 3em;
+}

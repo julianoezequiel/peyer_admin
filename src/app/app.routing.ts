@@ -14,7 +14,7 @@ import { LoginComponent } from "./views/login/login.component";
 export const routes: Routes = [
   {
     path: "",
-    redirectTo: "dashboard",
+    redirectTo: "login",
     pathMatch: "full",
     canActivate: [AuthGuard],
   },
@@ -31,20 +31,24 @@ export const routes: Routes = [
           import("./views/dashboard/dashboard.module").then(
             (m) => m.DashboardModule
           ),
+        canActivate: [AuthGuard],
       },
 
       // USERS
       {
         path: "users",
         component: ListaUsuariosComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: "users/user",
         component: CadastroUsuariosComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: "users/user/:id",
         component: CadastroUsuariosComponent,
+        canActivate: [AuthGuard],
       },
 
       {

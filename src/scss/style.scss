@@ -42,7 +42,8 @@ $custom-theme: mat-light-theme(
 //------
 
 /* SIDEBAR */
-$width-sidebar: 210px;
+/*$width-sidebar: 210px;
+
 .sidebar-lg-show {
   app-sidebar {
     width: $width-sidebar !important;
@@ -57,8 +58,17 @@ $width-sidebar: 210px;
   }
 
   main.main {
-    margin-left: 210px !important;
+    //margin-left: 210px !important;
   }
+}*/
+
+/* HELPERS */
+.h100 {
+  height: 100%;
+}
+
+.w100 {
+  width: 100%;
 }
 
 /* SCROLLBAR */
@@ -185,14 +195,15 @@ mat-form-field {
 }
 
 // Quando o campo está readonly
-mat-form-field.mat-form-field-appearance-outline.isReadOnly {
-  .mat-form-field-outline {
-    background-color: #ccc !important;
-    color: rgba(0, 0, 0, 0.349) !important;
-    border-radius: 5px;
-  }
-  .mat-form-field-label {
-    color: rgba(0, 0, 0, 0.7);
+mat-form-field.isReadOnly {
+
+  .mat-form-field-flex {
+    background-color: #ddd !important;
+    cursor: not-allowed;
+
+    input {
+      cursor: not-allowed;
+    }
   }
 }
 

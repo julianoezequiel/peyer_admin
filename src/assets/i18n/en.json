@@ -33,6 +33,7 @@
     "adicionar": "Add",
     "remover": "Remove",
     "editar": "Edit",
+    "pronto": "Done",
     "acoes": "Actions",
     "buscar": "Search",
     "upload": "Choose a file",
@@ -51,7 +52,10 @@
         "nome": "Name",
         "telefone": "Phone",
         "contatosEmergencia": "Emergency Contacts",
-        "permissao": "Select user permissions:"
+        "permissao": {
+          "titulo" : "Permissions",
+          "selecionar" : "Select user permissions:"
+        }
       },
       "campo": {
         "nomeUsuario": "Username",
@@ -67,7 +71,11 @@
           "motorista": "Driver"
         }
       },
-      "msg.sucesso": "User successfully registered, verification email sent to {{value}}"
+      "msg": {
+        "sucesso": "User successfully registered, verification email sent to {{value}}",
+        "alterar-proprio-usuario": "Changing your own user is not allowed",
+        "finalizar-edicao": "Finish editing the Email/Password field"
+      }
     },
     "campo": {
       "obrigatorio": "Required",
@@ -85,7 +93,15 @@
   "login": {
     "semPermissao": "Your user does not have admin permission",
     "informarEmail": "Inform an email",
-    "enviadoLinkRecuperacao": "Recovery link sent to your email"
+    "enviadoLinkRecuperacao": "Recovery link sent to your email",
+    "refazer": "Please, login again"
+  },
+
+  "errorPage": {
+    "perdido": "Oops! You're lost",
+    "msg": {
+      "404": "The page you are looking for was not found."
+    }
   },
 
   "errorFirebase": {
@@ -94,6 +110,7 @@
     "user-not-found": "User not found or account has been deleted",
     "wrong-password": "Invalid password",
     "timeout": "The operation has timed out",
-    "too-many-requests": "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later"
+    "too-many-requests": "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later",
+    "invalid-email": "The email address is badly formatted"
   }
 }

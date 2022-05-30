@@ -1,3 +1,5 @@
+import { AngularFireStorage } from '@angular/fire/storage';
+import { UserFirebase } from './../../views/cadastros/model/userfirebase.model';
 import { ChangeDetectorRef } from "@angular/core";
 import { style } from "@angular/animations";
 import { Component, OnDestroy, OnInit } from "@angular/core";
@@ -13,17 +15,21 @@ import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public sidebarMinimized = false;
+
   public navItems = navItems.map((items) => {
     this.translate(items);
     return items;
   });
 
+  downloadURL: string = "";
+
   constructor(
     private router: Router,
     private ts: TranslateService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private angularFireStorage: AngularFireStorage
   ) {
-    console.log("inicializando layout");
+    console.log("Init Layout");
   }
   ngOnDestroy(): void {
     //throw new Error('Method not implemented.')
@@ -36,6 +42,20 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         return items;
       });
     });
+
+    this.downloadPhoto();
+  }
+
+  downloadPhoto() {
+    const userLocal = JSON.parse(localStorage.getItem("user_firebase")) as UserFirebase;
+    
+    if (userLocal.photoURL) {
+        this.angularFireStorage.ref("/" + userLocal.photoURL).getDownloadURL().subscribe(
+          (complete) => {
+            this.downloadURL = complete
+          }
+        );
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -58,7 +78,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   }
 
   logout() {
-    localStorage.removeItem("user");
-    this.router.navigate(["login"]);
+    localStorage.removeItem("user_firebase");
+    this.router.navigate(["/login"]);
   }
 }

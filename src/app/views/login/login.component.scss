@@ -1,8 +1,11 @@
 @import "src/scss/_variables.scss";
 
+form {
+  padding: 10px;
+  margin: auto;
+}
+
 mat-card {
-  max-width: 500px;
-  margin: 0 auto;
   padding: 0;
   border: 3px solid $peyer-color-green;
   border-radius: 10px;

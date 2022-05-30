@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { AngularFireAuth } from "@angular/fire/auth";
 import { FormBuilder } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -32,6 +33,7 @@ export class ListaUsuariosComponent implements OnInit {
     private usuarioService: UsuarioService,
     private activatedRoute: ActivatedRoute,
     public auth: AuthService,
+    public afAuth: AngularFireAuth,
     public translate: TranslateService
   ) {}
 
@@ -43,7 +45,7 @@ export class ListaUsuariosComponent implements OnInit {
   data: UserFirebase[];
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["displayName", "email", "acoes"];
+  displayedColumns = ["displayName", "email", "jobTitle", "birthDate", "acoes"];
 
   async ngOnInit() {
     await this.getAll();
@@ -55,21 +57,25 @@ export class ListaUsuariosComponent implements OnInit {
     });
   }
 
-  editar(id) {
-    this.router.navigate(["../users/user/", id], {
-      relativeTo: this.activatedRoute,
-    });
+  async editar(user: UserFirebase) {
+
+    let userValid = await this.checkOwnUser(user);
+
+    if (userValid) {
+      this.router.navigate(["../users/user/", user.uid], {
+        relativeTo: this.activatedRoute,
+      });
+    }
   }
 
   async getAll() {
     await this.usuarioService.read_all().subscribe((data) => {
       let lista: UserFirebase[] = data.map((e) => {
         return {
-          uid: e.payload.doc.id,
+          uid: e.payload.doc.data()["uid"],
           email: e.payload.doc.data()["email"],
           displayName: e.payload.doc.data()["displayName"],
           photoURL: e.payload.doc.data()["photoURL"],
-          emailVerified: e.payload.doc.data()["emailVerified"],
           password: e.payload.doc.data()["password"],
           jobTitle: e.payload.doc.data()["jobTitle"],
           birthDate: e.payload.doc.data()["birthDate"],
@@ -86,34 +92,59 @@ export class ListaUsuariosComponent implements OnInit {
     });
   }
 
-  excluir(user: UserFirebase) {
+  async excluir(user: UserFirebase) {
     if (user.uid) {
-      this.usuarioService
-        .delete(user)
-        .then(() => {
-          this.toastr.success(
-            this.translate.instant("mensagem.sucesso.removido"),
-            this.translate.instant("alerta.atencao"),
-            {
-              closeButton: true,
-              progressAnimation: "decreasing",
-              progressBar: true,
-            }
-          );
-          this.getAll();
-        })
-        .catch((error) => {
-          this.toastr.warning(
-            this.translate.instant("mensagem.falha.removido"),
-            this.translate.instant("alerta.atencao"),
-            {
-              closeButton: true,
-              progressAnimation: "decreasing",
-              progressBar: true,
-            }
-          );
-        });
+      let userValid = await this.checkOwnUser(user);
+
+      if (userValid) {
+        this.usuarioService
+          .delete(user)
+          .then(() => {
+            this.toastr.success(
+              this.translate.instant("mensagem.sucesso.removido"),
+              this.translate.instant("alerta.atencao"),
+              {
+                closeButton: true,
+                progressAnimation: "decreasing",
+                progressBar: true,
+              }
+            );
+            this.getAll();
+          })
+          .catch((error) => {
+            this.toastr.warning(
+              this.translate.instant("mensagem.falha.removido"),
+              this.translate.instant("alerta.atencao"),
+              {
+                closeButton: true,
+                progressAnimation: "decreasing",
+                progressBar: true,
+              }
+            );
+          });
+      }
     }
+  }
+
+  async checkOwnUser(user: UserFirebase): Promise<any> {
+    return this.afAuth.currentUser.then((res) => {
+      if (res.uid == user.uid) {
+        this.toastr.warning(
+          this.translate.instant(
+            "cadastros.usuarios.msg.alterar-proprio-usuario"
+          ),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+        return null;
+      } else {
+        return res;
+      }
+    });
   }
 
   confirmDialog(m): void {

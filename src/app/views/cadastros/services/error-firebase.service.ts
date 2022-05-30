@@ -10,15 +10,22 @@ export class ErrorFirebaseService {
   // Returns the error message find by the FireBase 'code'
   // PS. ADD TO THE INTERNATIONALIZATION FILE, THE OTHER IDs AND CORRESPONDING MESSAGES
   getErrorByCode(code: string): string {
-    code = code.split("/")[1];
+    try {
+      code = code.split("/")[1];
 
-    if (this.hasTranslation(`errorFirebase.${code}`)) {
-      return this.translate.instant(`errorFirebase.${code}`);
-    } else {
+      if (this.hasTranslation(`errorFirebase.${code}`)) {
+        return this.translate.instant(`errorFirebase.${code}`);
+      } else {
+        return this.translate.instant("errorFirebase.desconhecido", {
+          value: code,
+        });
+      }
+    } catch (error) {
       return this.translate.instant("errorFirebase.desconhecido", {
-        value: code,
+        value: "ER-001",
       });
     }
+
   }
 
   hasTranslation(key: string): boolean {
