@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
 import { UsuarioService } from './views/cadastros/services/usuario.service';
-import { AuthService } from './views/login/auth.service';
+import { AuthService } from './views/auth/services/auth.service';
 
 @Component({
   selector: "body",

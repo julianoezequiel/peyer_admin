@@ -37,8 +37,8 @@
     "acoes": "Actions",
     "buscar": "Search",
     "upload": "Choose a file",
-    "novoRegistro": "/ New Register",
-    "editarRegistro": "/ Edit Register",
+    "novoRegistro": "/ New register",
+    "editarRegistro": "/ Edit register",
     "entrar": "Sign in",
     "esqueceuSenha": "Forgot password?",
     "sair": "Logout"
@@ -51,19 +51,19 @@
         "foto": "Photo",
         "nome": "Name",
         "telefone": "Phone",
-        "contatosEmergencia": "Emergency Contacts",
+        "contatosEmergencia": "Emergency contacts",
         "permissao": {
-          "titulo" : "Permissions",
-          "selecionar" : "Select user permissions:"
+          "titulo": "Permissions",
+          "selecionar": "Select user permissions:"
         }
       },
       "campo": {
         "nomeUsuario": "Username",
         "email": "Email",
         "senha": "Password",
-        "senhaConfirma": "Confirm Password",
-        "cargo": "Job Title",
-        "dataNascimento": "Birth Date",
+        "senhaConfirma": "Confirm password",
+        "cargo": "Job title",
+        "dataNascimento": "Birth date",
         "contato": "Contact",
         "permissao": {
           "funcionario": "Employee",
@@ -74,7 +74,7 @@
       "msg": {
         "sucesso": "User successfully registered, verification email sent to {{value}}",
         "alterar-proprio-usuario": "Changing your own user is not allowed",
-        "finalizar-edicao": "Finish editing the Email/Password field"
+        "finalizar-edicao": "Finish editing the email/password field"
       }
     },
     "campo": {
@@ -93,8 +93,16 @@
   "login": {
     "semPermissao": "Your user does not have admin permission",
     "informarEmail": "Inform an email",
-    "enviadoLinkRecuperacao": "Recovery link sent to your email",
-    "refazer": "Please, login again"
+    "enviadoLinkRecuperacao": "Recovery link sent to email {{value}}",
+    "refazer": "Please, login again",
+    "campo": {
+      "senhaAntiga": "Old password",
+      "senhaNova": "New password",
+      "senhaConfirma": "Confirm new password"
+    },
+    "btn": {
+      "mudarSenha": "Change password"
+    }
   },
 
   "errorPage": {
@@ -105,12 +113,15 @@
   },
 
   "errorFirebase": {
-    "desconhecido": "An unknown error has occurred! \n Error code: {{value}}",
+    "desconhecido": "An unknown error has occurred! \n- Error code: {{code}} \n- Message: {{message}}",
     "email-already-in-use": "The email address is already in use by another account",
     "user-not-found": "User not found or account has been deleted",
     "wrong-password": "Invalid password",
     "timeout": "The operation has timed out",
     "too-many-requests": "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later",
-    "invalid-email": "The email address is badly formatted"
+    "invalid-email": "The email address is badly formatted",
+    "expired-action-code": "Password reset code has expired",
+    "invalid-action-code": "Password reset code is invalid or has already been used",
+    "user-disabled": "User corresponding to the password reset code provided is disabled"
   }
 }

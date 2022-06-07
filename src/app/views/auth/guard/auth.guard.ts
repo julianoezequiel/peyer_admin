@@ -1,25 +1,19 @@
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { UserFirebase } from "./../cadastros/model/userfirebase.model";
-import { Injectable } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-} from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import { ToastrService } from "ngx-toastr";
-import { Observable } from "rxjs";
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
-import { UsuarioService } from "./../cadastros/services/usuario.service";
-import { AuthService } from "./../login/auth.service";
+import { UserFirebase } from './../../cadastros/model/userfirebase.model';
+import { UsuarioService } from './../../cadastros/services/usuario.service';
+import { AuthService } from '../services/auth.service';
+
 
 // Angular
 // RxJS
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private router: Router,
     private translate: TranslateService,
     private usuarioService: UsuarioService,
     private authService: AuthService,
@@ -45,6 +39,7 @@ export class AuthGuard implements CanActivate {
               if (userData.email == userCurrent.email && userCurrent.email == userLocal.email) {
                 if (!userData.permissions.administrative) {
                   this.signOut(true);
+                  return false;
                 } else {
                   return true;
                 }
@@ -70,6 +65,7 @@ export class AuthGuard implements CanActivate {
         });
     } else {
         this.signOut(false);
+        return false;
     }
   }
 

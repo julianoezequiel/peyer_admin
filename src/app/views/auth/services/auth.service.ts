@@ -2,11 +2,12 @@ import { Injectable, NgZone, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import firebase from 'firebase';
+import { resolve } from 'path';
 import { Observable, of } from 'rxjs';
 
-import { UserFirebase } from '../cadastros/model/userfirebase.model';
-import { ErrorFirebaseService } from '../cadastros/services/error-firebase.service';
-import firebase from 'firebase'
+import { UserFirebase } from '../../cadastros/model/userfirebase.model';
+import { ErrorFirebaseService } from '../../cadastros/services/error-firebase.service';
 
 @Injectable()
 export class AuthService implements OnInit {
@@ -60,7 +61,7 @@ export class AuthService implements OnInit {
         .then((result) => {
           resolve(result);
         })
-        .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
     });
   }
 
@@ -75,7 +76,7 @@ export class AuthService implements OnInit {
         .then((result) => {
           resolve(result);
         })
-        .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
     });
   }
   /* Delete user from Authentication */
@@ -93,31 +94,52 @@ export class AuthService implements OnInit {
                 .then(() => resolve(true))
                 .catch((error) => {
                   console.log(error);
-                  reject(this.errorFB.getErrorByCode(error.code));
+                  reject(this.errorFB.getErrorByCode(error));
                 });
             })
             .catch((error) => {
               console.log(error);
-              reject(this.errorFB.getErrorByCode(error.code));
+              reject(this.errorFB.getErrorByCode(error));
             });
         })
         .catch((error) => {
           console.log(error);
-          reject(this.errorFB.getErrorByCode(error.code));
+          reject(this.errorFB.getErrorByCode(error));
         });
     });
   }
 
   // Reset Forggot password
   ForgotPassword(passwordResetEmail) {
-    return new Promise((acept, reject) => {
+    var actionCodeSettings = {
+      url: 'http://localhost:4200/#/forgot-password?uid=' + 157,
+    }
 
+    return new Promise((resolve, reject) => {
       this.afAuth
         .sendPasswordResetEmail(passwordResetEmail)
         .then((success) => {
-          acept(success);
+          resolve(success);
         })
-        .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+    });
+  }
+
+  confirmPasswordReset(code, newPassword) {
+    return new Promise((resolve, reject) => {
+      this.afAuth
+        .confirmPasswordReset(code, newPassword)
+        .then(() => resolve(null))
+        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+    });
+  }
+
+  verifyPasswordResetCode(oobCode: string) {
+    return new Promise((resolve, reject) => {
+      this.afAuth
+        .verifyPasswordResetCode(oobCode)
+        .then((email) => resolve(email))
+        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
     });
   }
 
@@ -127,7 +149,6 @@ export class AuthService implements OnInit {
       localStorage.removeItem("user_firebase");
       this.router.navigate(["login"]);
       console.log("Leaving...");
-      
     });
   }
 

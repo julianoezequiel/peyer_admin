@@ -9,20 +9,23 @@ export class ErrorFirebaseService {
 
   // Returns the error message find by the FireBase 'code'
   // PS. ADD TO THE INTERNATIONALIZATION FILE, THE OTHER IDs AND CORRESPONDING MESSAGES
-  getErrorByCode(code: string): string {
+  getErrorByCode(error): string {
     try {
-      code = code.split("/")[1];
-
+      var msg = error.message
+      var code = error.code.split("/")[1];
+      
       if (this.hasTranslation(`errorFirebase.${code}`)) {
         return this.translate.instant(`errorFirebase.${code}`);
       } else {
         return this.translate.instant("errorFirebase.desconhecido", {
-          value: code,
+          code: code,
+          message: msg
         });
       }
     } catch (error) {
       return this.translate.instant("errorFirebase.desconhecido", {
-        value: "ER-001",
+        code: "SYS-001",
+        message: msg
       });
     }
 

@@ -1,14 +1,16 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-import { DefaultLayoutComponent } from "./containers";
-import { PaginaSucessoComponent } from "./views/cadastros/pagina-sucesso/pagina-sucesso.component";
-import { CadastroUsuariosComponent } from "./views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component";
-import { ListaUsuariosComponent } from "./views/cadastros/usuarios/lista-usuarios/lista-usuarios.component";
-import { P404Component } from "./views/error/404.component";
-import { P500Component } from "./views/error/500.component";
-import { AuthGuard } from "./views/guard/auth.guard";
-import { LoginComponent } from "./views/login/login.component";
+import { DefaultLayoutComponent } from './containers';
+import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
+import { AuthGuard } from './views/auth/guard/auth.guard';
+import { LoginComponent } from './views/auth/login/login.component';
+import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
+import { CadastroUsuariosComponent } from './views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component';
+import { ListaUsuariosComponent } from './views/cadastros/usuarios/lista-usuarios/lista-usuarios.component';
+import { P404Component } from './views/error/404.component';
+import { P500Component } from './views/error/500.component';
+
 
 // Import Containers
 export const routes: Routes = [
@@ -92,9 +94,10 @@ export const routes: Routes = [
   {
     path: "login",
     component: LoginComponent,
-    data: {
-      title: "Login Page",
-    },
+  },
+  {
+    path: "forgot-password",
+    component: ForgotPasswordComponent,
   },
   { path: "**", component: P404Component },
 ];

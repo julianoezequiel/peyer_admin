@@ -26,7 +26,7 @@ import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs/internal/Subscription";
 
 import { rowsAnimation } from "../../../../shared/animations";
-import { AuthService } from "../../../login/auth.service";
+import { AuthService } from "../../../auth/services/auth.service";
 import { UserFirebase } from "../../model/userfirebase.model";
 import { UsuarioService } from "../../services/usuario.service";
 import { EmergencyContacts } from "./../../model/emergencyContacts.model";
@@ -199,6 +199,15 @@ export class CadastroUsuariosComponent implements OnInit, OnDestroy {
       Object.keys(controls).forEach((controlName) => {
         controls[controlName].markAsTouched();
     });
+      this.toastr.warning(
+        this.translate.instant("cadastros.campo.existeInvalidos"),
+        this.translate.instant("alerta.atencao"),
+        {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        }
+      );
       return;
     }
 

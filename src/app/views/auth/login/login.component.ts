@@ -1,4 +1,4 @@
-import { UserFirebase } from './../cadastros/model/userfirebase.model';
+import { UserFirebase } from '../../cadastros/model/userfirebase.model';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,8 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { UsuarioService } from '../cadastros/services/usuario.service';
-import { AuthService } from './auth.service';
+import { UsuarioService } from '../../cadastros/services/usuario.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: "app-dashboard",
@@ -201,7 +201,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .ForgotPassword(email)
       .then((r) => {
         this.toastr.success(
-          this.translate.instant("login.enviadoLinkRecuperacao"),
+          this.translate.instant("login.enviadoLinkRecuperacao", {value: email}),
           this.translate.instant("alerta.atencao"),
           {
             closeButton: true,

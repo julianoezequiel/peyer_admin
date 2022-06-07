@@ -6,7 +6,7 @@ import {
 } from "@angular/fire/firestore";
 import { AngularFireStorage } from "@angular/fire/storage";
 
-import { AuthService } from "../../login/auth.service";
+import { AuthService } from "../../auth/services/auth.service";
 import { UserFirebase } from "./../model/userfirebase.model";
 import { ErrorFirebaseService } from "./error-firebase.service";
 
@@ -53,7 +53,7 @@ export class UsuarioService {
         .finally(() => {
           //console.log("Relog...");
           this.authService.SignIn(userRelog.email, userRelog.password)
-          .catch((error) => reject(this.errorFB.getErrorByCode(error.code)));
+          .catch((error) => reject(this.errorFB.getErrorByCode(error)));
         });
     });
   }
@@ -83,7 +83,7 @@ export class UsuarioService {
             })
             .catch((error) => {
               console.log(error);
-              reject(this.errorFB.getErrorByCode(error.code))
+              reject(this.errorFB.getErrorByCode(error))
               return false;
             });
           } else {
@@ -103,7 +103,7 @@ export class UsuarioService {
             })
             .catch((error) => {
               //console.log(error);
-              reject(this.errorFB.getErrorByCode(error.code));
+              reject(this.errorFB.getErrorByCode(error));
               return false;
             });
           } else if (!updatePassword && processedEmail) {
@@ -124,6 +124,40 @@ export class UsuarioService {
       } else {
         resolve(this.firestore.collection(this.collectionName).doc(userUpdateUID).update(userUpdate));
       }      
+    });
+  }
+
+  updatePasswordFirestore(email: string, newPassword: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      this.firestore
+        .collection(this.collectionName, (ref) => ref.where("email", "==", email))
+        .get()
+        .toPromise()
+        .then((response) => {
+          let user = response.docs[0].data() as UserFirebase;
+
+          this.authService
+            .SignIn(user.email, newPassword)
+            .then(() => {
+              response.docs[0].ref
+                .update({ password: newPassword })
+                .then(() => {
+                  resolve(null);
+                })
+                .catch((error) => {
+                  console.log(error);
+                  reject(error);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+              reject(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error));
+        });
     });
   }
 
@@ -190,7 +224,7 @@ export class UsuarioService {
         })
         .catch((error) => {
           console.log(error);
-          reject(this.errorFB.getErrorByCode(error.code));
+          reject(this.errorFB.getErrorByCode(error));
         });
     });
   }

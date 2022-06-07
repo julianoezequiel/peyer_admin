@@ -12,8 +12,8 @@ import { ToastrService } from "ngx-toastr";
 import {
   ConfirmDialogComponent,
   ConfirmDialogModel,
-} from "../../../confirm-dialog/confirm-dialog.component";
-import { AuthService } from "../../../login/auth.service";
+} from "../../../../shared/confirm-dialog/confirm-dialog.component";
+import { AuthService } from "../../../auth/services/auth.service";
 import { UserFirebase } from "../../model/userfirebase.model";
 import { UsuarioService } from "../../services/usuario.service";
 import { rowsAnimation } from "./../../../../shared/animations";

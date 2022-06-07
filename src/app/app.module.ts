@@ -1,87 +1,65 @@
-import "firebase/storage";
+import { AuthGuard } from './views/auth/guard/auth.guard';
 
-import { DragDropModule } from "@angular/cdk/drag-drop";
-import { LayoutModule } from "@angular/cdk/layout";
-import {
-  CurrencyPipe,
-  HashLocationStrategy,
-  LOCATION_INITIALIZED,
-  LocationStrategy,
-} from "@angular/common";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
-import { APP_INITIALIZER, Injector, LOCALE_ID, NgModule } from "@angular/core";
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFirestoreModule } from "@angular/fire/firestore";
-import { AngularFireStorageModule } from "@angular/fire/storage";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
-import {
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  MatNativeDateModule,
-} from "@angular/material/core";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatListModule } from "@angular/material/list";
-import {
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from "@angular/material/paginator";
-import { MatRadioModule } from "@angular/material/radio";
-import { MatSelectModule } from "@angular/material/select";
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatSortModule } from "@angular/material/sort";
-import { MatTableModule } from "@angular/material/table";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  AppAsideModule,
-  AppBreadcrumbModule,
-  AppFooterModule,
-  AppHeaderModule,
-  AppSidebarModule,
-} from "@coreui/angular";
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { ChartsModule } from "ng2-charts";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { ModalModule } from "ngx-bootstrap/modal";
-import { TabsModule } from "ngx-bootstrap/tabs";
-import { NgxLoadingModule } from "ngx-loading";
-import { IConfig, NgxMaskModule } from "ngx-mask";
-import {
-  PerfectScrollbarConfigInterface,
-  PerfectScrollbarModule,
-} from "ngx-perfect-scrollbar";
-import { ToastrModule } from "ngx-toastr";
+import 'firebase/storage';
 
-import { environment } from "../environments/environment";
-import { AppComponent } from "./app.component";
-import { AppRoutingModule } from "./app.routing";
-import { DefaultLayoutComponent } from "./containers";
-import { getDutchPaginatorIntl } from "./dutch-paginator-intl";
-import { MaterialModule } from "./material.module";
-import { FilterPipe } from "./shared/filter-pipe.pipe";
-import { PaginaSucessoComponent } from "./views/cadastros/pagina-sucesso/pagina-sucesso.component";
-import { CadastroUsuariosComponent } from "./views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component";
-import { ListaUsuariosComponent } from "./views/cadastros/usuarios/lista-usuarios/lista-usuarios.component";
-import { ConfirmDialogComponent } from "./views/confirm-dialog/confirm-dialog.component";
-import { P404Component } from "./views/error/404.component";
-import { P500Component } from "./views/error/500.component";
-import { AuthGuard } from "./views/guard/auth.guard";
-import { AuthService } from "./views/login/auth.service";
-import { LoginComponent } from "./views/login/login.component";
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { LayoutModule } from '@angular/cdk/layout';
+import { CurrencyPipe, HashLocationStrategy, LOCATION_INITIALIZED, LocationStrategy } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, Injector, LOCALE_ID, NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule } from '@coreui/angular';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ChartsModule } from 'ng2-charts';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgxLoadingModule } from 'ngx-loading';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ToastrModule } from 'ngx-toastr';
+
+import { environment } from '../environments/environment';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app.routing';
+import { DefaultLayoutComponent } from './containers';
+import { getDutchPaginatorIntl } from './dutch-paginator-intl';
+import { MaterialModule } from './material.module';
+import { AlertDialogComponent } from './shared/alert-dialog/alert-dialog.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
+import { FilterPipe } from './shared/filter-pipe.pipe';
+import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
+import { AuthService } from './views/auth/services/auth.service';
+import { LoginComponent } from './views/auth/login/login.component';
+import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
+import { CadastroUsuariosComponent } from './views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component';
+import { ListaUsuariosComponent } from './views/cadastros/usuarios/lista-usuarios/lista-usuarios.component';
+import { P404Component } from './views/error/404.component';
+import { P500Component } from './views/error/500.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -166,6 +144,8 @@ const maskConfig: Partial<IConfig> = {
     ConfirmDialogComponent,
     PaginaSucessoComponent,
     FilterPipe,
+    ForgotPasswordComponent,
+    AlertDialogComponent,
   ],
   providers: [
     {
@@ -204,7 +184,7 @@ const maskConfig: Partial<IConfig> = {
       useValue: getDutchPaginatorIntl(),
     },
   ],
-  entryComponents: [ConfirmDialogComponent],
+  entryComponents: [ConfirmDialogComponent, AlertDialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
