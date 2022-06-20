@@ -1,0 +1,328 @@
+<form [formGroup]="userForm" novalidate>
+
+  <mat-card-header class="principal">
+    <mat-card-title>
+      <span class="title">
+        <a href="#/users">
+          <mat-icon color=accent>arrow_back</mat-icon>
+          <span>{{ 'menu.usuarios' | translate}}</span>
+        </a>
+      </span>
+      <span class="sub-title">{{ pageTitle | translate}}</span>
+    </mat-card-title>
+  </mat-card-header>
+
+  <div class="row">
+
+    <div class="col" style="margin-bottom: 6px;">
+      <!-- CARD USER -->
+      <mat-card class="card-user elevation-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">person</mat-icon>
+          <span class="card-title">{{'cadastros.usuarios.titulo.usuario'|translate}}</span>
+        </mat-card-header>
+
+        <mat-divider></mat-divider>
+
+        <!-- USERNAME -->
+          <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
+            <mat-label>{{'cadastros.usuarios.campo.nomeUsuario'|translate}}</mat-label>
+            <input matInput formControlName="usuario" [readonly]="!userActive">
+            <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- EMAIL -->
+          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && emailReadOnly">
+            <mat-label>{{'cadastros.usuarios.campo.email'|translate}}</mat-label>
+            <input matInput formControlName="email" type="email" [readonly]="!newUser && emailReadOnly">
+            <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(true)" color="primary"
+              [disabled]="!userActive">
+              <mat-icon class="animation360" *ngIf="emailReadOnly" matTooltip="{{'titulo.editar'|translate}}"
+                matTooltipPosition="below">edit</mat-icon>
+              <mat-icon class="animation360" *ngIf="!emailReadOnly" matTooltip="{{'titulo.pronto'|translate}}"
+                matTooltipPosition="below">done</mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.controls['email'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['email'].hasError('email')">
+              <strong>{{'cadastros.campo.invalido'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- PASSWORD -->
+          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
+            <mat-label>{{'cadastros.usuarios.campo.senha'|translate}}</mat-label>
+            <input matInput formControlName="senha" type="password" autocomplete
+              [readonly]="!newUser && passwordReadOnly">
+            <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(false)" color="primary"
+              [disabled]="!userActive">
+              <mat-icon class="animation360" *ngIf="passwordReadOnly" matTooltip="{{'titulo.editar'|translate}}"
+                matTooltipPosition="below">edit</mat-icon>
+              <mat-icon class="animation360" *ngIf="!passwordReadOnly" matTooltip="{{'titulo.pronto'|translate}}"
+                matTooltipPosition="below">done</mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
+              <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- CONFIRM PASSWORD -->
+          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
+            <mat-label>{{'cadastros.usuarios.campo.senhaConfirma'|translate}}</mat-label>
+            <input matInput formControlName="senha_confirma" type="password" autocomplete
+              [readonly]="!newUser && passwordReadOnly">
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
+              <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('confirmPassInvalid')">
+              <strong>{{'cadastros.campo.senhaConfirmaInvalido'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- JOB TITLE -->
+          <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
+            <mat-label>{{'cadastros.usuarios.campo.cargo'|translate}}</mat-label>
+            <input matInput formControlName="cargo" [readonly]="!userActive">
+            <mat-error *ngIf="userForm.controls['cargo'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- BIRTH DATE -->
+          <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
+            <mat-label>{{'cadastros.usuarios.campo.dataNascimento'|translate}}</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dataNascimento" [readonly]="!userActive">
+            <mat-hint>(DD/MM/YYYY)</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="!userActive"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="userForm.controls['dataNascimento'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- CONTACT -->
+          <mat-form-field appearance="fill" class="field-whith-prefix" [class.isReadOnly]="!userActive">
+            <mat-label>{{'cadastros.usuarios.campo.contato'|translate}}</mat-label>
+            <span matPrefix>+41&nbsp;</span>
+            <input matInput formControlName="contato" mask="(00) 000-00-00" maxlength="14" [validation]="true"
+              [readonly]="!userActive">
+            <mat-error *ngIf="userForm.controls['contato'].hasError('required')">
+              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.controls['contato'].hasError('mask')">
+              <strong>{{'cadastros.campo.formatoInvalido'|translate}}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-divider></mat-divider>
+
+          <!-- PERMISSIONS -->
+          <div class="permissions" formGroupName="permissao">
+
+            <p class="title">{{'cadastros.usuarios.titulo.permissao.selecionar'|translate}}</p>
+
+            <div class="checkboxs-align">
+              <!-- Employee -->
+              <mat-checkbox id="employee" value="employee" formControlName="employee" color="primary">
+                <mat-label for="employee">{{'cadastros.usuarios.campo.permissao.funcionario'|translate}}</mat-label>
+              </mat-checkbox>
+              <!---->
+
+              <!-- Administrative -->
+              <mat-checkbox id="administrative" value="administrative" formControlName="administrative" color="primary">
+                <mat-label for="administrative">{{'cadastros.usuarios.campo.permissao.administrativo'|translate}}
+                </mat-label>
+              </mat-checkbox>
+              <!---->
+
+              <!-- Driver -->
+              <mat-checkbox id="driver" value="driver" formControlName="driver" color="primary">
+                <mat-label for="driver">{{'cadastros.usuarios.campo.permissao.motorista'|translate}}</mat-label>
+              </mat-checkbox>
+              <!---->
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- ACTIVE/INACTIVE -->
+          <div class="active">
+            <p class="title">{{'cadastros.usuarios.titulo.ativo'|translate}}</p>
+
+            <div class="toggle-align">
+              <mat-label>{{'opcao.nao'|translate}}&nbsp;</mat-label>
+              <mat-slide-toggle formControlName="ativo" (change)="onToggleChange($event)"></mat-slide-toggle>
+              <mat-label>&nbsp;{{'opcao.sim'|translate}}</mat-label>
+            </div>
+          </div>
+
+      </mat-card>
+    </div>
+
+    <div class="col" style="margin-bottom: 6px;">
+      <!-- CARD PHOTO -->
+      <mat-card class="card-photo elevation-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">add_a_photo</mat-icon>
+          <span class="card-title">{{'cadastros.usuarios.titulo.foto'|translate}}</span>
+        </mat-card-header>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-content>
+          <mat-spinner diameter="60" *ngIf="loadingPhoto"></mat-spinner>
+
+          <div *ngIf="!loadingPhoto">
+            <img *ngIf="dataimage" src="{{dataimage}}">
+            <img *ngIf="!dataimage && downloadURL | async; let url" [src]="url" alt="Image from AngularFireStorage">
+          </div>
+        </mat-card-content>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-actions>
+          <div style="display: flex; justify-content: space-between;">
+            <!-- Browse Button File -->
+            <button mat-raised-button type="button" color="accent" class="buttons"
+              matTooltip="{{'titulo.upload'|translate}}" matTooltipPosition="below" [disabled]="!userActive">
+              <mat-icon>add_to_photos</mat-icon>
+              <label for='buttons' style="margin: 0;"
+                [ngStyle]="{'cursor': !userActive ? 'not-allowed' : 'pointer'}">{{'titulo.upload'|translate}}</label>
+              <input style="display: none;" type="file" #UploadFileInput id="buttons" (change)="uploadFileEvt($event)"
+                name="buttons" multiple="multiple" accept="image/*" *ngIf="userActive" />
+            </button>
+
+            <button mat-raised-button matTooltip="{{'titulo.remover'|translate}}" matTooltipPosition="below"
+              type="button" (click)="removePhoto()" color="warn" class="buttons"
+              [disabled]="!userData.photoURL || !userActive">
+              <mat-icon>delete</mat-icon>
+              {{'titulo.remover' | translate}}
+            </button>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- CARD EMERGENCY CONTACTS -->
+      <mat-card class="card-emergency-contacts elevation-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">contact_phone</mat-icon>
+          <span class="card-title">{{'cadastros.usuarios.titulo.contatosEmergencia.titulo'|translate}}</span>
+        </mat-card-header>
+
+        <mat-divider></mat-divider>
+
+        <div class="loading" *ngIf="loadingTable">
+          <mat-spinner diameter="60"></mat-spinner>
+        </div>
+
+        <div class="table-conf" *ngIf="!loadingTable">
+          <!-- TABELA -->
+          <table mat-table [dataSource]="dataSourceEC" matSort matSortActive="nome" matSortDirection="asc"
+            matSortDisableClear formArrayName="contatosEmergencia">
+
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row [@rowsAnimation]="" *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
+            <!---->
+
+            <!-- Coluna NAME -->
+            <ng-container matColumnDef="nome">
+              <th mat-header-cell *matHeaderCellDef>{{'cadastros.usuarios.titulo.nome'|translate}}
+              </th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <mat-form-field appearance="outline" [class.isReadOnly]="!userActive">
+                  <input matInput formControlName="nome" [value]="row.nome" #nome
+                    (ngModelChange)="onChangeField(row, nome.value, false)" [readonly]="!userActive">
+                  <mat-icon matSuffix color="warn" *ngIf="!nome.value"
+                    matTooltip="{{'cadastros.campo.obrigatorio'|translate}}" matTooltipPosition="above">error_outline
+                  </mat-icon>
+                </mat-form-field>
+              </td>
+            </ng-container>
+            <!---->
+
+            <!-- Coluna PHONE -->
+            <ng-container matColumnDef="telefone">
+              <th mat-header-cell *matHeaderCellDef>
+                {{'cadastros.usuarios.titulo.telefone'|translate}}</th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <mat-form-field appearance="outline" [class.isReadOnly]="!userActive">
+                  <span matPrefix>+41&nbsp;</span>
+                  <input matInput formControlName="telefone" [value]="row.telefone | mask: '(00) 000-00-00'" #telefone
+                    (ngModelChange)="onChangeField(row, telefone.value, true)" mask="(00) 000-00-00" maxlength="14"
+                    [readonly]="!userActive">
+                  <mat-icon matSuffix color="warn" *ngIf="validPhoneNumber(telefone.value)"
+                    matTooltip="{{getErrorPhone(telefone.value) | translate}}" matTooltipPosition="above">
+                    error_outline
+                  </mat-icon>
+                </mat-form-field>
+              </td>
+            </ng-container>
+            <!---->
+            <!-- Coluna de ações -->
+            <ng-container matColumnDef="acoes">
+              <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+              <td mat-cell *matCellDef="let row; let index = index">
+                <div class="buttons-align">
+                  <!-- <button mat-icon-button matTooltip="{{'titulo.editar'|translate}}" matTooltipPosition="below"
+                        type="button">
+                        <mat-icon class="icon-edit">edit</mat-icon>
+                      </button>&nbsp; -->
+                  <button mat-icon-button matTooltip="{{'titulo.remover'|translate}}" matTooltipPosition="below"
+                    type="button" (click)="removeEmergencyContact(template)" [disabled]="!userActive" color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+
+                <ng-template #template>
+                  <div class="text-center" style="padding: 12px 0;">
+                    <span>{{'mensagem.confirmar' | translate}}</span>
+                    <mat-divider style="margin: 7px 0;"></mat-divider>
+                    <button mat-button (click)="confirm(row)">{{'opcao.sim' | translate}}</button>
+                    <button mat-raised-button color="primary" (click)="this.modalRef?.hide()">{{'opcao.nao'
+                      | translate}}</button>
+                  </div>
+                </ng-template>
+              </td>
+            </ng-container>
+            <!---->
+          </table>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-actions class="contacts">
+          <button mat-icon-button matTooltip="{{'titulo.adicionar'|translate}}" matTooltipPosition="below" type="button"
+            (click)="addEmergencyContact()" [disabled]="!userActive" color="primary">
+            <mat-icon class="add">add_circle_outline</mat-icon>
+          </button>
+          <!-- Paginação -->
+          <!-- <mat-spinner [diameter]="20" *ngIf="carregandoLista"></mat-spinner> -->
+          <mat-paginator #paginator [length]="dataSourceEC?.data.length" [pageIndex]="0" [pageSize]="5"
+            [pageSizeOptions]="[5,10,20]" sticky>
+          </mat-paginator>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+  </div>
+
+  <mat-card-actions align="end" class="principal">
+    <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)"
+      [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
+    <button mat-raised-button color="danger" type="button" (click)="voltar()"
+      style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+    </button>
+  </mat-card-actions>
+
+</form>

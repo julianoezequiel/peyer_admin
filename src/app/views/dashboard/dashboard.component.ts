@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { UsuarioService } from '../cadastros/services/usuario.service';
+import { UsuarioService } from '../pages/services/usuario.service';
 
 export class Utils {
   public static unsubscribeAll(subObject: { subscriptions: Subscription[] }) {

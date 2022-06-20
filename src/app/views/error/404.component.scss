@@ -12,7 +12,7 @@
 }
 
 .brand {
-  height: 71px;
+  height: 70px;
   width: 100%;
   background-color: $peyer-color-green;
 }
@@ -38,4 +38,17 @@
 
 .msgDesc {
     font-size: 3em;
+}
+
+.mat-icon-button {
+  height: 70px;
+  width: 70px;
+  
+  mat-icon {
+    height: 45px;
+    width: 45px;
+    font-size: 45px;
+    line-height: 45px;
+    font-weight: bold;
+  }
 }

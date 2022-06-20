@@ -1,0 +1,60 @@
+@import "src/scss/_variables.scss";
+
+.mat-column-displayName {
+  width: 30%;
+  max-width: 90px;
+}
+
+.mat-column-email {
+  width: 30%;
+  max-width: 90px;
+}
+
+.mat-column-jobTitle {
+  width: 20%;
+  max-width: 90px;
+}
+
+.mat-column-birthDate {
+  width: 10%;
+  max-width: 90px;
+}
+
+.mat-column-active {
+  width: 10%;
+  max-width: 90px;
+
+  mat-icon {
+    margin: 0 6px;
+  }
+}
+
+.mat-column-acoes {
+  text-align: center;
+
+  .buttons-align {
+    display: flex;
+  }
+}
+
+tr.element-row:not(.element-focus):hover {
+  background: #eeeeee;
+  cursor: pointer;
+}
+
+tr.element-row:not(.element-focus):active {
+  background: #dcdcdc;
+}
+
+::ng-deep .tooltip-element-row {
+  text-align: center;
+  font-size: 13px;
+  max-width: 180px !important;
+  width: 180px !important;
+}
+
+::ng-deep .modal-contatos-emergencia {
+  mat-dialog-container {
+    padding: 0px 10px 10px;
+  }
+}

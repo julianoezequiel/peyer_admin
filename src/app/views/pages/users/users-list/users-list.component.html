@@ -1,0 +1,101 @@
+<mat-card-header class="principal mat-elevation-z3">
+  <mat-card-title>
+    <span class="title">{{'menu.usuarios'|translate}}</span>
+  </mat-card-title>
+</mat-card-header>
+
+<mat-card-content class="principal mat-elevation-z8">
+
+  <div class="options">
+    <button class="add" mat-raised-button color="primary" type="button" (click)="add()">
+      {{'titulo.adicionar'| translate}}
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{'titulo.buscar'| translate}}</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput (keyup)="applyFilter($event.target.value)" type="search">
+    </mat-form-field>
+  </div>
+
+  <div class="table-scroll">
+    <table mat-table class="w100" aria-label="Elements" [dataSource]="dataSource" matSort matSortActive="displayName"
+      matSortDirection="asc" matSortDisableClear>
+
+      <!-- Row definitions -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
+        matTooltip="{{'cadastros.usuarios.titulo.contatosEmergencia.visualizar'|translate}}" matTooltipPosition="above"
+        matTooltipClass="tooltip-element-row">
+      </tr>
+      <!---->
+
+      <!-- USER Column -->
+      <ng-container matColumnDef="displayName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.titulo.usuario'| translate}}</th>
+        <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewEmergencyContacts(row)">
+          <span matTooltip="{{ row.displayName }}" matTooltipPosition="below">{{ row.displayName }}</span>
+        </td>
+      </ng-container>
+
+      <!-- EMAIL Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.campo.email'|translate}}</th>
+        <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewEmergencyContacts(row)">
+          <span matTooltip="{{ row.email }}" matTooltipPosition="below">{{ row.email }}</span>
+        </td>
+      </ng-container>
+
+      <!-- ACTIVE Column -->
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.campo.ativo'|translate}}
+        </th>
+        <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewEmergencyContacts(row)">
+          <mat-icon color="{{ row.active ? 'primary' : 'warn' }}">{{ row.active ? 'check_circle_outline' : 'highlight_off' }}</mat-icon>
+        <td>
+      </ng-container>
+
+      <!-- JOB TITLE Column -->
+      <ng-container matColumnDef="jobTitle">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.campo.cargo'|translate}}</th>
+        <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewEmergencyContacts(row)">
+          <span matTooltip="{{ row.jobTitle }}" matTooltipPosition="below">{{ row.jobTitle }}</span>
+        </td>
+      </ng-container>
+
+      <!-- BIRTH DATE Column -->
+      <ng-container matColumnDef="birthDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.usuarios.campo.dataNascimento'|translate}}
+        </th>
+        <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewEmergencyContacts(row)">
+          <span matTooltip="{{ row.birthDate }}" matTooltipPosition="below">{{ row.birthDate }}</span>
+        <td>
+      </ng-container>
+
+      <!-- ACOES Column -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="buttons-align">
+            <button (click)="edit(row)" mat-icon-button color="primary" matTooltip="{{'titulo.editar'|translate}}">
+              <mat-icon>edit</mat-icon>
+            </button>&nbsp;
+            <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
+              (click)="confirmDialog(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+    </table>
+
+    <mat-card *ngIf="dataEmpty" class="dataEmpty">
+      {{'titulo.data-empty'|translate}}
+    </mat-card>
+  </div>
+</mat-card-content>
+
+<mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+  [pageSizeOptions]="[5, 25, 50]">
+</mat-paginator>

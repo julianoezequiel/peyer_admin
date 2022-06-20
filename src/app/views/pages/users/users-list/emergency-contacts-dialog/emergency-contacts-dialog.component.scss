@@ -1,0 +1,40 @@
+[mat-dialog-title] {
+    margin: 0;
+}
+
+.row-flex {
+    justify-content: space-between;
+}
+
+.header {
+    margin: 5px 0;
+}
+
+mat-icon.icon {
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+}
+
+mat-list-item {
+    height: 60px !important;
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 4px;
+    box-shadow: 0px 1px 4px -1px rgb(0 0 0 / 57%);
+    margin-bottom: 12px;
+}
+
+::ng-deep .mat-list-item-content {
+    padding: 0 !important;
+}
+
+.scroll {
+    padding: 5px;
+    height: 250px;
+    overflow-y: auto;
+}
+
+.username {
+    text-align: center;
+    display: block;
+}

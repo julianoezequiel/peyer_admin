@@ -29,18 +29,6 @@ $custom-theme: mat-light-theme(
   font-weight: 500;
 }
 
-/* CHECKBOX */
-// estado = checked (v)
-.mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: $peyer-color-green !important;
-}
-
-// estado = indeterminate (-)
-.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background-color: $peyer-color-green !important;
-}
-//------
-
 /* SIDEBAR */
 /*$width-sidebar: 210px;
 
@@ -71,6 +59,27 @@ $custom-theme: mat-light-theme(
   width: 100%;
 }
 
+.row-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.animation360 {
+  transition: transform 0.7s ease-in-out;
+}
+
+button:focus .animation360 {
+  transform: rotate(360deg);
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar-track {
   background-color: #dad7d7;
@@ -98,20 +107,20 @@ input:-webkit-autofill:active {
   stroke: $peyer-color-green;
 }
 
+*:disabled {
+  cursor: not-allowed;
+
+  *{
+    cursor: not-allowed;
+  }
+}
+
 /* ICONS  */
-.icon-add {
-  color: $peyer-color-green;
-}
-
-.icon-danger {
-  color: $color-warn;
-}
-
 .icon-edit {
   color: $peyer-color-green;
 }
 
-/* BEGIN (BUTTONS) */
+/* (BUTTONS) */
 button:hover {
   &.mat-raised-button,
   &.mat-stroked-button,
@@ -126,9 +135,9 @@ button.active:focus {
   outline: none !important;
   outline-style: none !important;
 }
-//---END (BUTTONS)---
+//--- (BUTTONS) ---
 
-/* BEGIN (FORMULÁRIO) */
+/* (FORMULÁRIO) */
 .text-danger {
   color: $color-warn !important;
 }
@@ -197,8 +206,20 @@ mat-form-field {
 // Quando o campo está readonly
 mat-form-field.isReadOnly {
 
+  &.mat-form-field-appearance-outline {
+    .mat-form-field-flex .mat-form-field-outline {
+      background-color: #ddd !important;
+      border-radius: 5px;
+    }
+  }
+
+  &:not(.mat-form-field-appearance-outline) {
+    .mat-form-field-flex {
+      background-color: #ddd !important;
+    }
+  }
+
   .mat-form-field-flex {
-    background-color: #ddd !important;
     cursor: not-allowed;
 
     input {
@@ -207,4 +228,71 @@ mat-form-field.isReadOnly {
   }
 }
 
-//---END (FORMULÁRIO)---
+//--- (FORMULÁRIO) ---
+
+
+/* CALENDÁRIO */
+.mat-calendar-header {
+  background: $peyer-color-green;
+  
+  * {
+    color: white !important;
+  }
+
+  .mat-calendar-arrow {
+    border-top-color: white;
+  }
+}
+/* --- CALENDÁRIO --- */
+
+/* TABLE */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 15px;
+  padding-bottom: 0;
+
+  button {
+    height: 45px;
+    width: 100px;
+  }
+
+  mat-form-field {
+    width: 40%;
+    font-size: 13px;
+  }
+}
+
+.table-scroll {
+  overflow-y: auto;
+  height: 79%;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+}
+
+.dataEmpty {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #73818f;
+}
+/* --- TABLE --- */
+
+/* BUTTON TOGGLE */
+.mat-slide-toggle-bar {
+  height: 27px !important;
+  width: 88px !important;
+}
+
+.mat-slide-toggle-thumb {
+  height: 30px !important;
+  width: 70px !important;
+  border-radius: 8px !important;
+}
+
+.mat-slide-toggle-thumb-container {
+  height: 32px !important;
+  width: 72px !important;
+  top: -2px !important;
+}
+/* --- BUTTON TOGGLE --- */

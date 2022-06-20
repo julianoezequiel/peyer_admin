@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
-import { UsuarioService } from './views/cadastros/services/usuario.service';
+import { UsuarioService } from './views/pages/services/usuario.service';
 import { AuthService } from './views/auth/services/auth.service';
 
 @Component({

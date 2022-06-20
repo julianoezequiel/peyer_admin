@@ -1,0 +1,31 @@
+<mat-card-header class="principal">
+    <mat-card-title>
+        <span class="title">
+            <a href="#/vehicles">
+                <mat-icon color=accent>arrow_back</mat-icon>
+                <span>{{ 'menu.vehicles' | translate}}</span>
+            </a>
+        </span>
+        <span class="sub-title">{{ pageTitle | translate}}</span>
+    </mat-card-title>
+</mat-card-header>
+
+
+
+<nav mat-tab-nav-bar>
+    <div *ngFor="let link of navLinks">
+        <a mat-tab-link 
+            [routerLink]="link.path" 
+            routerLinkActive 
+            #rla="routerLinkActive"
+            [active]="rla.isActive"
+            class="row-flex">
+            <mat-icon class="example-tab-icon">{{link.icon}}</mat-icon>
+            <span>{{link.label | translate}}</span>
+        </a>
+    </div>
+</nav>
+
+<mat-card-content class="scroll">
+    <router-outlet></router-outlet>
+</mat-card-content>

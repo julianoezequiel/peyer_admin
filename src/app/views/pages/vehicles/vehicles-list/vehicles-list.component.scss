@@ -1,0 +1,99 @@
+mat-card-content.principal {
+  margin-bottom: 10px;
+}
+
+.mat-column-name {
+  width: 35%;
+  max-width: 90px;
+}
+
+.mat-column-status {
+  width: 10%;
+  max-width: 90px;
+}
+
+img.mat-icon {
+  margin: 0 6px;
+  height: 23px !important;
+  width: 29px !important;
+}
+
+.mat-column-lastDriver {
+  width: 35%;
+  max-width: 90px;
+}
+
+.mat-column-licensePlate {
+  width: 10%;
+  max-width: 90px;
+}
+
+.mat-column-totalWeight {
+  width: 10%;
+  max-width: 90px;
+
+  span {
+    margin: 0 16px;
+  }
+}
+
+.mat-column-acoes {
+  text-align: center;
+
+  .buttons-align {
+    display: flex;
+  }
+}
+
+tr.element-row:not(.element-focus):hover {
+  background: #eeeeee;
+  cursor: pointer;
+}
+
+tr.element-row:not(.element-focus):active {
+  background: #dcdcdc;
+}
+
+::ng-deep .tooltip-element-row {
+  text-align: center;
+  font-size: 13px;
+  max-width: 180px !important;
+  width: 180px !important;
+}
+
+::ng-deep .modal-contatos-emergencia {
+  mat-dialog-container {
+    padding: 0px 10px 10px;
+  }
+}
+
+div.footer.row-flex {
+  justify-content: space-between;
+
+  mat-list {
+    padding-top: 0;
+    margin: 2px 20px;
+    box-shadow: 0px 0px 4px 2px rgb(0 0 0 / 30%);
+    border-radius: 5px;
+
+    mat-list-item {
+      height: 34px;
+
+      span {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+     ::ng-deep .mat-list-item-content {
+        border-bottom: 1px solid #ddd;
+        margin: 0px 10px;
+      }
+
+      .mat-list-icon {
+        border-radius: 0;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+}

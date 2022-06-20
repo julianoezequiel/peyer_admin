@@ -1,0 +1,123 @@
+<mat-card-header class="principal mat-elevation-z3">
+    <mat-card-title>
+        <span class="title">{{'menu.vehicles'|translate}}</span>
+    </mat-card-title>
+</mat-card-header>
+
+<mat-card-content class="principal mat-elevation-z8">
+
+    <div class="options">
+        <button class="add" mat-raised-button color="primary" type="button" (click)="add()">
+            {{'titulo.adicionar'| translate}}
+            <mat-icon>add_circle_outline</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline">
+            <mat-label>{{'titulo.buscar'| translate}}</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput (keyup)="applyFilter($event.target.value)" type="search">
+        </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+        <table mat-table class="w100" [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc"
+            matSortDisableClear>
+
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
+                matTooltip="{{'cadastros.vehicles.title.viewHistory'|translate}}" matTooltipPosition="above"
+                matTooltipClass="tooltip-element-row">
+            </tr>
+            <!---->
+
+            <!-- NAME Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.vehicles.field.name'| translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                    <span matTooltip="{{ row.name }}" matTooltipPosition="below">{{ row.name }}</span>
+                </td>
+            </ng-container>
+
+            <!-- STATUS Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.vehicles.field.status'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                    <img class="mat-icon"
+                        src="assets/img/icon/{{ row.onRoute ? 'truck-fast-solid-green' : 'warehouse-solid-green' }}.png">
+                <td>
+            </ng-container>
+
+            <!-- LAST DRIVER Column -->
+            <ng-container matColumnDef="lastDriver">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.vehicles.field.lastDriver'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                    <span matTooltip="{{ row.lastDriver.displayName }}" matTooltipPosition="below">{{
+                        row.lastDriver.displayName }}</span>
+                </td>
+            </ng-container>
+
+            <!-- LICENSE PLATE Column -->
+            <ng-container matColumnDef="licensePlate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.vehicles.field.licensePlate'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                    <span matTooltip="{{ row.licensePlate }}" matTooltipPosition="below">{{ row.licensePlate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- TOTAL WEIGHT Column -->
+            <ng-container matColumnDef="totalWeight">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.vehicles.field.totalWeight'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                    <span matTooltip="{{ row.totalWeight }}" matTooltipPosition="below">{{ row.totalWeight }} T</span>
+                <td>
+            </ng-container>
+
+            <!-- ACOES Column -->
+            <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="buttons-align">
+                        <button (click)="edit(row)" mat-icon-button color="primary"
+                            matTooltip="{{'titulo.editar'|translate}}">
+                            <mat-icon>edit</mat-icon>
+                        </button>&nbsp;
+                        <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
+                            (click)="confirmDialog(row)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+        </table>
+
+        <mat-card *ngIf="dataEmpty" class="dataEmpty">
+            {{'titulo.data-empty'|translate}}
+        </mat-card>
+    </div>
+</mat-card-content>
+
+<div class="footer row-flex">
+    <mat-list>
+        <mat-list-item>
+            <img mat-list-icon class="mat-icon" src="assets/img/icon/truck-fast-solid-green.png">
+            <span mat-line>Vehicle on route</span>
+        </mat-list-item>
+        <mat-list-item>
+            <img mat-list-icon class="mat-icon" src="assets/img/icon/warehouse-solid-green.png">
+            <span mat-line>Vehicle on garage</span>
+        </mat-list-item>
+    </mat-list>
+
+    <mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+        [pageSizeOptions]="[5, 25, 50]">
+    </mat-paginator>
+</div>

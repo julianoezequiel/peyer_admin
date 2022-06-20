@@ -1,7 +1,8 @@
 {
   "menu": {
     "dashboard": "Dashboard",
-    "usuarios": "Users"
+    "usuarios": "Users",
+    "vehicles": "Vehicles"
   },
 
   "alerta": {
@@ -35,8 +36,9 @@
     "editar": "Edit",
     "pronto": "Done",
     "acoes": "Actions",
-    "buscar": "Search",
+    "buscar": "Search...",
     "upload": "Choose a file",
+    "data-empty": "There are no registered to display",
     "novoRegistro": "/ New register",
     "editarRegistro": "/ Edit register",
     "entrar": "Sign in",
@@ -51,11 +53,15 @@
         "foto": "Photo",
         "nome": "Name",
         "telefone": "Phone",
-        "contatosEmergencia": "Emergency contacts",
+        "contatosEmergencia": {
+          "titulo": "Emergency contacts",
+          "visualizar": "View emergency contacts"
+        },
         "permissao": {
           "titulo": "Permissions",
           "selecionar": "Select user permissions:"
-        }
+        },
+        "ativo": "Account active:"
       },
       "campo": {
         "nomeUsuario": "Username",
@@ -69,12 +75,44 @@
           "funcionario": "Employee",
           "administrativo": "Administrative",
           "motorista": "Driver"
-        }
+        },
+        "ativo": "Active"
       },
       "msg": {
         "sucesso": "User successfully registered, verification email sent to {{value}}",
         "alterar-proprio-usuario": "Changing your own user is not allowed",
-        "finalizar-edicao": "Finish editing the email/password field"
+        "finalizar-edicao": "Finish editing the email/password field",
+        "erro": {
+          "salvar-foto": "Error saving photo"
+        }
+      }
+    },
+    "vehicles": {
+      "title": {
+        "viewHistory": "View vehicle history",
+        "vehicleInformation": "VEHICLE INFORMATION",
+        "driverInformation": "DRIVER INFORMATION",
+        "onRoute": "Vehicle on route:"
+      },
+      "field": {
+        "name": "Name",
+        "status": "Status",
+        "lastDriver": "Last driver",
+        "licensePlate": "License plate",
+        "category": "Category",
+        "totalWeight": "Total weight",
+        "usefulLoad": "Useful load"
+      },
+      "msg": {
+        "deleteVehicleOnRoute": "This vehicle is on route. Do you want to remove it anyway?"
+      }
+    },
+    "vehicleHistory": {
+      "title": {
+        "history": "/ History of ",
+        "driversHistory": "Drivers history",
+        "routesHistory": "Routes history",
+        "damagesHistory": "Damages history"
       }
     },
     "campo": {
@@ -113,7 +151,7 @@
   },
 
   "errorFirebase": {
-    "desconhecido": "An unknown error has occurred! \n- Error code: {{code}} \n- Message: {{message}}",
+    "unknown": "An unknown error has occurred! \n- Error code: {{code}} \n- Message: {{message}}",
     "email-already-in-use": "The email address is already in use by another account",
     "user-not-found": "User not found or account has been deleted",
     "wrong-password": "Invalid password",
@@ -122,6 +160,10 @@
     "invalid-email": "The email address is badly formatted",
     "expired-action-code": "Password reset code has expired",
     "invalid-action-code": "Password reset code is invalid or has already been used",
-    "user-disabled": "User corresponding to the password reset code provided is disabled"
+    "user-disabled": "User corresponding to the password reset code provided is disabled",
+    "object-not-found": "Photo not found",
+    "not-found": "Register not found",
+    "already-exists": "Register already exists",
+    "internal": "Internal error, please contact support"
   }
 }

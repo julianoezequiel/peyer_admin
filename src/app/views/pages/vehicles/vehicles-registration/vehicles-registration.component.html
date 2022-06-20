@@ -1,0 +1,152 @@
+<form [formGroup]="vehicleForm" novalidate>
+
+
+    <mat-card-header class="principal">
+        <mat-card-title>
+            <span class="title">
+                <a href="#/vehicles">
+                    <mat-icon color=accent>arrow_back</mat-icon>
+                    <span>{{ 'menu.vehicles' | translate}}</span>
+                </a>
+            </span>
+            <span class="sub-title">{{ pageTitle | translate}}</span>
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="principal">
+        <mat-card class="h100 elevation-card" style="overflow-y: auto;">
+
+            <mat-card-header class="fieldsGroupHeader">
+                <mat-card-title class="fieldsGroupTitle">
+                    <!-- <img class="mat-icon" src="assets/img/icon/truck-solid-green.png"> -->
+                    <mat-icon>local_shipping</mat-icon>
+                    <span>{{'cadastros.vehicles.title.vehicleInformation' | translate}}</span>
+                </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row-flex">
+                    <!-- NAME -->
+                    <mat-form-field appearance="fill" style="width: 30%;">
+                        <mat-label>{{'cadastros.vehicles.field.name'|translate}}</mat-label>
+                        <input matInput formControlName="name">
+                        <mat-error *ngIf="vehicleForm.controls['name'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- LICENSE PLATE -->
+                    <mat-form-field appearance="fill" style="width: 30%;">
+                        <mat-label>{{'cadastros.vehicles.field.licensePlate'|translate}}</mat-label>
+                        <input matInput formControlName="licensePlate">
+                        <mat-error *ngIf="vehicleForm.controls['licensePlate'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- CATEGORY -->
+                    <mat-form-field appearance="fill" style="width: 35%;">
+                        <mat-label>{{'cadastros.vehicles.field.category'|translate}}</mat-label>
+                        <input matInput formControlName="category">
+                        <mat-error *ngIf="vehicleForm.controls['category'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="row-flex">
+                    <!-- TOTAL WEIGHT -->
+                    <mat-form-field appearance="fill" style="width: 30%;">
+                        <mat-label>{{'cadastros.vehicles.field.totalWeight'|translate}}</mat-label>
+                        <input matInput formControlName="totalWeight" mask="00.0" suffix=" T"
+                            (blur)="formatNumber(true)" placeholder="00.0 T" (keydown)="$event.stopPropagation()">
+                        <mat-error *ngIf="vehicleForm.controls['totalWeight'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- USEFULD LOAD -->
+                    <mat-form-field appearance="fill" style="width: 30%;">
+                        <mat-label>{{'cadastros.vehicles.field.usefulLoad'|translate}}</mat-label>
+                        <input matInput formControlName="usefulLoad" mask="00.0" suffix=" T"
+                            (blur)="formatNumber(false)" placeholder="00.0 T">
+                        <mat-error *ngIf="vehicleForm.controls['usefulLoad'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- ON ROUTE -->
+                    <div class="onRoute" style="width: 35%;">
+                        <p class="title">{{'cadastros.vehicles.title.onRoute'|translate}}</p>
+
+                        <div class="toggle-align">
+                            <mat-label>{{'opcao.nao'|translate}}&nbsp;&nbsp;</mat-label>
+                            <mat-slide-toggle formControlName="onRoute"
+                                [class.onRoute]="vehicleForm.controls['onRoute'].value"></mat-slide-toggle>
+                            <mat-label>&nbsp;&nbsp;{{'opcao.sim'|translate}}</mat-label>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+
+            <mat-card-header class="fieldsGroupHeader">
+                <mat-card-title class="fieldsGroupTitle">
+                    <!-- <img class="mat-icon" src="assets/img/icon/steering-wheel-green.png"> -->
+                    <mat-icon>badge</mat-icon>
+                    <span>{{'cadastros.vehicles.title.driverInformation' | translate}}</span>
+                </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content formGroupName="lastDriver">
+                <div class="row-flex">
+                    <mat-form-field appearance="fill" style="width: 57%">
+                        <mat-label>{{'cadastros.vehicles.field.lastDriver' | translate}}</mat-label>
+                        <mat-select formControlName="displayName" disableOptionCentering>
+
+                            <mat-form-field class="searchDriver">
+                                <mat-icon matPrefix>search</mat-icon>
+                                <input placeholder="{{'titulo.buscar' | translate}}" matInput type="text" #searchDriver
+                                    (keydown)="$event.stopPropagation()">
+                            </mat-form-field>
+
+                            <div class=scrollDriversList>
+                                <mat-option [value]="" (onSelectionChange)="onDriverChange(null, $event)">--
+                                </mat-option>
+                                <ng-container *ngFor="let driver of driversList">
+                                    <mat-option
+                                        *ngIf="searchDriver.value ? applyFilter(driver, searchDriver.value) : true"
+                                        [value]="driver.displayName"
+                                        (onSelectionChange)="onDriverChange(driver, $event)">
+                                        {{driver.displayName}}
+                                    </mat-option>
+                                </ng-container>
+                            </div>
+
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" class="isReadOnly" style="width: 40%">
+                        <mat-label>{{'cadastros.usuarios.campo.contato' | translate}}</mat-label>
+                        <span matPrefix>+41&nbsp;</span>
+                        <input matInput formControlName="contact" mask="(00) 000-00-00" readonly>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+
+        </mat-card>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions align="end" class="principal">
+        <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+        <button mat-raised-button color="primary" (click)="onSubmit()"
+            [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
+        <button mat-raised-button color="danger" type="button" (click)="goBack()"
+            style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+        </button>
+    </mat-card-actions>
+
+</form>

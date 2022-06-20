@@ -1,5 +1,5 @@
 import { AlertDialogComponent } from './../../../shared/alert-dialog/alert-dialog.component';
-import { UsuarioService } from './../../cadastros/services/usuario.service';
+import { UsuarioService } from '../../pages/services/usuario.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';

@@ -4,20 +4,31 @@
   box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.57);
 }
 
+::ng-deep .elevation-card {
+  box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+
 /* HEADER */
 app-header {
-  height: 71px;
+  height: 70px;
   background-color: $peyer-color-green;
   border: 0;
 
   ::ng-deep {
-    a img {
-      height: 71px;
+    a.navbar-brand {
+      margin-bottom: 10px;
+
+      img {
+        height: 67px;
+        margin: auto;
+      }
     }
 
     .navbar-toggler {
       background: $peyer-color-yellow;
       min-width: 40px;
+      margin: 0 5px;
     }
   }
 
@@ -42,17 +53,38 @@ app-sidebar {
   padding-top: 10px;
 
   app-sidebar-nav {
-
     ::ng-deep app-sidebar-nav-items {
       padding: 0px 5px;
 
       app-sidebar-nav-link {
         margin-bottom: 2px;
+        height: 50px;
+
+        a {
+          padding-right: 0px;
+          padding-left: 5px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          height: 50px;
+
+          app-sidebar-nav-link-content {
+            display: flex;
+            align-items: center;
+            height: 40px;
+          }
+        }
 
         i {
-          font-size: 20px !important;
+          margin-right: 15px !important;
+          font-size: 23px !important;
           vertical-align: middle !important;
           color: $peyer-color-yellow !important;
+
+          &.fa-truck {
+            transform: scaleX(-1);
+            padding-right: 23px;
+            margin-right: 10px !important;
+          }
         }
 
         .nav-link {
@@ -73,23 +105,57 @@ main.main {
 
   mat-card.principal {
     height: 100%;
-    padding-top: 0;
+    padding: 0;
 
     ::ng-deep mat-card-header.principal {
       background-color: #2f353a;
-      margin: 0 -16px;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
-      margin-bottom: 10px;
+      height: 48px;
+      align-items: center;
 
       mat-card-title {
-        margin-top: 12px;
+        margin: 0;
         font-size: 18px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
         .title {
           color: $peyer-color-yellow;
+
+          a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #fddf4e;
+
+            mat-icon {
+              font-size: 27px;
+              height: 27px;
+              width: 27px;
+            }
+
+            span {
+              margin-left: 5px;
+            }
+
+            &:hover {
+              text-decoration: none;
+              color: #d1b73b;
+
+              mat-icon {
+                color: #d1b73b;
+              }
+
+              span {
+                text-decoration: underline;
+              }
+            }
+          }
         }
         .sub-title {
+          margin-left: 5px;
           color: gray;
         }
       }
@@ -101,7 +167,14 @@ main.main {
 
     ::ng-deep mat-card-actions.principal {
       margin: 0;
-      padding-bottom: 0;
+      padding: 8px;
+      align-items: center;
+
+      button {
+        width: 140px;
+        height: 40px;
+        margin: 0;
+      }
     }
   }
 }

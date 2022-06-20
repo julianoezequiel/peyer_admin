@@ -1,5 +1,5 @@
 import { AngularFireStorage } from '@angular/fire/storage';
-import { UserFirebase } from './../../views/cadastros/model/userfirebase.model';
+import { UserFirebase } from '../../views/pages/model/user/userfirebase.model';
 import { ChangeDetectorRef } from "@angular/core";
 import { style } from "@angular/animations";
 import { Component, OnDestroy, OnInit } from "@angular/core";

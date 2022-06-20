@@ -1,4 +1,4 @@
-import { UserFirebase } from '../../cadastros/model/userfirebase.model';
+import { UserFirebase } from '../../pages/model/user/userfirebase.model';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { UsuarioService } from '../../cadastros/services/usuario.service';
+import { UsuarioService } from '../../pages/services/usuario.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({

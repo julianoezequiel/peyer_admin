@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
 
-import { DefaultLayoutComponent } from './containers';
-import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
-import { AuthGuard } from './views/auth/guard/auth.guard';
-import { LoginComponent } from './views/auth/login/login.component';
-import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
-import { CadastroUsuariosComponent } from './views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component';
-import { ListaUsuariosComponent } from './views/cadastros/usuarios/lista-usuarios/lista-usuarios.component';
-import { P404Component } from './views/error/404.component';
-import { P500Component } from './views/error/500.component';
-
+import { DefaultLayoutComponent } from "./containers";
+import { AuthGuard } from "./views/auth/auth.guard";
+import { ForgotPasswordComponent } from "./views/auth/forgot-password/forgot-password.component";
+import { LoginComponent } from "./views/auth/login/login.component";
+import { P404Component } from "./views/error/404.component";
+import { P500Component } from "./views/error/500.component";
+import { UsersRegistrationComponent } from "./views/pages/users/users-registration/users-registration.component";
+import { UsersListComponent } from "./views/pages/users/users-list/users-list.component";
+import { VehiclesListComponent } from "./views/pages/vehicles/vehicles-list/vehicles-list.component";
+import { VehiclesRegistrationComponent } from "./views/pages/vehicles/vehicles-registration/vehicles-registration.component";
 
 // Import Containers
 export const routes: Routes = [
@@ -26,7 +26,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
 
     children: [
-      //Dashboard
+      // DASHBOARD
       {
         path: "dashboard",
         loadChildren: () =>
@@ -39,43 +39,47 @@ export const routes: Routes = [
       // USERS
       {
         path: "users",
-        component: ListaUsuariosComponent,
+        component: UsersListComponent,
         canActivate: [AuthGuard],
       },
       {
         path: "users/user",
-        component: CadastroUsuariosComponent,
+        component: UsersRegistrationComponent,
         canActivate: [AuthGuard],
       },
       {
         path: "users/user/:id",
-        component: CadastroUsuariosComponent,
+        component: UsersRegistrationComponent,
         canActivate: [AuthGuard],
       },
 
+      // VEHICLES
       {
-        path: "base",
-        loadChildren: () =>
-          import("./views/base/base.module").then((m) => m.BaseModule),
+        path: "vehicles",
+        component: VehiclesListComponent,
+        canActivate: [AuthGuard],
       },
       {
-        path: "theme",
-        loadChildren: () =>
-          import("./views/theme/theme.module").then((m) => m.ThemeModule),
+        path: "vehicles/vehicle",
+        component: VehiclesRegistrationComponent,
+        canActivate: [AuthGuard],
       },
       {
-        path: "widgets",
+        path: "vehicles/vehicle/:id",
+        component: VehiclesRegistrationComponent,
+        canActivate: [AuthGuard],
+      },
+
+      // VEHICLES HISTORIES
+      {
+        path: "vehicles/vehicle/:id/histories",
         loadChildren: () =>
-          import("./views/widgets/widgets.module").then((m) => m.WidgetsModule),
+          import(
+            "./views/pages/vehicle-histories/vehicle-history.module"
+          ).then((m) => m.VehicleHistoriesModule),
+        canActivate: [AuthGuard],
       },
     ],
-  },
-  {
-    path: "sucess",
-    component: PaginaSucessoComponent,
-    data: {
-      title: "Sucesso",
-    },
   },
   {
     path: "404",

@@ -1,5 +1,3 @@
-import { AuthGuard } from './views/auth/guard/auth.guard';
-
 import 'firebase/storage';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -40,7 +38,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxLoadingModule } from 'ngx-loading';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
-import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
 
 import { environment } from '../environments/environment';
@@ -52,17 +50,25 @@ import { MaterialModule } from './material.module';
 import { AlertDialogComponent } from './shared/alert-dialog/alert-dialog.component';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 import { FilterPipe } from './shared/filter-pipe.pipe';
+import { AuthGuard } from './views/auth/auth.guard';
 import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
-import { AuthService } from './views/auth/services/auth.service';
 import { LoginComponent } from './views/auth/login/login.component';
-import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
-import { CadastroUsuariosComponent } from './views/cadastros/usuarios/cadastro-usuarios/cadastro-usuarios.component';
-import { ListaUsuariosComponent } from './views/cadastros/usuarios/lista-usuarios/lista-usuarios.component';
+import { AuthService } from './views/auth/services/auth.service';
 import { P404Component } from './views/error/404.component';
 import { P500Component } from './views/error/500.component';
+import { UsersRegistrationComponent } from './views/pages/users/users-registration/users-registration.component';
+import { UsersListComponent } from './views/pages/users/users-list/users-list.component';
+import {
+  EmergencyContactsDialog,
+} from './views/pages/users/users-list/emergency-contacts-dialog/emergency-contacts-dialog.component';
+import { VehiclesListComponent } from './views/pages/vehicles/vehicles-list/vehicles-list.component';
+import { VehiclesRegistrationComponent } from './views/pages/vehicles/vehicles-registration/vehicles-registration.component';
+import { VehicleHistoriesModule } from './views/pages/vehicle-histories/vehicle-history.module';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
+  wheelSpeed: 0
 };
 
 // Import containers
@@ -87,7 +93,6 @@ const maskConfig: Partial<IConfig> = {
     AppFooterModule,
     AppHeaderModule,
     AppSidebarModule,
-    PerfectScrollbarModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
@@ -132,6 +137,7 @@ const maskConfig: Partial<IConfig> = {
     MatMomentDateModule,
     MatNativeDateModule,
     PerfectScrollbarModule,
+    VehicleHistoriesModule,
   ],
   declarations: [
     AppComponent,
@@ -139,13 +145,16 @@ const maskConfig: Partial<IConfig> = {
     P404Component,
     P500Component,
     LoginComponent,
-    CadastroUsuariosComponent,
-    ListaUsuariosComponent,
+    UsersRegistrationComponent,
+    UsersListComponent,
     ConfirmDialogComponent,
-    PaginaSucessoComponent,
     FilterPipe,
     ForgotPasswordComponent,
     AlertDialogComponent,
+    EmergencyContactsDialog,
+    VehiclesListComponent,
+    VehiclesRegistrationComponent,
+
   ],
   providers: [
     {
@@ -171,6 +180,10 @@ const maskConfig: Partial<IConfig> = {
         },
       },
     },
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    },
     //{provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
     CurrencyPipe,
     {
@@ -184,7 +197,7 @@ const maskConfig: Partial<IConfig> = {
       useValue: getDutchPaginatorIntl(),
     },
   ],
-  entryComponents: [ConfirmDialogComponent, AlertDialogComponent],
+  entryComponents: [ConfirmDialogComponent, AlertDialogComponent, EmergencyContactsDialog],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -3,11 +3,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
-import { resolve } from 'path';
 import { Observable, of } from 'rxjs';
 
-import { UserFirebase } from '../../cadastros/model/userfirebase.model';
-import { ErrorFirebaseService } from '../../cadastros/services/error-firebase.service';
+import { UserFirebase } from '../../pages/model/user/userfirebase.model';
+import { ErrorFirebaseService } from '../../error/services/error-firebase.service';
 
 @Injectable()
 export class AuthService implements OnInit {
@@ -61,7 +60,10 @@ export class AuthService implements OnInit {
         .then((result) => {
           resolve(result);
         })
-        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error))
+        });
     });
   }
 
@@ -76,7 +78,10 @@ export class AuthService implements OnInit {
         .then((result) => {
           resolve(result);
         })
-        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error))
+        });
     });
   }
   /* Delete user from Authentication */
@@ -112,7 +117,7 @@ export class AuthService implements OnInit {
   // Reset Forggot password
   ForgotPassword(passwordResetEmail) {
     var actionCodeSettings = {
-      url: 'http://localhost:4200/#/forgot-password?uid=' + 157,
+      url: 'http://localhost:4200/#/forgot-password',
     }
 
     return new Promise((resolve, reject) => {
@@ -121,7 +126,10 @@ export class AuthService implements OnInit {
         .then((success) => {
           resolve(success);
         })
-        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error))
+        });
     });
   }
 
@@ -130,7 +138,10 @@ export class AuthService implements OnInit {
       this.afAuth
         .confirmPasswordReset(code, newPassword)
         .then(() => resolve(null))
-        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error))
+        });
     });
   }
 
@@ -139,7 +150,10 @@ export class AuthService implements OnInit {
       this.afAuth
         .verifyPasswordResetCode(oobCode)
         .then((email) => resolve(email))
-        .catch((error) => reject(this.errorFB.getErrorByCode(error)));
+        .catch((error) => {
+          console.log(error);
+          reject(this.errorFB.getErrorByCode(error))
+        });
     });
   }
 
