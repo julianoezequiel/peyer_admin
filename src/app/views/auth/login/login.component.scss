@@ -7,7 +7,7 @@ form {
 
 mat-card {
   padding: 0;
-  border: 3px solid $peyer-color-green;
+  border: 1px solid $peyer-color-green;
   border-radius: 10px;
 
   mat-card-content {
@@ -36,6 +36,7 @@ mat-card {
   background: $peyer-color-green;
   margin-bottom: 20px;
   text-align: center;
+  border-radius: 8px;
 }
 
 mat-form-field {
@@ -45,7 +46,7 @@ mat-form-field {
     .mat-form-field-outline-start,
     .mat-form-field-outline-gap,
     .mat-form-field-outline-end {
-      border-width: 3px;
+      border-width: 1px;
     }
   }
 }
