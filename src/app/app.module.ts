@@ -63,7 +63,7 @@ import {
 } from './views/pages/users/users-list/emergency-contacts-dialog/emergency-contacts-dialog.component';
 import { VehiclesListComponent } from './views/pages/vehicles/vehicles-list/vehicles-list.component';
 import { VehiclesRegistrationComponent } from './views/pages/vehicles/vehicles-registration/vehicles-registration.component';
-import { VehicleHistoriesModule } from './views/pages/vehicle-histories/vehicle-history.module';
+import { VehicleHistoryModule } from './views/pages/vehicle-history/vehicle-history.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -137,7 +137,7 @@ const maskConfig: Partial<IConfig> = {
     MatMomentDateModule,
     MatNativeDateModule,
     PerfectScrollbarModule,
-    VehicleHistoriesModule,
+    VehicleHistoryModule,
   ],
   declarations: [
     AppComponent,

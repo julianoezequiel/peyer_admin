@@ -75,8 +75,8 @@ export const routes: Routes = [
         path: "vehicles/vehicle/:id/histories",
         loadChildren: () =>
           import(
-            "./views/pages/vehicle-histories/vehicle-history.module"
-          ).then((m) => m.VehicleHistoriesModule),
+            "./views/pages/vehicle-history/vehicle-history.module"
+          ).then((m) => m.VehicleHistoryModule),
         canActivate: [AuthGuard],
       },
     ],

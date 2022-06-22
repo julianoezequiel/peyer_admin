@@ -1,5 +1,3 @@
-import { UserFirebase } from "../user/userfirebase.model";
-
 export interface Vehicle {
   _id?: string;
   name: string;
@@ -13,4 +11,5 @@ export interface Vehicle {
   category: string;
   totalWeight: string;
   usefulLoad: string;
+  updateDate: string;
 }

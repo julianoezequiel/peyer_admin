@@ -18,9 +18,10 @@ export class Utils {
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  totalpedidos: number = 0;
-  totalusuarios: number = 0;
-  totalprodutos: number = 0;
+  
+  totalUsers: number = 0;
+  totalBirthdays: number = 0;
+  totalVehicles: number = 0;
   totalpedidosHistorico: number = 0;
   totalcatalogo: number = 0;
   totalClientes: number = 0;
@@ -36,13 +37,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const sub1 = this.usuarioService.count().subscribe((result) => {
-      this.totalusuarios = result.length;
+      this.totalUsers = result.length;
     });
 
     this.subscriptions.push(sub1);
   }
 
-  goToUsusarios() {
+  goToUsers() {
     this.router.navigate(["users"]);
   }
 }

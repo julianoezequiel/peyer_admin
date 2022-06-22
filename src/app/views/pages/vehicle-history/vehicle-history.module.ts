@@ -19,4 +19,4 @@ import { DamagesHistoryComponent } from './damages-history/damages-history.compo
     TranslateModule
   ],
 })
-export class VehicleHistoriesModule { }
+export class VehicleHistoryModule { }

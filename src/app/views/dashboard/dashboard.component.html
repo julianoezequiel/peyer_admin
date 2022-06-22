@@ -1,59 +1,12 @@
 <div class="animated fadeIn content" ngIf="false">
   <div class="row">
 
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-info">
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-primary" (click)="goToUsers()" popover="{{'dashboard.popover.users' | translate}}"
+        triggers="mouseenter:mouseleave" placement="bottom">
         <div class="card-body pb-0">
-          <div class="text-value">{{totalpedidos}}</div>
-          <div>Pedidos</div>
-        </div>
-        <div class="chart-wrapper  mt-3 mx-3 text-center " style="height:70px;">
-            <i class="fa fa-cart-arrow-down fa-4x"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-primary">
-        <div class="card-body pb-0">
-          <div class="text-value">{{totalprodutos}}</div>
-          <div>Produtos</div>
-        </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
-          <i class="fa fa-list fa-4x"></i>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-warning">
-        <div class="card-body pb-0">
-          <div class="text-value">{{totalcatalogo}}</div>
-          <div>Catálogos</div>
-        </div>
-        <div class="chart-wrapper mt-3 text-center" style="height:70px;">
-          <i class="fa fa-shopping-cart fa-4x"></i>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-info">
-        <div class="card-body pb-0">
-          <div class="text-value">{{totalClientes}}</div>
-          <div>Clientes</div>
-        </div>
-        <div class="chart-wrapper  mt-3 mx-3 text-center " style="height:70px;">
-            <i class="fa fa-address-card fa-4x"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;" (click)="goToUsusarios()">
-      <div class="card text-white bg-danger">
-        <div class="card-body pb-0">
-          <div class="text-value">{{totalusuarios}}</div>
-          <div>Usários</div>
+          <div class="text-title">{{'dashboard.title.users' | translate}}</div>
+          <div class="text-value">{{totalUsers}}</div>
         </div>
         <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
           <i class="fa fa-user fa-4x"></i>
@@ -61,29 +14,91 @@
       </div>
     </div>
 
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-info">
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-success" popover="{{'dashboard.popover.todaysBirthdays' | translate}}"
+        triggers="mouseenter:mouseleave" placement="bottom">
         <div class="card-body pb-0">
-          <div class="text-value">{{totalpedidosHistorico}}</div>
-          <div>Histórico</div>
+          <div class="text-title">{{'dashboard.title.todaysBirthdays' | translate}}</div>
+          <div class="text-value">{{totalBirthdays}}</div>
         </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center"  style="height:70px;">
-          <i class="fa fa-archive fa-4x"></i>
+        <div class="chart-wrapper  mt-3 mx-3 text-center " style="height:70px;">
+          <mat-icon>cake</mat-icon>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-3 col-lg-2 col-xs-12" style="cursor: pointer;">
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-info" popover="{{'dashboard.popover.vehicles' | translate}}"
+        triggers="mouseenter:mouseleave" placement="bottom">
+        <div class="card-body pb-0">
+          <div class="text-title">{{'dashboard.title.vehicles' | translate}}</div>
+          <div class="text-value">{{totalVehicles}}</div>
+        </div>
+        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
+          <mat-icon>local_shipping</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-danger">
+        <div class="card-body pb-0">
+          <div class="text-title">Damages</div>
+          <div class="text-value">{{totalcatalogo}}</div>
+        </div>
+        <div class="chart-wrapper mt-3 text-center" style="height:70px;">
+          <mat-icon>nearby_error</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-warning">
+        <div class="card-body pb-0">
+          <div class="text-title">Improvements pending</div>
+          <div class="text-value">{{totalpedidosHistorico}}</div>
+        </div>
+        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-warning">
+        <div class="card-body pb-0">
+          <div class="text-title">Absences pending</div>
+          <div class="text-value">{{totalClientes}}</div>
+        </div>
+        <div class="chart-wrapper  mt-3 mx-3 text-center " style="height:70px;">
+          <mat-icon>work_history</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
       <div class="card text-white bg-primary">
         <div class="card-body pb-0">
+          <div class="text-title">Meu Pedido</div>
           <div class="text-value">&nbsp;</div>
-          <div>Meu Pedido</div>
         </div>
         <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
           <i class="fa fa-shopping-basket  fa-4x"></i>
         </div>
       </div>
     </div>
+
+    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
+      <div class="card text-white bg-primary">
+        <div class="card-body pb-0">
+          <div class="text-title">Meu Pedido</div>
+          <div class="text-value">&nbsp;</div>
+        </div>
+        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
+          <i class="fa fa-shopping-basket  fa-4x"></i>
+        </div>
+      </div>
+    </div> -->
   </div>
-  
+
 </div>

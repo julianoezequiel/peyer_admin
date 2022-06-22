@@ -1,3 +1,5 @@
+import { VehicleHistoryService } from './vehicle-history.service';
+import { TranslateService } from '@ngx-translate/core';
 import { Vehicle } from "../model/vehicle/vehicle.model";
 import { ErrorFirebaseService } from "../../error/services/error-firebase.service";
 import {
@@ -12,7 +14,9 @@ import { Injectable } from "@angular/core";
 export class VehicleService {
   constructor(
     private firestore: AngularFirestore,
-    private errorFB: ErrorFirebaseService
+    private errorFB: ErrorFirebaseService,
+    private translate: TranslateService,
+    private vehicleHistory: VehicleHistoryService
   ) {}
 
   collection = this.firestore.collection("vehicles");
@@ -32,7 +36,18 @@ export class VehicleService {
 
       let vehicle = await this.collection
         .add(recordToBeCreated)
-        .then((res) => resolve(true))
+        .then((res) => {
+          res.get().then(x => {
+             console.log(x.data());
+             
+            this.vehicleHistory.createHistoryDrivers (x.id, x.data() as Vehicle)
+              .then(() => {
+                resolve(true);
+              })
+              .catch(() => reject(this.translate.instant("failedCreateDriverHistory")));
+          });
+          
+        })
         .catch((error) => {
           console.log(error);
           reject(this.errorFB.getErrorByCode(error));

@@ -45,7 +45,18 @@
     "esqueceuSenha": "Forgot password?",
     "sair": "Logout"
   },
-
+  "dashboard": {
+    "title": {
+      "users": "Users",
+      "vehicles": "Vehicles",
+      "todaysBirthdays": "Today's birthdays"
+    },
+    "popover": {
+      "users": "View users",
+      "vehicles": "View vehicles",
+      "todaysBirthdays": "View today's birthdays"
+    }
+  },
   "cadastros": {
     "usuarios": {
       "titulo": {
@@ -104,7 +115,8 @@
         "usefulLoad": "Useful load"
       },
       "msg": {
-        "deleteVehicleOnRoute": "This vehicle is on route. Do you want to remove it anyway?"
+        "deleteVehicleOnRoute": "This vehicle is on route. Do you want to remove it anyway?",
+        "failedCreateDriverHistory": "Failed to create driver history"
       }
     },
     "vehicleHistory": {

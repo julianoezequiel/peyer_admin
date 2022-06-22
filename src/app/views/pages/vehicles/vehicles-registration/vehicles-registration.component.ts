@@ -11,6 +11,7 @@ import { Vehicle } from "./../../model/vehicle/vehicle.model";
 import { UsuarioService } from "./../../services/usuario.service";
 import { VehicleService } from "../../services/vehicle.service";
 import { MatOptionSelectionChange } from "@angular/material/core";
+import moment from "moment";
 
 @Component({
   selector: "app-vehicles-registration",
@@ -31,6 +32,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
     category: "",
     totalWeight: "",
     usefulLoad: "",
+    updateDate: moment(new Date()).format("DD/MM/YYYY HH:mm")
   };
 
   private subscriptions: Subscription[] = [];
@@ -117,6 +119,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
 
     const vehicle: Vehicle = this.vehicleForm.value as Vehicle;
     vehicle._id = this.vehicleData._id;
+    vehicle.updateDate = this.vehicleData.updateDate;
 
     this.disableBtn = true;
     if (vehicle._id) {
