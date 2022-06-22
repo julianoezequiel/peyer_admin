@@ -37,7 +37,9 @@ export class VehicleService {
       let vehicle = await this.collection
         .add(recordToBeCreated)
         .then((res) => {
-          res.get().then(x => {
+          resolve(true);
+
+          /*res.get().then(x => {
              console.log(x.data());
              
             this.vehicleHistory.createHistoryDrivers (x.id, x.data() as Vehicle)
@@ -45,7 +47,7 @@ export class VehicleService {
                 resolve(true);
               })
               .catch(() => reject(this.translate.instant("failedCreateDriverHistory")));
-          });
+          });*/
           
         })
         .catch((error) => {

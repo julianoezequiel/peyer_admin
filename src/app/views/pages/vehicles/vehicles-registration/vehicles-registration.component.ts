@@ -32,7 +32,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
     category: "",
     totalWeight: "",
     usefulLoad: "",
-    updateDate: moment(new Date()).format("DD/MM/YYYY HH:mm")
+    //updateDate: moment(new Date()).format("DD/MM/YYYY HH:mm")
   };
 
   private subscriptions: Subscription[] = [];
@@ -119,7 +119,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
 
     const vehicle: Vehicle = this.vehicleForm.value as Vehicle;
     vehicle._id = this.vehicleData._id;
-    vehicle.updateDate = this.vehicleData.updateDate;
+    //vehicle.updateDate = this.vehicleData.updateDate;
 
     this.disableBtn = true;
     if (vehicle._id) {
