@@ -1,0 +1,103 @@
+<mat-card-header class="principal mat-elevation-z3">
+    <mat-card-title>
+        <span class="title">{{'menu.newsletters'|translate}}</span>
+    </mat-card-title>
+</mat-card-header>
+
+<mat-card-content class="principal mat-elevation-z8">
+
+    <div class="options">
+        <button class="add" mat-raised-button color="primary" type="button" (click)="add()">
+            {{'titulo.adicionar'| translate}}
+            <mat-icon>add_circle_outline</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline">
+            <mat-label>{{'titulo.buscar'| translate}}</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput (keyup)="applyFilter($event.target.value)" type="search">
+        </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+        <table mat-table class="w100" [dataSource]="dataSource" matSort matSortActive="title" matSortDirection="asc"
+            matSortDisableClear>
+
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
+                matTooltip="{{'cadastros.newsletters.title.viewNewsDetails'|translate}}" matTooltipPosition="above"
+                matTooltipClass="tooltip-element-row"
+                [hidden]="loading">
+            </tr>
+            <!---->
+
+            <!-- TITLE Column -->
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.newsletters.field.title'| translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewNewsDetails(row)">
+                    <span matTooltip="{{ row.title }}" matTooltipPosition="below">{{ row.title }}</span>
+                </td>
+            </ng-container>
+
+            <!-- DESCRIPTION Column -->
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.newsletters.field.description'| translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewNewsDetails(row)">
+                    <span matTooltip="{{ row.description }}" matTooltipPosition="below">{{ row.description }}</span>
+                </td>
+            </ng-container>
+
+            <!-- PUBLICATION DATE Column -->
+            <ng-container matColumnDef="publicationDate">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.newsletters.field.publicationDate'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewNewsDetails(row)">
+                    <span matTooltip="{{ row.publicationDate }}" matTooltipPosition="below">{{row.publicationDate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- AUTHOR Column -->
+            <ng-container matColumnDef="author">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.newsletters.title.author'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewNewsDetails(row)">
+                    <span matTooltip="{{ row.author.displayName }}" matTooltipPosition="below">{{ row.author.displayName }}</span>
+                </td>
+            </ng-container>
+
+            <!-- ACTIONS Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="buttons-align">
+                        <button (click)="edit(row)" mat-icon-button color="primary"
+                            matTooltip="{{'titulo.editar'|translate}}">
+                            <mat-icon>edit</mat-icon>
+                        </button>&nbsp;
+                        <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
+                            (click)="confirmDialog(row)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+        </table>
+
+        <div class="loading" *ngIf="loading">
+            <mat-spinner diameter="100"></mat-spinner>
+        </div>
+
+        <mat-card *ngIf="dataEmpty && !loading" class="dataEmpty">
+            {{'titulo.dataEmpty'|translate}}
+        </mat-card>
+    </div>
+</mat-card-content>
+
+<mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+  [pageSizeOptions]="[5, 25, 50]">
+</mat-paginator>

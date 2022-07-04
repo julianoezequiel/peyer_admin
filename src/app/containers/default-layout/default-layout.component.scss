@@ -156,7 +156,7 @@ main.main {
         }
         .sub-title {
           margin-left: 5px;
-          color: gray;
+          color: #e0e1e2;
         }
       }
     }
@@ -167,7 +167,7 @@ main.main {
 
     ::ng-deep mat-card-actions.principal {
       margin: 0;
-      padding: 8px;
+      padding: 8px 16px;
       align-items: center;
 
       button {

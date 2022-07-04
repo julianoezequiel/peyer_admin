@@ -96,7 +96,7 @@ mat-icon[mat-card-avatar] {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 140px;
+      width: 165px;
       height: 40px;
 
       label {
@@ -153,6 +153,10 @@ mat-icon[mat-card-avatar] {
 
   tr.mat-header-row {
     height: 40px;
+  }
+
+  tr.mat-row {
+    height: 43px;
   }
 
   th.mat-header-cell,

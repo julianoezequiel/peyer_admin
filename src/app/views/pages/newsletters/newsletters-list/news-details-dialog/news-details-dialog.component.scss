@@ -1,0 +1,94 @@
+.header {
+  text-align: end;
+
+  mat-icon {
+    border-radius: 50%;
+  }
+}
+
+mat-card-content {
+  margin: 0;
+  margin-top: 5px;
+
+  h1 {
+    margin-bottom: 0px;
+  }
+
+  h3 {
+    margin-bottom: 5px;
+  }
+
+  h5 {
+    text-align: end;
+    margin-bottom: 2px;
+  }
+
+  .messageBody {
+    height: 230px;
+    margin: 0;
+    overflow-y: auto;
+    font-size: 13px;
+    text-align: justify;
+    padding: 0 7px;
+    box-shadow: inset 0 0 3px 0px;
+    border-radius: 3px;
+  }
+}
+
+mat-dialog-actions {
+  flex-wrap: wrap;
+  align-items: stretch;
+  flex-direction: column;
+
+  .attachments {
+    background: #2d72781c;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+
+    span {
+      margin-left: 10px;
+      font-weight: 500;
+    }
+  }
+
+  .listFiles {
+    mat-chip {
+      cursor: pointer;
+      justify-content: space-between;
+    }
+
+    .row-flex {
+      flex-wrap: nowrap;
+    }
+
+    .filename {
+      width: 305px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .icon-format {
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+      margin-right: 7px;
+    }
+
+    .download-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      margin-left: 8px;
+      opacity: 0.7;
+    }
+
+    mat-chip:hover {
+      .download-icon {
+        opacity: 1;
+      }
+    }
+  }
+}

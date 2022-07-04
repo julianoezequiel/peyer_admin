@@ -14,8 +14,8 @@ mat-card-content.principal {
 
 img.mat-icon {
   margin: 0 6px;
-  height: 23px !important;
-  width: 29px !important;
+  height: 20px !important;
+  width: 26px !important;
 }
 
 .mat-column-lastDriver {
@@ -61,12 +61,6 @@ tr.element-row:not(.element-focus):active {
   width: 180px !important;
 }
 
-::ng-deep .modal-contatos-emergencia {
-  mat-dialog-container {
-    padding: 0px 10px 10px;
-  }
-}
-
 div.footer.row-flex {
   justify-content: space-between;
 
@@ -77,14 +71,14 @@ div.footer.row-flex {
     border-radius: 5px;
 
     mat-list-item {
-      height: 34px;
+      height: 29px;
 
       span {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 500;
       }
 
-     ::ng-deep .mat-list-item-content {
+      ::ng-deep .mat-list-item-content {
         border-bottom: 1px solid #ddd;
         margin: 0px 10px;
       }
@@ -96,4 +90,11 @@ div.footer.row-flex {
       }
     }
   }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 375px);
 }

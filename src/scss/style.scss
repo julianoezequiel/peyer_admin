@@ -22,11 +22,17 @@ $custom-theme: mat-light-theme(
 );
 
 @include angular-material-theme($custom-theme);
+
+$custom-typography: mat-typography-config(
+  $font-family: 'Poppins'
+);
+
+@include angular-material-typography($custom-typography);
 /*---------------------------------------------*/
 
 * {
   font-family: Poppins, Helvetica, sans-serif;
-  font-weight: 500;
+  //font-weight: 500;
 }
 
 /* SIDEBAR */
@@ -63,6 +69,12 @@ $custom-theme: mat-light-theme(
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
 }
 
@@ -143,7 +155,7 @@ button.active:focus {
 }
 
 .mat-form-field-ripple {
-  background-color: $peyer-color-green !important;
+   background-color: $peyer-color-green;
 }
 
 // Input (appearance=outline)
@@ -154,7 +166,7 @@ button.active:focus {
 
 // Input focado (appearance=outline)
 .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-  color: $peyer-color-green !important;
+  // color: $peyer-color-green !important;
 }
 
 // Input with erro - linha (appearance=outline)
@@ -185,7 +197,7 @@ mat-form-field {
 
 // Label focused
 .mat-form-field.mat-focused .mat-form-field-label {
-  color: $peyer-color-green !important;
+  // color: $peyer-color-green !important;
 }
 
 // Mat-form-field formatado para quando possuir prefixo
@@ -271,9 +283,11 @@ mat-form-field.isReadOnly {
 }
 
 .dataEmpty {
-  text-align: center;
+  display: flex !important;
+  flex-direction: row;
+  justify-content: center;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   color: #73818f;
 }
 /* --- TABLE --- */
@@ -296,3 +310,9 @@ mat-form-field.isReadOnly {
   top: -2px !important;
 }
 /* --- BUTTON TOGGLE --- */
+
+
+/* TOAST */
+.toast-message {
+  white-space: pre-wrap;
+}

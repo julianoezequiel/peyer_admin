@@ -193,19 +193,19 @@
           <div style="display: flex; justify-content: space-between;">
             <!-- Browse Button File -->
             <button mat-raised-button type="button" color="accent" class="buttons"
-              matTooltip="{{'titulo.upload'|translate}}" matTooltipPosition="below" [disabled]="!userActive">
-              <mat-icon>add_to_photos</mat-icon>
+              matTooltip="{{'titulo.uploadPhoto'|translate}}" matTooltipPosition="below" [disabled]="!userActive">
               <label for='buttons' style="margin: 0;"
-                [ngStyle]="{'cursor': !userActive ? 'not-allowed' : 'pointer'}">{{'titulo.upload'|translate}}</label>
+                [ngStyle]="{'cursor': !userActive ? 'not-allowed' : 'pointer'}">{{'titulo.uploadPhoto'|translate}}</label>
               <input style="display: none;" type="file" #UploadFileInput id="buttons" (change)="uploadFileEvt($event)"
-                name="buttons" multiple="multiple" accept="image/*" *ngIf="userActive" />
+                name="buttons" accept="image/*" *ngIf="userActive" />
+              <mat-icon>upload_file</mat-icon>
             </button>
 
             <button mat-raised-button matTooltip="{{'titulo.remover'|translate}}" matTooltipPosition="below"
               type="button" (click)="removePhoto()" color="warn" class="buttons"
               [disabled]="!userData.photoURL || !userActive">
-              <mat-icon>delete</mat-icon>
               {{'titulo.remover' | translate}}
+              <mat-icon>delete</mat-icon>
             </button>
           </div>
         </mat-card-actions>

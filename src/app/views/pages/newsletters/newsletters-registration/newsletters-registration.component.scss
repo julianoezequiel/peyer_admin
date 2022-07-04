@@ -1,0 +1,132 @@
+mat-card-content.principal {
+  height: calc(100vh - 216px);
+  padding: 16px 16px 0;
+}
+
+mat-card-content:not(.principal) {
+  margin: 15px 0px;
+}
+
+.fieldsGroupHeader {
+  background: #2d72781c;
+  border-radius: 5px;
+
+  .fieldsGroupTitle {
+    margin: 4px 0px;
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      height: 33px;
+      width: 33px;
+      font-size: 33px;
+    }
+
+    span {
+      font-size: 20px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.message-body textarea {
+  overflow: hidden;
+  resize: vertical;
+  text-align: justify;
+}
+
+.row-flex {
+  justify-content: space-between;
+
+  &.attachments {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.content-attachments {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 35px;
+
+  button {
+    width: 215px;
+
+    * {
+      cursor: pointer;
+    }
+  }
+
+  mat-hint {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+}
+
+mat-card-actions {
+  .author {
+    margin-left: 15px;
+  }
+
+  .row-flex {
+    align-items: baseline;
+  }
+
+  .btns {
+    margin-top: 10px;
+  }
+
+  .publicationDate {
+    width: 56%;
+    font-size: 9px;
+
+    ::ng-deep .mat-form-field-flex {
+      padding-top: 0;
+    }
+
+    ::ng-deep mat-label {
+      font-size: 12px;
+    }
+
+    mat-error {
+      font-size: 10px;
+    }
+
+    ::ng-deep button {
+      width: 35px !important;
+      height: 35px !important;
+
+      svg {
+        height: 20px !important;
+        width: 20px !important;
+      }
+    }
+
+    input {
+      font-size: 13px;
+    }
+  }
+}
+
+.listFiles {
+  .column-flex {
+    align-items: flex-start;
+  }
+
+  .icon-format {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    margin-right: 7px;
+  }
+}
+
+mat-card-actions.principal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}

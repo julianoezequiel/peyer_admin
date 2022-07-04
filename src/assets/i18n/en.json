@@ -2,7 +2,8 @@
   "menu": {
     "dashboard": "Dashboard",
     "usuarios": "Users",
-    "vehicles": "Vehicles"
+    "vehicles": "Vehicles",
+    "newsletters": "Newsletters"
   },
 
   "alerta": {
@@ -37,8 +38,10 @@
     "pronto": "Done",
     "acoes": "Actions",
     "buscar": "Search...",
-    "upload": "Choose a file",
-    "data-empty": "There are no registered to display",
+    "uploadPhoto": "Choose a photo",
+    "attachFiles": "Attach files",
+    "download": "Download file",
+    "dataEmpty": "There are no registered to display",
     "novoRegistro": "/ New register",
     "editarRegistro": "/ Edit register",
     "entrar": "Sign in",
@@ -101,22 +104,24 @@
     "vehicles": {
       "title": {
         "viewHistory": "View vehicle history",
-        "vehicleInformation": "VEHICLE INFORMATION",
-        "driverInformation": "DRIVER INFORMATION",
+        "vehicleInformation": "Vehicle information",
+        "driverInformation": "Driver information",
         "onRoute": "Vehicle on route:"
       },
       "field": {
         "name": "Name",
         "status": "Status",
-        "lastDriver": "Last driver",
+        "lastDriver": "Driver",
         "licensePlate": "License plate",
         "category": "Category",
         "totalWeight": "Total weight",
-        "usefulLoad": "Useful load"
+        "usefulLoad": "Useful load",
+        "updateDate": "Update date"
       },
       "msg": {
         "deleteVehicleOnRoute": "This vehicle is on route. Do you want to remove it anyway?",
-        "failedCreateDriverHistory": "Failed to create driver history"
+        "failedCreateDriverHistory": "Failed to create driver history",
+        "noDriver": "The vehicle was marked 'on route', but there is no driver attached to it.\nPlease, select a driver."
       }
     },
     "vehicleHistory": {
@@ -125,6 +130,28 @@
         "driversHistory": "Drivers history",
         "routesHistory": "Routes history",
         "damagesHistory": "Damages history"
+      }
+    },
+    "newsletters": {
+      "title": {
+        "viewNewsDetails": "View news details",
+        "newsInformation": "News information",
+        "attachments": "Attachments",
+        "onlyFormats": "Only PDF and image formats",
+        "author": "Author"
+      },
+      "field": {
+        "title": "Title",
+        "description": "Description",
+        "publicationDate": "Publication Date",
+        "messageBody": "Message body"
+      },
+      "msg": {
+        "maxFiles": "A maximum of two files is allowed, remove some files.",
+        "fileInvalidFormat": "Some files from the files are not in the correct format, check if they are in PDF or image format.",
+        "failedUploadAttachments": "Could not upload file {{value}}.",
+        "alreadyPublished": "The news has already been published",
+        "lowerDate": "Cannot be less than the current date"
       }
     },
     "campo": {
@@ -163,7 +190,7 @@
   },
 
   "errorFirebase": {
-    "unknown": "An unknown error has occurred! \n- Error code: {{code}} \n- Message: {{message}}",
+    "unknown": "An unknown error has occurred!\n- Error code: {{code}}\n- Message: {{message}}",
     "email-already-in-use": "The email address is already in use by another account",
     "user-not-found": "User not found or account has been deleted",
     "wrong-password": "Invalid password",
@@ -173,9 +200,10 @@
     "expired-action-code": "Password reset code has expired",
     "invalid-action-code": "Password reset code is invalid or has already been used",
     "user-disabled": "User corresponding to the password reset code provided is disabled",
-    "object-not-found": "Photo not found",
+    "object-not-found": "File not found",
     "not-found": "Register not found",
     "already-exists": "Register already exists",
-    "internal": "Internal error, please contact support"
+    "internal": "Internal error, please contact support",
+    "data-loss": "Unrecoverable data loss or corruption"
   }
 }

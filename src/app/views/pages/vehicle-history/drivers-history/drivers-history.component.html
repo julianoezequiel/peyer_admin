@@ -1,1 +1,19 @@
-<p>Drivers history in development...</p>
+<div class="loading" *ngIf="loading">
+    <mat-spinner diameter="100"></mat-spinner>
+</div>
+
+<mat-list role="list" class="listHistory h100" *ngIf="!loading">
+
+    <mat-list-item *ngIf="dataEmpty" class="dataEmpty">
+        {{'titulo.dataEmpty'|translate}}
+    </mat-list-item>
+    
+    <ng-container *ngIf="!dataEmpty">
+        <mat-list-item role="listitem" *ngFor="let item of dataList" [@rowsAnimation]="">
+            <div class="column-flex">
+                <span>{{'cadastros.vehicles.field.lastDriver' | translate}}:&nbsp;<span>{{item.displayName}}</span></span>
+                <span>{{'cadastros.vehicles.field.updateDate' | translate}}:&nbsp;<span>{{item.updateDate}}</span></span>
+            </div>
+        </mat-list-item>
+    </ng-container>
+</mat-list>

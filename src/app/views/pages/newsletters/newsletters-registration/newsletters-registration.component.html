@@ -1,0 +1,128 @@
+<form [formGroup]="newsletterForm" novalidate>
+
+    <mat-card-header class="principal">
+        <mat-card-title>
+            <span class="title">
+                <a href="#/newsletters">
+                    <mat-icon color=accent>arrow_back</mat-icon>
+                    <span>{{ 'menu.newsletters' | translate}}</span>
+                </a>
+            </span>
+            <span class="sub-title">{{ pageTitle | translate}}</span>
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="principal">
+        <mat-card class="h100 elevation-card" style="overflow-y: auto;">
+
+            <mat-card-header class="fieldsGroupHeader">
+                <mat-card-title class="fieldsGroupTitle">
+                    <mat-icon color="primary">newspaper</mat-icon>
+                    <span>{{'cadastros.newsletters.title.newsInformation' | translate}}</span>
+                </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row-flex">
+                    <!-- TITLE -->
+                    <mat-form-field appearance="fill" style="width: 49%;">
+                        <mat-label>{{'cadastros.newsletters.field.title'|translate}}</mat-label>
+                        <input matInput formControlName="title">
+                        <mat-error *ngIf="newsletterForm.controls['title'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- DESCRIPTION -->
+                    <mat-form-field appearance="fill" style="width: 49%;">
+                        <mat-label>{{'cadastros.newsletters.field.description'|translate}}</mat-label>
+                        <input matInput formControlName="description">
+                        <mat-error *ngIf="newsletterForm.controls['description'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="row-flex">
+                    <!-- MESSAGE BODY -->
+                    <mat-form-field appearance="fill" class="message-body" style="width: 100%;">
+                        <mat-label>{{'cadastros.newsletters.field.messageBody'|translate}}</mat-label>
+                        <textarea matInput formControlName="messageBody" maxlength="1000" cdkTextareaAutosize
+                            #input></textarea>
+                        <mat-error *ngIf="newsletterForm.controls['messageBody'].hasError('required')">
+                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                        </mat-error>
+                        <mat-hint align="start">{{input.value?.length || 0}}/1000</mat-hint>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+
+            <mat-card-header class="fieldsGroupHeader">
+                <mat-card-title class="fieldsGroupTitle">
+                    <mat-icon color="primary">attachment</mat-icon>
+                    <span>{{'cadastros.newsletters.title.attachments' | translate}}</span>
+                </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row-flex attachments">
+                    <div class="content-attachments">
+                        <!-- Browse Button File -->
+                        <button mat-raised-button type="button" color="accent" class="buttons"
+                            matTooltip="{{'titulo.attachFiles'|translate}}" matTooltipPosition="below" (click)="uploadFileInput.click()">
+                            <label style="margin: 0;">{{'titulo.attachFiles'|translate}}</label>
+                            <input style="display: none;" type="file" #uploadFileInput id="buttons" name="buttons"
+                                accept="application/pdf, image/*" multiple (change)="uploadFileEvt($event)" />
+                            <mat-icon>upload_file</mat-icon>
+                        </button>
+                        <mat-hint>{{'cadastros.newsletters.title.onlyFormats' |
+                            translate}}&nbsp;-&nbsp;({{ listFiles?.length ? listFiles?.length : 0 }}/2)</mat-hint>
+                    </div>
+
+                    <mat-chip-list role="list" class="listFiles">
+                        <div class="column-flex">
+                            <mat-chip *ngFor="let file of listFiles" (removed)="removeFile(file)">
+                                <mat-icon class="icon-format">{{file.type.includes("image") ? "image" : "picture_as_pdf"}}</mat-icon>
+                                <div>{{file.name}}</div>
+                                <mat-icon matChipRemove matTooltip="{{'titulo.remover'|translate}}"
+                                    matTooltipPosition="above">cancel</mat-icon>
+                            </mat-chip>
+                        </div>
+                    </mat-chip-list>
+                </div>
+            </mat-card-content>
+
+        </mat-card>
+    </mat-card-content>
+
+    <mat-card-actions class="principal">
+
+        <div class="row-flex">
+            <i class="author">{{'cadastros.newsletters.title.author' |
+                translate}}&nbsp;:&nbsp;{{this.newsletterData.author.displayName}}</i>
+
+            <mat-form-field appearance="fill" class="publicationDate" [class.isReadOnly]="disableDate" [matTooltip]="getDateMsg()"
+            matTooltipPosition="above">
+                <!-- <mat-label>{{'cadastros.newsletters.field.publicationDate'|translate}}</mat-label> -->
+                <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="publicationDate"
+                    placeholder="DD/MM/YYYY" [readonly]="disableDate">
+                <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="disableDate"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="getDateErrorMsg()">
+                    <strong>{{msgError}}</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row-flex btns">
+            <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+            <button mat-raised-button color="primary" (click)="onSubmit()"
+                [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
+            <button mat-raised-button color="danger" type="button" (click)="goToList()"
+                style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+            </button>
+        </div>
+    </mat-card-actions>
+
+</form>

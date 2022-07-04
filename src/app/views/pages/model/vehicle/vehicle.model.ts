@@ -11,5 +11,5 @@ export interface Vehicle {
   category: string;
   totalWeight: string;
   usefulLoad: string;
-  //updateDate: string;
+  updateDate: string;
 }

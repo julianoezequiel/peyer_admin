@@ -1,0 +1,42 @@
+<div class="header">
+    <!-- <mat-icon class="icon" color="primary">contact_phone</mat-icon> -->
+    <!-- <span mat-dialog-title>{{'cadastros.usuarios.titulo.contatosEmergencia.titulo'|translate}}</span> -->
+    <!-- <button mat-icon-button [mat-dialog-close]="true"> -->
+    <mat-icon color=warn [mat-dialog-close]="true" matRipple>close</mat-icon>
+    <!-- </button> -->
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-card-content>
+    <div>
+        <h1>{{data.title}}</h1>
+        <h3>{{data.description}}</h3>
+        <h5>{{data.publicationDate}}</h5>
+
+        <p class="messageBody">{{data.messageBody}}</p>
+    </div>
+</mat-card-content>
+
+<mat-dialog-actions>
+    <div class="attachments">
+        <mat-icon color="primary">attachment</mat-icon>
+        <span>{{'cadastros.newsletters.title.attachments' | translate}}</span>
+    </div>
+
+    <mat-chip-list role="list" class="listFiles">
+        <div class="column-flex">
+            <mat-chip *ngFor="let file of data.attachments" (click)="download(file)" (mouseover)="tooltip.show()"
+                (mouseout)="tooltip.hide()" [matTooltip]="file.name" matTooltipPosition="above">
+                <div class="row-flex">
+                    <mat-icon class="icon-format">{{file.type.includes("image") ? "image" : "picture_as_pdf"}}</mat-icon>
+                    <!-- <a href="https://firebasestorage.googleapis.com/v0/b/peyer-dev.appspot.com/o/user-images%2F3akb0_36695923.png?alt=media&token=2f6b8337-48a3-4ab7-8de7-68765e7bfa41" target="_blank" class="filename"> -->
+                        <span class="filename">{{file.name}}</span>
+                    <!-- </a> -->
+                </div>
+                <mat-icon class="download-icon" color="primary" matTooltip="{{'titulo.download' | translate}}" matTooltipPosition="above"
+                    #tooltip="matTooltip">download</mat-icon>
+            </mat-chip>
+        </div>
+    </mat-chip-list>
+</mat-dialog-actions>

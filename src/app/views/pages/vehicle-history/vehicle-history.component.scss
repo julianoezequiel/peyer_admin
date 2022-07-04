@@ -1,7 +1,7 @@
 @import "src/scss/_variables.scss";
 
 ::ng-deep .mat-ink-bar {
-  width: 160px !important;
+  visibility: hidden !important;
 }
 
 a span {
@@ -19,9 +19,17 @@ a:hover {
 
 .mat-tab-label-active {
   opacity: 1;
+  transition: opacity 2s linear;
 
   mat-icon {
     color: $peyer-color-green;
+  }
+
+  .mat-ink-bar {
+    visibility: visible !important;
+    width: 100%;
+    opacity: 1;
+    transition: opacity 2s linear;
   }
 }
 

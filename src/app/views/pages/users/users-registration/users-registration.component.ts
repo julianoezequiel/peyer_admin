@@ -433,7 +433,8 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
   async uploadPhoto() {
     if (this.imageFile) {
       try {
-        //console.log("UPLOAD", this.userData.photoURL);
+        console.log("photoURL", this.userData.photoURL);
+        console.log("imageFile", this.imageFile);
 
         const storageRef = this.angularFireStorage.ref(this.userData.photoURL);
 

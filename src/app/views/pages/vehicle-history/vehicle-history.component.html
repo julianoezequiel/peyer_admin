@@ -6,11 +6,9 @@
                 <span>{{ 'menu.vehicles' | translate}}</span>
             </a>
         </span>
-        <span class="sub-title">{{ pageTitle | translate}}</span>
+        <span class="sub-title">{{ pageTitle }}</span>
     </mat-card-title>
 </mat-card-header>
-
-
 
 <nav mat-tab-nav-bar>
     <div *ngFor="let link of navLinks">
@@ -20,8 +18,10 @@
             #rla="routerLinkActive"
             [active]="rla.isActive"
             class="row-flex">
-            <mat-icon class="example-tab-icon">{{link.icon}}</mat-icon>
+            <mat-icon>{{link.icon}}</mat-icon>
             <span>{{link.label | translate}}</span>
+
+            <div class="mat-ink-bar"></div>
         </a>
     </div>
 </nav>

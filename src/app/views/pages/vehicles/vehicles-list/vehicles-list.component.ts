@@ -1,11 +1,12 @@
-import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { ToastrService } from "ngx-toastr";
 import { MatDialog } from "@angular/material/dialog";
 import {
   ConfirmDialogModel,
   ConfirmDialogComponent,
 } from "./../../../../shared/confirm-dialog/confirm-dialog.component";
 import { TranslateService } from "@ngx-translate/core";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
@@ -22,26 +23,14 @@ import { ErrorFirebaseService } from "./../../../error/services/error-firebase.s
   styleUrls: ["./vehicles-list.component.scss"],
   animations: [rowsAnimation],
 })
-export class VehiclesListComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private vehiclesService: VehicleService,
-    private errorFB: ErrorFirebaseService,
-    public translate: TranslateService,
-    public dialog: MatDialog,
-    private toastr: ToastrService,
-  ) {}
+export class VehiclesListComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Subscription[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<Vehicle>;
-
-  dataEmpty = true;
-
-  data: Vehicle[];
-
   displayedColumns = [
     "name",
     "status",
@@ -51,8 +40,27 @@ export class VehiclesListComponent implements OnInit {
     "acoes",
   ];
 
+  dataEmpty = true;
+  loading = true;
+
+  data: Vehicle[];
+
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private vehiclesService: VehicleService,
+    private errorFB: ErrorFirebaseService,
+    public translate: TranslateService,
+    public dialog: MatDialog,
+    private toastr: ToastrService
+  ) {}
+
   ngOnInit() {
     this.getAll();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((x) => x.unsubscribe());
   }
 
   add() {
@@ -85,7 +93,7 @@ export class VehiclesListComponent implements OnInit {
         })
         .catch((error) => {
           this.toastr.warning(
-            this.translate.instant("mensagem.falha.removido"),
+            this.translate.instant("mensagem.falha.removido") + `\n- ${error}`,
             this.translate.instant("alerta.atencao"),
             {
               closeButton: true,
@@ -98,7 +106,7 @@ export class VehiclesListComponent implements OnInit {
   }
 
   async getAll() {
-    this.vehiclesService.getAll().subscribe(
+    const subList = await this.vehiclesService.getAll().subscribe(
       (data) => {
         let vehiclesList: Vehicle[] = data.map((e) => {
           let vehicle = e.payload.doc.data() as Vehicle;
@@ -112,6 +120,8 @@ export class VehiclesListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(vehiclesList);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+
+        this.loading = false
       },
 
       (error) => {
@@ -119,21 +129,14 @@ export class VehiclesListComponent implements OnInit {
         return this.errorFB.getErrorByCode(error);
       }
     );
+
+    this.subscriptions.push(subList);
   }
 
   viewVehicleHistory(row: Vehicle) {
-  
     this.router.navigate([`../vehicles/vehicle/${row._id}/histories`], {
       relativeTo: this.activatedRoute,
     });
-
-    //const dialogData = {username: row.displayName, emergencyContacts: row.emergencyContacts};
-
-    /*const dialogRef = this.dialog.open(EmergencyContactsDialog, {
-      width: "330px",
-      data: dialogData,
-      panelClass: 'modal-contatos-emergencia'
-    });*/
   }
 
   confirmDialog(row): void {

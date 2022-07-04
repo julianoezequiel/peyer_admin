@@ -6,9 +6,9 @@ export class DriversHistory {
   displayName: string;
   updateDate: string;
 
-  constructor(driver: UserFirebase) {
+  constructor(driver: UserFirebase, updateDate: string) {
     this.uid = driver.uid;
     this.displayName = driver.displayName;
-    this.updateDate = moment(new Date()).format("DD/MM/YYYY HH:mm");
+    this.updateDate = updateDate;
   }
 }

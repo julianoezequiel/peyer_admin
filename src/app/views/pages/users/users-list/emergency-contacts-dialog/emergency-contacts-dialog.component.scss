@@ -16,22 +16,31 @@ mat-icon.icon {
     width: 30px;
 }
 
-mat-list-item {
-    height: 60px !important;
-    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 4px;
-    box-shadow: 0px 1px 4px -1px rgb(0 0 0 / 57%);
-    margin-bottom: 12px;
-}
-
-::ng-deep .mat-list-item-content {
-    padding: 0 !important;
-}
-
-.scroll {
-    padding: 5px;
+.listContacts {
+    padding: 0 5px;
+    margin: 5px 0;
     height: 250px;
     overflow-y: auto;
+
+    mat-list-item {
+        height: 50px !important;
+        transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 5px;
+        background: #2d72781c;
+        //box-shadow: 0px 1px 4px -1px rgb(0 0 0 / 57%);
+     
+        &:not(:last-of-type) {
+            margin-bottom: 12px;
+        }
+
+        ::ng-deep .mat-list-text {
+            padding-left: 5px !important;
+        }
+    }
+    
+    ::ng-deep .mat-list-item-content {
+        padding: 0 !important;
+    }
 }
 
 .username {

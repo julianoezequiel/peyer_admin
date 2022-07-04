@@ -1,5 +1,10 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
@@ -32,7 +37,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
     category: "",
     totalWeight: "",
     usefulLoad: "",
-    //updateDate: moment(new Date()).format("DD/MM/YYYY HH:mm")
+    updateDate: "",
   };
 
   private subscriptions: Subscription[] = [];
@@ -40,7 +45,6 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
   vehicleForm: FormGroup;
 
   pageTitle: string;
-  newVehicle = true;
   disableBtn = false;
 
   driversList: UserFirebase[] = [];
@@ -66,7 +70,6 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
         const id = params.id;
 
         this.pageTitle = id ? "titulo.editarRegistro" : "titulo.novoRegistro";
-        this.newVehicle = id ? false : true;
 
         if (id && id.length > 0) {
           const material = this.vehicleService.getById(id).valueChanges();
@@ -119,12 +122,32 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
 
     const vehicle: Vehicle = this.vehicleForm.value as Vehicle;
     vehicle._id = this.vehicleData._id;
-    //vehicle.updateDate = this.vehicleData.updateDate;
+    //vehicle.updateDate = moment(new Date()).format("DD/MM/YYYY HH:mm");
+
+    /* check driver vehicle */
+    if (vehicle.onRoute) {
+      if (
+        !vehicle.lastDriver.uid &&
+        (!vehicle.lastDriver.displayName || vehicle.lastDriver.displayName == "")
+      ) {
+        this.toastr.warning(
+          this.translate.instant("cadastros.vehicles.msg.noDriver"),
+          this.translate.instant("alerta.atencao"),
+          {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          }
+        );
+        return;
+      }
+    }
 
     this.disableBtn = true;
     if (vehicle._id) {
       this.updateVehicle(vehicle);
     } else {
+      vehicle.updateDate = moment(new Date()).format("DD/MM/YYYY HH:mm");
       this.addVehicle(vehicle);
     }
   }
@@ -134,7 +157,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
       name: [this.vehicleData.name, Validators.required],
       onRoute: [this.vehicleData.onRoute],
       lastDriver: this.fb.group({
-        id: [this.vehicleData.lastDriver.uid],
+        uid: [this.vehicleData.lastDriver.uid],
         displayName: [this.vehicleData.lastDriver.displayName],
         contact: [this.vehicleData.lastDriver.contact],
       }),
@@ -143,6 +166,14 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
       totalWeight: [this.vehicleData.totalWeight, Validators.required],
       usefulLoad: [this.vehicleData.usefulLoad, Validators.required],
     });
+  }
+
+  checkDriverVehicle(vehicle: Vehicle) {
+    if (
+      vehicle.lastDriver.uid &&
+      (vehicle.lastDriver.displayName || vehicle.lastDriver.displayName == "")
+    ) {
+    }
   }
 
   addVehicle(vehicle: Vehicle) {
@@ -167,12 +198,12 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
           progressBar: true,
         });
       })
-      .finally(() => this.disableBtn = false);
+      .finally(() => (this.disableBtn = false));
   }
 
   updateVehicle(vehicle: Vehicle) {
     this.vehicleService
-      .update(vehicle)
+      .update(vehicle, this.vehicleData)
       .then((x) => {
         this.toastr.success(
           this.translate.instant("mensagem.sucesso.alterado"),
@@ -192,7 +223,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
           progressBar: true,
         });
       })
-      .finally(() => this.disableBtn = false);
+      .finally(() => (this.disableBtn = false));
   }
 
   formatNumber(isTotalWeight: boolean) {
@@ -221,12 +252,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
         : { uid: "", displayName: "", contact: "" };
       const controls = this.vehicleForm.controls;
 
-      console.log("driver", driver);
-      console.log("event", $event);
-      console.log("lastDriver", lastDriver);
-      
-
-      controls.lastDriver.get("id").setValue(lastDriver.uid);
+      controls.lastDriver.get("uid").setValue(lastDriver.uid);
       controls.lastDriver.get("displayName").setValue(lastDriver.displayName);
       controls.lastDriver.get("contact").setValue(lastDriver.contact);
     }

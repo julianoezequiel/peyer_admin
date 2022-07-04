@@ -27,7 +27,8 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
             <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
                 matTooltip="{{'cadastros.vehicles.title.viewHistory'|translate}}" matTooltipPosition="above"
-                matTooltipClass="tooltip-element-row">
+                matTooltipClass="tooltip-element-row"
+                [hidden]="loading">
             </tr>
             <!---->
 
@@ -42,7 +43,7 @@
 
             <!-- STATUS Column -->
             <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.vehicles.field.status'|translate}}
+                <th mat-header-cell *matHeaderCellDef>{{'cadastros.vehicles.field.status'|translate}}
                 </th>
                 <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
                     <img class="mat-icon"
@@ -52,7 +53,7 @@
 
             <!-- LAST DRIVER Column -->
             <ng-container matColumnDef="lastDriver">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <th mat-header-cell *matHeaderCellDef>
                     {{'cadastros.vehicles.field.lastDriver'|translate}}
                 </th>
                 <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
@@ -99,8 +100,12 @@
             </ng-container>
         </table>
 
-        <mat-card *ngIf="dataEmpty" class="dataEmpty">
-            {{'titulo.data-empty'|translate}}
+        <div class="loading" *ngIf="loading">
+            <mat-spinner diameter="100"></mat-spinner>
+        </div>
+
+        <mat-card *ngIf="dataEmpty && !loading" class="dataEmpty">
+            {{'titulo.dataEmpty'|translate}}
         </mat-card>
     </div>
 </mat-card-content>

@@ -1,5 +1,8 @@
-import { VehicleHistoryService } from './vehicle-history.service';
-import { TranslateService } from '@ngx-translate/core';
+import { UserFirebase } from "./../model/user/userfirebase.model";
+import { DriversHistory } from "./../model/vehicle-history/drivers-history.model";
+import { ToastrService } from "ngx-toastr";
+import { VehicleHistoryService } from "./vehicle-history.service";
+import { TranslateService } from "@ngx-translate/core";
 import { Vehicle } from "../model/vehicle/vehicle.model";
 import { ErrorFirebaseService } from "../../error/services/error-firebase.service";
 import {
@@ -7,6 +10,8 @@ import {
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
 import { Injectable } from "@angular/core";
+import _ from "lodash";
+import moment from "moment";
 
 @Injectable({
   providedIn: "root",
@@ -16,16 +21,21 @@ export class VehicleService {
     private firestore: AngularFirestore,
     private errorFB: ErrorFirebaseService,
     private translate: TranslateService,
-    private vehicleHistory: VehicleHistoryService
+    private vehicleHistory: VehicleHistoryService,
+    private toastr: ToastrService
   ) {}
 
   collection = this.firestore.collection("vehicles");
+
+  driversSubCollection = "drivers_history";
+  routesSubCollection = "routes_history";
+  damagesSubCollection = "damages_history";
 
   getById(id): AngularFirestoreDocument<Vehicle> {
     return this.collection.doc(id);
   }
 
-  create(recordToBeCreated): Promise<any> {
+  create(recordToBeCreated: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
       delete recordToBeCreated._id;
 
@@ -37,18 +47,12 @@ export class VehicleService {
       let vehicle = await this.collection
         .add(recordToBeCreated)
         .then((res) => {
-          resolve(true);
-
-          /*res.get().then(x => {
-             console.log(x.data());
-             
-            this.vehicleHistory.createHistoryDrivers (x.id, x.data() as Vehicle)
-              .then(() => {
-                resolve(true);
-              })
-              .catch(() => reject(this.translate.instant("failedCreateDriverHistory")));
-          });*/
-          
+          res.get().then((x) => {
+            this.vehicleHistory
+              .createHistoryDrivers(x.id, x.data() as Vehicle)
+              .then(() => {})
+              .finally(() => resolve(true));
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -57,28 +61,43 @@ export class VehicleService {
     });
   }
 
-  update(recordToBeUpdated): Promise<any> {
+  update(recordToBeUpdated: Vehicle, oldRecord: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      let id = recordToBeUpdated._id;
-      delete recordToBeUpdated._id;
 
-      recordToBeUpdated.lastDriver.displayName = recordToBeUpdated.lastDriver
-        .displayName
-        ? recordToBeUpdated.lastDriver.displayName
-        : "";
+      delete oldRecord.updateDate;
+      delete recordToBeUpdated.updateDate;
 
-      let vehicle = await this.collection
-        .doc(id)
-        .update(recordToBeUpdated)
-        .then((res) => resolve(true))
-        .catch((error) => {
-          console.log(error);
-          reject(this.errorFB.getErrorByCode(error));
-        });
+      if (!_.isEqual(recordToBeUpdated, oldRecord)) {
+        
+        recordToBeUpdated.updateDate = moment(new Date()).format("DD/MM/YYYY HH:mm");
+
+        let id = recordToBeUpdated._id;
+        delete recordToBeUpdated._id;
+  
+        recordToBeUpdated.lastDriver.displayName = recordToBeUpdated.lastDriver
+          .displayName
+          ? recordToBeUpdated.lastDriver.displayName
+          : "";
+  
+        let vehicle = await this.collection
+          .doc(id)
+          .update(recordToBeUpdated)
+          .catch((error) => {
+            console.log(error);
+            reject(this.errorFB.getErrorByCode(error));
+          });
+  
+        let driver_history = await this.vehicleHistory
+        .createHistoryDrivers(id, recordToBeUpdated)
+        .finally(() => resolve(true));
+      } else {
+        resolve(true);
+      }
+
     });
   }
 
-  delete(recordToBeRemoved) {
+  delete(recordToBeRemoved: Vehicle) {
     return new Promise(async (resolve, reject) => {
       this.collection
         .doc(recordToBeRemoved._id)

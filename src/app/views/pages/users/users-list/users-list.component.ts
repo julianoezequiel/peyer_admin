@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +23,21 @@ import { EmergencyContactsDialog } from './emergency-contacts-dialog/emergency-c
   styleUrls: ["./users-list.component.scss"],
   animations: [rowsAnimation],
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Subscription[] = [];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  dataSource: MatTableDataSource<UserFirebase>;
+  displayedColumns = ["displayName", "email", "active", "jobTitle", "birthDate", "acoes"];
+  
+  dataEmpty = true;
+  loading = true;
+
+  data: UserFirebase[];
+
   constructor(
     public dialog: MatDialog,
     private router: Router,
@@ -35,18 +50,12 @@ export class UsersListComponent implements OnInit {
     public translate: TranslateService
   ) {}
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
-  dataSource: MatTableDataSource<UserFirebase>;
-  dataEmpty = true;
-
-  data: UserFirebase[];
-
-  displayedColumns = ["displayName", "email", "active", "jobTitle", "birthDate", "acoes"];
-
   async ngOnInit() {
     await this.getAll();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((x) => x.unsubscribe());
   }
 
   add() {
@@ -67,7 +76,7 @@ export class UsersListComponent implements OnInit {
   }
 
   async getAll() {
-    await this.usuarioService.read_all().subscribe((data) => {
+    const subList = await this.usuarioService.read_all().subscribe((data) => {
 
       this.dataEmpty = data.length == 0;
 
@@ -91,7 +100,11 @@ export class UsersListComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+
+      this.loading = false;
     });
+
+    this.subscriptions.push(subList);
   }
 
   async delete(user: UserFirebase) {
@@ -115,7 +128,7 @@ export class UsersListComponent implements OnInit {
           })
           .catch((error) => {
             this.toastr.warning(
-              this.translate.instant("mensagem.falha.removido"),
+              this.translate.instant("mensagem.falha.removido") + `\n- ${error}`,
               this.translate.instant("alerta.atencao"),
               {
                 closeButton: true,

@@ -10,9 +10,6 @@ const routes: Routes = [
   {
     path: "",
     component: VehicleHistoryComponent,
-    data: {
-      title: "cadastros.vehicleHistory.title.history",
-    },
     children: [
       {
         path: "",

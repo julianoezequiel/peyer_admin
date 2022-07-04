@@ -16,4 +16,9 @@ export const navItems: INavData[] = [
     url: "/vehicles",
     icon: "fa fa-truck",
   },
+  {
+    name: 'menu.newsletters',
+    url: "/newsletters",
+    icon: "fa fa-newspaper-o",
+  },
 ];

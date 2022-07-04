@@ -1,3 +1,5 @@
+import { NewslettersRegistrationComponent } from './views/pages/newsletters/newsletters-registration/newsletters-registration.component';
+import { NewslettersListComponent } from './views/pages/newsletters/newsletters-list/newsletters-list.component';
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
@@ -74,9 +76,26 @@ export const routes: Routes = [
       {
         path: "vehicles/vehicle/:id/histories",
         loadChildren: () =>
-          import(
-            "./views/pages/vehicle-history/vehicle-history.module"
-          ).then((m) => m.VehicleHistoryModule),
+          import("./views/pages/vehicle-history/vehicle-history.module").then(
+            (m) => m.VehicleHistoryModule
+          ),
+        canActivate: [AuthGuard],
+      },
+
+      // NEWSLETTER
+      {
+        path: "newsletters",
+        component: NewslettersListComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "newsletters/news",
+        component: NewslettersRegistrationComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "newsletters/news/:id",
+        component: NewslettersRegistrationComponent,
         canActivate: [AuthGuard],
       },
     ],

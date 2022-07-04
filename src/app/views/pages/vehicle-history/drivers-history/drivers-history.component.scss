@@ -1,0 +1,34 @@
+.listHistory {
+  overflow-y: auto;
+  padding: 0 5px;
+
+  ::ng-deep .mat-list-item {
+    width: 100%;
+    height: 55px;
+    background: #2d72781c;
+    border-radius: 5px;
+
+    &:not(:last-of-type) {
+      margin-bottom: 10px;
+    }
+  
+    span {
+      font-weight: 500;
+  
+      span {
+          font-weight: normal;
+      }
+  
+      &:first-of-type {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}

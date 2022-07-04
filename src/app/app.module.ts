@@ -1,3 +1,4 @@
+import { NewsDetailsDialog } from './views/pages/newsletters/newsletters-list/news-details-dialog/news-details-dialog.component';
 import 'firebase/storage';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -64,6 +65,8 @@ import {
 import { VehiclesListComponent } from './views/pages/vehicles/vehicles-list/vehicles-list.component';
 import { VehiclesRegistrationComponent } from './views/pages/vehicles/vehicles-registration/vehicles-registration.component';
 import { VehicleHistoryModule } from './views/pages/vehicle-history/vehicle-history.module';
+import { NewslettersListComponent } from './views/pages/newsletters/newsletters-list/newsletters-list.component';
+import { NewslettersRegistrationComponent } from './views/pages/newsletters/newsletters-registration/newsletters-registration.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -154,7 +157,9 @@ const maskConfig: Partial<IConfig> = {
     EmergencyContactsDialog,
     VehiclesListComponent,
     VehiclesRegistrationComponent,
-
+    NewslettersListComponent,
+    NewslettersRegistrationComponent,
+    NewsDetailsDialog
   ],
   providers: [
     {
@@ -197,7 +202,7 @@ const maskConfig: Partial<IConfig> = {
       useValue: getDutchPaginatorIntl(),
     },
   ],
-  entryComponents: [ConfirmDialogComponent, AlertDialogComponent, EmergencyContactsDialog],
+  entryComponents: [ConfirmDialogComponent, AlertDialogComponent, EmergencyContactsDialog, NewsDetailsDialog],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

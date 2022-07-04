@@ -1,6 +1,5 @@
 <form [formGroup]="vehicleForm" novalidate>
 
-
     <mat-card-header class="principal">
         <mat-card-title>
             <span class="title">
@@ -21,7 +20,7 @@
             <mat-card-header class="fieldsGroupHeader">
                 <mat-card-title class="fieldsGroupTitle">
                     <!-- <img class="mat-icon" src="assets/img/icon/truck-solid-green.png"> -->
-                    <mat-icon>local_shipping</mat-icon>
+                    <mat-icon color="primary">local_shipping</mat-icon>
                     <span>{{'cadastros.vehicles.title.vehicleInformation' | translate}}</span>
                 </mat-card-title>
             </mat-card-header>
@@ -61,7 +60,7 @@
                     <mat-form-field appearance="fill" style="width: 30%;">
                         <mat-label>{{'cadastros.vehicles.field.totalWeight'|translate}}</mat-label>
                         <input matInput formControlName="totalWeight" mask="00.0" suffix=" T"
-                            (blur)="formatNumber(true)" placeholder="00.0 T" (keydown)="$event.stopPropagation()">
+                            (blur)="formatNumber(true)" placeholder="00.0 T" (keyup)="$event.stopPropagation()">
                         <mat-error *ngIf="vehicleForm.controls['totalWeight'].hasError('required')">
                             <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
                         </mat-error>
@@ -71,7 +70,7 @@
                     <mat-form-field appearance="fill" style="width: 30%;">
                         <mat-label>{{'cadastros.vehicles.field.usefulLoad'|translate}}</mat-label>
                         <input matInput formControlName="usefulLoad" mask="00.0" suffix=" T"
-                            (blur)="formatNumber(false)" placeholder="00.0 T">
+                            (blur)="formatNumber(false)" placeholder="00.0 T" (keyup)="$event.stopPropagation()">
                         <mat-error *ngIf="vehicleForm.controls['usefulLoad'].hasError('required')">
                             <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
                         </mat-error>
@@ -94,7 +93,7 @@
             <mat-card-header class="fieldsGroupHeader">
                 <mat-card-title class="fieldsGroupTitle">
                     <!-- <img class="mat-icon" src="assets/img/icon/steering-wheel-green.png"> -->
-                    <mat-icon>badge</mat-icon>
+                    <mat-icon color="primary">badge</mat-icon>
                     <span>{{'cadastros.vehicles.title.driverInformation' | translate}}</span>
                 </mat-card-title>
             </mat-card-header>
@@ -137,8 +136,6 @@
 
         </mat-card>
     </mat-card-content>
-
-    <mat-divider></mat-divider>
 
     <mat-card-actions align="end" class="principal">
         <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
