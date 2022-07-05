@@ -37,6 +37,7 @@ export class VehiclesListComponent implements OnInit, OnDestroy {
     "lastDriver",
     "licensePlate",
     "totalWeight",
+    "updateDate",
     "acoes",
   ];
 

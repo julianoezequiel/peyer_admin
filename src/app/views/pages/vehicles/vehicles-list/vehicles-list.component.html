@@ -82,6 +82,16 @@
                 <td>
             </ng-container>
 
+            <!-- UPDATE DATE Column -->
+            <ng-container matColumnDef="updateDate">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.vehicles.field.updateDate'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                    <span matTooltip="{{ row.updateDate }}" matTooltipPosition="below">{{ row.updateDate }}</span>
+                <td>
+            </ng-container>
+
             <!-- ACOES Column -->
             <ng-container matColumnDef="acoes">
                 <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>

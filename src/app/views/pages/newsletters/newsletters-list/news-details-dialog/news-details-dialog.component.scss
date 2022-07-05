@@ -18,9 +18,12 @@ mat-card-content {
     margin-bottom: 5px;
   }
 
-  h5 {
-    text-align: end;
-    margin-bottom: 2px;
+  .row-flex {
+    justify-content: space-between;
+    h5 {
+      //text-align: end;
+      margin-bottom: 2px;
+    }
   }
 
   .messageBody {

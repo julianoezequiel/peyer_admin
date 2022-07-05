@@ -12,7 +12,14 @@
     <div>
         <h1>{{data.title}}</h1>
         <h3>{{data.description}}</h3>
-        <h5>{{data.publicationDate}}</h5>
+        <div class="row-flex">
+            <h5>{{'cadastros.newsletters.title.author' | translate}}
+                :&nbsp;{{data.author.displayName}}
+            </h5>
+
+            <h5>{{data.publicationDate}}</h5>
+        </div>
+        
 
         <p class="messageBody">{{data.messageBody}}</p>
     </div>

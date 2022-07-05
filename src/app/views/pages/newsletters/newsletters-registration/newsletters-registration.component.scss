@@ -65,13 +65,23 @@ mat-card-content:not(.principal) {
   }
 }
 
-mat-card-actions {
+mat-card-actions.principal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
   .author {
     margin-left: 15px;
   }
 
   .row-flex {
     align-items: baseline;
+  }
+
+  i {
+    font-weight: 500;
   }
 
   .btns {
@@ -81,6 +91,8 @@ mat-card-actions {
   .publicationDate {
     width: 56%;
     font-size: 9px;
+    padding-left: 30px;
+
 
     ::ng-deep .mat-form-field-flex {
       padding-top: 0;
@@ -121,12 +133,4 @@ mat-card-actions {
     height: 22px;
     margin-right: 7px;
   }
-}
-
-mat-card-actions.principal {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
 }

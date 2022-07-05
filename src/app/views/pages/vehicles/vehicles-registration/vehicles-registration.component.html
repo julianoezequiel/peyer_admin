@@ -137,13 +137,19 @@
         </mat-card>
     </mat-card-content>
 
-    <mat-card-actions align="end" class="principal">
-        <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
-        <button mat-raised-button color="primary" (click)="onSubmit()"
-            [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
-        <button mat-raised-button color="danger" type="button" (click)="goBack()"
-            style="margin-left: 10px;">{{'titulo.voltar'|translate}}
-        </button>
+    <mat-card-actions class="principal">
+
+        <i class="updateDate">{{'cadastros.vehicles.field.updateDate' | translate}}:&nbsp;{{vehicleData.updateDate}}
+        </i>
+
+        <div class="row-flex">
+            <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+            <button mat-raised-button color="primary" (click)="onSubmit()"
+                [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
+            <button mat-raised-button color="danger" type="button" (click)="goBack()"
+                style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+            </button>
+        </div>
     </mat-card-actions>
 
 </form>

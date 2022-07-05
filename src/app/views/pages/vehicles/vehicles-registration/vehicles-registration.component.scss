@@ -86,3 +86,23 @@ img.mat-icon {
   height: 27px !important;
   width: 30px !important;
 }
+
+mat-card-actions.principal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .updateDate {
+    margin-left: 15px;
+  }
+
+  .row-flex {
+    align-items: baseline;
+  }
+
+  i {
+    font-weight: 500;
+  }
+}

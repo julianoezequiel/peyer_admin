@@ -3,12 +3,12 @@ mat-card-content.principal {
 }
 
 .mat-column-name {
-  width: 35%;
+  width: 30%;
   max-width: 90px;
 }
 
 .mat-column-status {
-  width: 10%;
+  width: 8%;
   max-width: 90px;
 }
 
@@ -19,7 +19,7 @@ img.mat-icon {
 }
 
 .mat-column-lastDriver {
-  width: 35%;
+  width: 30%;
   max-width: 90px;
 }
 
@@ -35,6 +35,15 @@ img.mat-icon {
   span {
     margin: 0 16px;
   }
+}
+
+.mat-column-updateDate {
+  width: 12%;
+  max-width: 90px;
+
+  /*span {
+    margin: 0 16px;
+  }*/
 }
 
 .mat-column-acoes {
