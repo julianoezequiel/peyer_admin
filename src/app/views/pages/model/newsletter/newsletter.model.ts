@@ -5,10 +5,7 @@ export interface Newsletter {
   messageBody: string;
   attachments: FileStructure[];
   publicationDate: string;
-  author: {
-    uid: string;
-    displayName: string;
-  };
+  authorID: string;
 }
 
 export interface FileStructure {

@@ -1,5 +1,8 @@
-import { NewslettersRegistrationComponent } from './views/pages/newsletters/newsletters-registration/newsletters-registration.component';
-import { NewslettersListComponent } from './views/pages/newsletters/newsletters-list/newsletters-list.component';
+import { AbsenceRequestsListComponent } from './views/pages/absence-requests/absence-requests-list/absence-requests-list.component';
+import { ImprovementsRegistrationComponent } from "./views/pages/improvements/improvements-registration/improvements-registration.component";
+import { ImprovementsListComponent } from "./views/pages/improvements/improvements-list/improvements-list.component";
+import { NewslettersRegistrationComponent } from "./views/pages/newsletters/newsletters-registration/newsletters-registration.component";
+import { NewslettersListComponent } from "./views/pages/newsletters/newsletters-list/newsletters-list.component";
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
@@ -13,6 +16,9 @@ import { UsersRegistrationComponent } from "./views/pages/users/users-registrati
 import { UsersListComponent } from "./views/pages/users/users-list/users-list.component";
 import { VehiclesListComponent } from "./views/pages/vehicles/vehicles-list/vehicles-list.component";
 import { VehiclesRegistrationComponent } from "./views/pages/vehicles/vehicles-registration/vehicles-registration.component";
+import { DailyScheduleListComponent } from "./views/pages/daily-schedule/daily-schedule-list/daily-schedule-list.component";
+import { DailyScheduleRegistrationComponent } from "./views/pages/daily-schedule/daily-schedule-registration/daily-schedule-registration.component";
+import { AbsenceRequestsRegistrationComponent } from './views/pages/absence-requests/absence-requests-registration/absence-requests-registration.component';
 
 // Import Containers
 export const routes: Routes = [
@@ -98,6 +104,57 @@ export const routes: Routes = [
         component: NewslettersRegistrationComponent,
         canActivate: [AuthGuard],
       },
+
+      // DAILY SCHEDULES
+      {
+        path: "daily-schedule",
+        component: DailyScheduleListComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "daily-schedule/route-plan",
+        component: DailyScheduleRegistrationComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "daily-schedule/route-plan/:id",
+        component: DailyScheduleRegistrationComponent,
+        canActivate: [AuthGuard],
+      },
+
+      // IMPROVEMENTS
+      {
+        path: "improvements",
+        component: ImprovementsListComponent,
+        canActivate: [AuthGuard],
+      },
+      /*{
+        path: "improvements/improvement",
+        component: ImprovementsRegistrationComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "improvements/improvement/:id",
+        component: ImprovementsRegistrationComponent,
+        canActivate: [AuthGuard],
+      },*/
+
+      // ABSENCE REQUESTS
+      {
+        path: "absence-requests",
+        component: AbsenceRequestsListComponent,
+        canActivate: [AuthGuard],
+      },
+      /*{
+        path: "absence-requests/request",
+        component: AbsenceRequestsRegistrationComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "absence-requests/request/:id",
+        component: AbsenceRequestsRegistrationComponent,
+        canActivate: [AuthGuard],
+      },*/
     ],
   },
   {

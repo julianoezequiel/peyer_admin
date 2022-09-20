@@ -1,0 +1,32 @@
+<div class="row-flex header">
+    <mat-icon class="icon" color="accent">calendar_month</mat-icon>
+    <span mat-dialog-title>{{ 'dashboard.title.todaysRoutes' | translate }}</span>
+    <mat-icon color=warn [mat-dialog-close]="true">close</mat-icon>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-list class="listItens">
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+        <mat-list-item *ngFor="let ds of routesList">
+            <mat-icon mat-list-icon color="primary" class="info-icon">info</mat-icon>
+
+            <div mat-line>
+                <span class="details-info ellipsis">{{ds.from}}&nbsp;</span>
+                <mat-icon color="primary" class="arrow">double_arrow</mat-icon>
+                <span class="details-info ellipsis">&nbsp;{{ds.to}}</span>
+            </div>
+                
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.route.traveling.hora'|translate}}:&nbsp;{{ds.time}}</span>
+            
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.route.traveling.vehicle'|translate}}:&nbsp;{{ds.vehicle}}</span>
+            
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.vehicles.field.lastDriver'|translate}}:&nbsp;{{ds.driver}}</span>
+        </mat-list-item>
+    </div>
+</mat-list>

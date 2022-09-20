@@ -11,11 +11,21 @@
             {{'titulo.adicionar'| translate}}
             <mat-icon>add_circle_outline</mat-icon>
         </button>
+        
+        <!-- STATUS FILTER -->
+        <mat-form-field appearance="outline" style="width: 15%">
+            <mat-label>{{'cadastros.vehicles.title.status'|translate}}</mat-label>
+            <mat-select disableOptionCentering #selectStatus (selectionChange)="getAll()">
+                <mat-option [value]="status.value" *ngFor="let status of statusList">
+                    {{ status?.label | translate }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>{{'titulo.buscar'| translate}}</mat-label>
             <mat-icon matPrefix>search</mat-icon>
-            <input matInput (keyup)="applyFilter($event.target.value)" type="search">
+            <input matInput (keyup)="applyFilter()" type="search" #searchFilter>
         </mat-form-field>
     </div>
 
@@ -36,29 +46,28 @@
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.vehicles.field.name'| translate}}
                 </th>
-                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
-                    <span matTooltip="{{ row.name }}" matTooltipPosition="below">{{ row.name }}</span>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row.vehicle)">
+                    <span matTooltip="{{ row.vehicle.name }}" matTooltipPosition="below">{{ row.vehicle.name }}</span>
                 </td>
             </ng-container>
 
             <!-- STATUS Column -->
             <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef>{{'cadastros.vehicles.field.status'|translate}}
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'cadastros.vehicles.field.status'|translate}}
                 </th>
-                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row.vehicle)">
                     <img class="mat-icon"
-                        src="assets/img/icon/{{ row.onRoute ? 'truck-fast-solid-green' : 'warehouse-solid-green' }}.png">
+                        src="assets/img/icon/{{ row.vehicle.onRoute ? 'truck-fast-solid-green' : 'warehouse-solid-green' }}.png">
                 <td>
             </ng-container>
 
-            <!-- LAST DRIVER Column -->
-            <ng-container matColumnDef="lastDriver">
-                <th mat-header-cell *matHeaderCellDef>
+            <!-- DRIVER Column -->
+            <ng-container matColumnDef="driver" > 
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{'cadastros.vehicles.field.lastDriver'|translate}}
                 </th>
-                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
-                    <span matTooltip="{{ row.lastDriver.displayName }}" matTooltipPosition="below">{{
-                        row.lastDriver.displayName }}</span>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row.vehicle)">
+                    <span matTooltip="{{ row.driver }}" matTooltipPosition="below">{{row.driver }}</span>
                 </td>
             </ng-container>
 
@@ -67,29 +76,9 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{'cadastros.vehicles.field.licensePlate'|translate}}
                 </th>
-                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
-                    <span matTooltip="{{ row.licensePlate }}" matTooltipPosition="below">{{ row.licensePlate }}</span>
+                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row.vehicle)">
+                    <span>{{ row.vehicle.licensePlate }}</span>
                 </td>
-            </ng-container>
-
-            <!-- TOTAL WEIGHT Column -->
-            <ng-container matColumnDef="totalWeight">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    {{'cadastros.vehicles.field.totalWeight'|translate}}
-                </th>
-                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
-                    <span matTooltip="{{ row.totalWeight }}" matTooltipPosition="below">{{ row.totalWeight }} T</span>
-                <td>
-            </ng-container>
-
-            <!-- UPDATE DATE Column -->
-            <ng-container matColumnDef="updateDate">
-                <th mat-header-cell *matHeaderCellDef>
-                    {{'cadastros.vehicles.field.updateDate'|translate}}
-                </th>
-                <td mat-cell *matCellDef="let row" class="ellipsis" (click)="viewVehicleHistory(row)">
-                    <span matTooltip="{{ row.updateDate }}" matTooltipPosition="below">{{ row.updateDate }}</span>
-                <td>
             </ng-container>
 
             <!-- ACOES Column -->
@@ -97,12 +86,12 @@
                 <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
                 <td mat-cell *matCellDef="let row">
                     <div class="buttons-align">
-                        <button (click)="edit(row)" mat-icon-button color="primary"
+                        <button (click)="edit(row.vehicle)" mat-icon-button color="primary"
                             matTooltip="{{'titulo.editar'|translate}}">
                             <mat-icon>edit</mat-icon>
                         </button>&nbsp;
                         <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
-                            (click)="confirmDialog(row)">
+                            (click)="confirmDialog(row.vehicle)">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
@@ -114,7 +103,7 @@
             <mat-spinner diameter="100"></mat-spinner>
         </div>
 
-        <mat-card *ngIf="dataEmpty && !loading" class="dataEmpty">
+        <mat-card *ngIf="dataSource?.data.length == 0 && !loading" class="dataEmpty">
             {{'titulo.dataEmpty'|translate}}
         </mat-card>
     </div>
@@ -133,6 +122,6 @@
     </mat-list>
 
     <mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
-        [pageSizeOptions]="[5, 25, 50]">
+        [pageSizeOptions]="[5, 15, 25]">
     </mat-paginator>
 </div>

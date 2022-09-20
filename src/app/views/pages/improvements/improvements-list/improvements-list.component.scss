@@ -1,0 +1,115 @@
+@import "src/scss/variables";
+
+mat-card-content.principal {
+  margin-bottom: 10px;
+}
+
+.mat-column-description {
+  width: 25%;
+  max-width: 90px;
+}
+
+.mat-column-name {
+  width: 25%;
+  max-width: 90px;
+}
+
+.mat-column-creationDate {
+  width: 12%;
+  max-width: 90px;
+}
+
+.mat-column-requestStatus {
+  width: 16%;
+  max-width: 90px;
+  padding: 0 5px;
+
+  &.mat-header-cell {
+    padding: 0 20px;
+  }
+
+  .status {
+    border-radius: 5px;
+    padding: 5px;
+    font-weight: 500;
+    box-shadow: 2px 2px 3px 0px rgb(0 0 0 / 30%);
+
+    &.pending {
+      background-color: $peyer-color-yellow-light;
+      padding: 5px 7px;
+    }
+
+    &.done {
+      background-color: $peyer-color-green-light;
+      padding: 5px 17.5px;
+    }
+
+    &.rejected {
+      background-color: $color-warn-light;
+    }
+  }
+}
+
+.mat-column-requestType {
+  width: 21%;
+  max-width: 90px;
+}
+
+.mat-column-actions {
+  text-align: center;
+
+  .buttons-align {
+    display: flex;
+  }
+}
+
+tr:nth-child(2n - 1):not(.mat-header-row) {
+  background: rgba(249, 249, 249, 0.3);
+}
+
+tr.element-row:not(.element-focus):hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+tr.element-row:not(.element-focus):active {
+  background: #ebebeb;
+}
+
+::ng-deep .tooltip-improvement {
+  text-align: center;
+  font-size: 12px;
+  max-width: 190px !important;
+  width: 190px !important;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 375px);
+}
+
+::ng-deep .improvement-details-dialog {
+  mat-dialog-container {
+    padding: 10px;
+    //background-color: lightyellow;
+    margin-top: 30px;
+  }
+}
+
+.pending .mat-form-field-appearance-outline ::ng-deep .mat-form-field-outline {
+  color: $peyer-color-yellow;
+}
+
+.done .mat-form-field-appearance-outline ::ng-deep .mat-form-field-outline {
+  color: $peyer-color-green;
+}
+
+.rejected .mat-form-field-appearance-outline ::ng-deep .mat-form-field-outline {
+  color: $color-warn;
+}
+
+.all .mat-form-field-appearance-outline ::ng-deep .mat-form-field-outline {
+  color: gray;
+}

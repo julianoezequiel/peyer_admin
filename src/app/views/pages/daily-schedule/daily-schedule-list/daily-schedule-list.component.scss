@@ -1,0 +1,64 @@
+.mat-column-driver {
+  width: 25%;
+  max-width: 90px;
+}
+
+.mat-column-vehicle {
+  width: 16%;
+  max-width: 90px;
+}
+
+.mat-column-from {
+  width: 20%;
+  max-width: 90px;
+}
+
+.mat-column-to {
+  width: 20%;
+  max-width: 90px;
+}
+
+.mat-column-beginDate {
+  width: 12%;
+  max-width: 90px;
+}
+
+.mat-column-time {
+  width: 5%;
+  max-width: 90px;
+}
+
+.mat-column-actions {
+  text-align: center;
+
+  .buttons-align {
+    display: flex;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 375px);
+}
+
+.scrollDriversList {
+  max-height: 200px;
+  height: 130px;
+  overflow-y: auto;
+}
+
+.searchDriver {
+  width: 100%;
+
+  ::ng-deep .mat-form-field-flex {
+      align-items: flex-end;
+      background: #f5f5f5;
+  }
+}
+
+
+tr:nth-child(2n - 1):not(.mat-header-row) {
+  background: rgba(249, 249, 249, 0.3);
+}

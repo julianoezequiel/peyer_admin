@@ -10,7 +10,8 @@ export interface UserFirebase {
   password: string;
   jobTitle: string;
   birthDate: string;
-  contact: string;
+  mainContact: string;
+  secondaryContact: string;
   permissions: Permissions;
   active: boolean;
   emergencyContacts: EmergencyContacts[];

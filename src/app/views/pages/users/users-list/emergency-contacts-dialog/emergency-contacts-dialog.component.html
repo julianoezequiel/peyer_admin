@@ -7,13 +7,13 @@
 </div>
 
 <mat-divider></mat-divider>
-<span class="username">{{data.username}}</span>
+<span class="username">{{data.user.displayName}}</span>
 <mat-divider></mat-divider>
 
 <mat-list class="listContacts">
     <mat-list-item *ngFor="let contato of data.emergencyContacts">
         <mat-icon mat-list-icon>phone</mat-icon>
         <div mat-line class="ellipsis">{{contato.nome}}</div>
-        <div mat-line> {{contato.telefone}} </div>
+        <div mat-line>{{contato.telefone}} </div>
     </mat-list-item>
 </mat-list>

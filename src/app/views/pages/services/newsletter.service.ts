@@ -1,7 +1,7 @@
 import { AngularFireStorage } from "@angular/fire/storage";
 import { FileStructure, Newsletter } from "./../model/newsletter/newsletter.model";
 import { UserFirebase } from "../model/user/userfirebase.model";
-import { DriversHistory } from "../model/vehicle-history/drivers-history.model";
+import { DriversRouteHistory } from "../model/vehicle-history/drivers-history.model";
 import { ToastrService } from "ngx-toastr";
 import { VehicleHistoryService } from "./vehicle-history.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -42,7 +42,6 @@ export class NewsletterService {
         .add(recordToBeCreated)
         .then((res) => {
           res.get().then((x) => {
-            console.log("x.data();", x.data());
             resolve(true);
           });
         })
@@ -100,11 +99,13 @@ export class NewsletterService {
     return this.collection.snapshotChanges();
   }
 
+  count() {
+    return this.collection.valueChanges();
+  }
+
   uploadAttachments(file) {
     return new Promise(async (resolve, reject) => {
-      const storageRef = await this.angularFireStorage.ref(
-        `newsletters/${file.id}_${file.name}`
-      );
+      const storageRef = await this.angularFireStorage.ref(`newsletters/${file.id}_${file.name}`);
 
       const t = await storageRef
         .put(file.fileProperties)
@@ -184,7 +185,7 @@ export class NewsletterService {
     this.collection
       .doc(idRecord)
       .set({ attachments: attachments }, { merge: true })
-      .then(() => console.log("CHANGED ATTACHMENTS"))
+      //.then(() => console.log("CHANGED ATTACHMENTS"))
       .catch((error) => {
         console.log(error);
       });

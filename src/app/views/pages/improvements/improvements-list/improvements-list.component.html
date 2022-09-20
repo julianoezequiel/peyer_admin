@@ -1,0 +1,135 @@
+<mat-card-header class="principal mat-elevation-z3">
+    <mat-card-title>
+        <span class="title">{{'menu.improvements'|translate}}</span>
+    </mat-card-title>
+</mat-card-header>
+
+<mat-card-content class="principal mat-elevation-z8">
+
+    <div class="options">
+        <!-- REQUEST TYPE FILTER -->
+        <mat-form-field appearance="outline" style="width: 25%">
+            <mat-label>{{'cadastros.improvements.field.requestType'|translate}}</mat-label>
+            <mat-select disableOptionCentering #selectType (selectionChange)="getAll()">
+                <mat-option [value]="type.value" *ngFor="let type of requestTypesList">
+                    {{ type?.label | translate }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- REQUEST STATUS FILTER -->
+        <div [class]="statusColor" style="width: 15%">
+            <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>{{'cadastros.improvements.field.requestStatus'|translate}}</mat-label>
+                <mat-select disableOptionCentering #selectStatus (selectionChange)="getAll(); getStatusColorSelect()">
+                    <mat-option [value]="status.value" *ngFor="let status of requestStatusList">
+                        {{ status?.label | translate }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>{{'titulo.buscar'| translate}}</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput (keyup)="applyFilter()" type="search" #searchFilter>
+        </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+        <table mat-table class="w100" [dataSource]="dataSource" matSort matSortActive="description"
+            matSortDirection="asc" matSortDisableClear>
+
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
+                matTooltip="{{'cadastros.improvements.title.viewImprovementDetails'|translate}}"
+                matTooltipPosition="above" matTooltipClass="tooltip-improvement" [hidden]="loading"
+                (click)="viewImprovementDetails(row)">
+            </tr>
+            <!---->
+
+            <!-- DESCRIPTION Column -->
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.improvements.field.description'| translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{ row.improvement.description }}</span>
+                </td>
+            </ng-container>
+
+            <!-- NAME Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.improvements.field.name'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{ row.name }}" matTooltipPosition="below">{{ row.name }}</span>
+                </td>
+            </ng-container>
+
+            <!-- CREATION DATE Column -->
+            <ng-container matColumnDef="creationDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.improvements.field.creationDate'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{row.improvement.creationDate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- REQUEST STATUS Column -->
+            <ng-container matColumnDef="requestStatus">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.improvements.field.requestStatus'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span class="{{getStatusColorCell(row.improvement.requestStatus.value)}} status">
+                        {{row.improvement.requestStatus.label | translate}}
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- REQUEST TYPE Column -->
+            <ng-container matColumnDef="requestType">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.improvements.field.requestType'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{ row.improvement.requestType.label | translate }}" matTooltipPosition="below">
+                        {{ row.improvement.requestType.label | translate }}
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- ACTIONS Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="buttons-align">
+                        <button mat-icon-button color="primary">
+                            <mat-icon>open_in_new</mat-icon>
+                        </button>&nbsp;
+                        <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
+                            (click)="confirmDialog(row.improvement); $event.stopPropagation()">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+        </table>
+
+        <div class="loading" *ngIf="loading">
+            <mat-spinner diameter="100"></mat-spinner>
+        </div>
+
+        <mat-card *ngIf="dataSource?.data.length == 0 && !loading" class="dataEmpty">
+            {{'titulo.dataEmpty'|translate}}
+        </mat-card>
+    </div>
+</mat-card-content>
+
+<mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+    [pageSizeOptions]="[5, 15, 25]">
+</mat-paginator>

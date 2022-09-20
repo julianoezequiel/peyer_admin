@@ -11,17 +11,18 @@
     &:not(:last-of-type) {
       margin-bottom: 10px;
     }
-  
-    span {
+
+    .column-flex {
+      justify-content: space-around;
+    }
+
+    span.label {
       font-weight: 500;
-  
-      span {
-          font-weight: normal;
-      }
-  
-      &:first-of-type {
-        margin-bottom: 5px;
-      }
+      font-size: 16px;
+    }
+
+    .info {
+      font-size: 15px;
     }
   }
 }

@@ -1,0 +1,159 @@
+<mat-card-header class="principal mat-elevation-z3">
+    <mat-card-title>
+        <span class="title">{{'menu.dailyschedule'|translate}}</span>
+    </mat-card-title>
+</mat-card-header>
+<mat-card-content class="principal mat-elevation-z8">
+
+    <div class="options">
+        <button class="add" mat-raised-button color="primary" type="button" (click)="add()">
+            {{'titulo.adicionar'| translate}}
+            <mat-icon>add_circle_outline</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline" style="width: 20%">
+            <mat-label>{{'cadastros.usuarios.campo.permissao.motorista'| translate}}</mat-label>
+            <mat-select #selectFilter [formControl]="driverFormControl" disableOptionCentering>
+
+                <mat-form-field class="searchDriver">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input placeholder="{{'titulo.buscar' | translate}}" matInput type="text" #searchDriver
+                        (keydown)="$event.stopPropagation()">
+                </mat-form-field>
+
+                <div class="scrollDriversList">
+                    <mat-option value="null" (onSelectionChange)="filterByDriverAndDate($event)"
+                        *ngIf="!searchDriver.value">All drivers</mat-option>
+
+                    <ng-container *ngFor="let driver of driverList">
+                        <mat-option *ngIf="searchDriver.value ? driverFilter(driver, searchDriver.value) : true"
+                            [value]="driver" (onSelectionChange)="filterByDriverAndDate($event)">
+                            {{driver.displayName}}
+                        </mat-option>
+                    </ng-container>
+                </div>
+
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 17.8%">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" [formControl]="dateFormControl"
+                (dateChange)="filterByDriverAndDate($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+            <mat-label>{{'titulo.buscar'| translate}}</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput (keyup)="applyFilter()" type="search" #searchFilter>
+        </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+        <table mat-table class="w100" [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc"
+            matSortDisableClear>
+
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
+                [hidden]="loading">
+            </tr>
+            <!---->
+
+            <!-- DRIVER Column -->
+            <ng-container matColumnDef="driver">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.usuarios.campo.permissao.motorista'| translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{row.driver}}" matTooltipPosition="below">{{row.driver}}</span>
+                </td>
+            </ng-container>
+
+            <!-- VEHICLE Column -->
+            <ng-container matColumnDef="vehicle">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.vehicles.title.vehicleInformation'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{row.vehicle}}" matTooltipPosition="below">{{row.vehicle}}</span>
+                </td>
+            </ng-container>
+
+            <!-- FROM Column -->
+            <ng-container matColumnDef="from">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.route.traveling.partida'|translate}}
+
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{ row.ds.departure }}" matTooltipPosition="below">{{ row.ds.departure }}</span>
+                </td>
+            </ng-container>
+
+            <!-- TO Column -->
+            <ng-container matColumnDef="to">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.route.traveling.destino'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{ row.ds.destination }}" matTooltipPosition="below">{{ row.ds.destination
+                        }}</span>
+                </td>
+            </ng-container>
+
+            <!-- BEGIN DATE Column -->
+            <ng-container matColumnDef="beginDate">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.route.traveling.dataPartida'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{ row.ds.beginDate }}</span>
+                <td>
+            </ng-container>
+
+            <!-- TIME Column -->
+            <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.route.traveling.hora'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{ row.ds.beginTime }}</span>
+                <td>
+            </ng-container>
+
+            <!-- ACOES Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="buttons-align">
+                        <button (click)="edit(row.ds)" mat-icon-button color="primary"
+                            matTooltip="{{'titulo.editar'|translate}}">
+                            <mat-icon>edit</mat-icon>
+                        </button>&nbsp;
+                        <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
+                            (click)="confirmDialog(row.ds)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+        </table>
+
+        <div class="loading" *ngIf="loading">
+            <mat-spinner diameter="100"></mat-spinner>
+        </div>
+
+        <mat-card *ngIf="dataSource?.data.length == 0 && !loading" class="dataEmpty">
+            {{'titulo.dataEmpty'|translate}}
+        </mat-card>
+    </div>
+
+</mat-card-content>
+
+<mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+    [pageSizeOptions]="[5, 15, 25]">
+</mat-paginator>

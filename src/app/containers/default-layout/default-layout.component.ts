@@ -1,10 +1,10 @@
-import { AngularFireStorage } from '@angular/fire/storage';
-import { UserFirebase } from '../../views/pages/model/user/userfirebase.model';
+import { AngularFireStorage } from "@angular/fire/storage";
+import { UserFirebase } from "../../views/pages/model/user/userfirebase.model";
 import { ChangeDetectorRef } from "@angular/core";
 import { style } from "@angular/animations";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { navItems } from "../../_nav";
-import { Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 
 import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 
@@ -22,6 +22,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   });
 
   downloadURL: string = "";
+  isDashboard: boolean = false;
+  userLocal: UserFirebase;
 
   constructor(
     private router: Router,
@@ -30,6 +32,12 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     private angularFireStorage: AngularFireStorage
   ) {
     console.log("Init Layout");
+
+    this.router.events.subscribe((r) => {
+      if (r instanceof NavigationEnd) {
+        this.isDashboard = r.url.includes("dashboard");
+      }
+    });
   }
   ngOnDestroy(): void {
     //throw new Error('Method not implemented.')
@@ -47,14 +55,17 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   }
 
   downloadPhoto() {
-    const userLocal = JSON.parse(localStorage.getItem("user_firebase")) as UserFirebase;
-    
-    if (userLocal.photoURL) {
-        this.angularFireStorage.ref("/" + userLocal.photoURL).getDownloadURL().subscribe(
-          (complete) => {
-            this.downloadURL = complete
-          }
-        );
+    this.userLocal = JSON.parse(
+      localStorage.getItem("user_firebase")
+    ) as UserFirebase;
+
+    if (this.userLocal.photoURL) {
+      this.angularFireStorage
+        .ref("/" + this.userLocal.photoURL)
+        .getDownloadURL()
+        .subscribe((complete) => {
+          this.downloadURL = complete;
+        });
     }
   }
 

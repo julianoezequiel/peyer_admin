@@ -30,18 +30,22 @@ mat-card-content.principal {
   }
 }
 
+tr:nth-child(2n - 1):not(.mat-header-row) {
+  background: rgba(249, 249, 249, 0.3);
+}
+
 tr.element-row:not(.element-focus):hover {
-  background: #eeeeee;
+  background: #f5f5f5;
   cursor: pointer;
 }
 
 tr.element-row:not(.element-focus):active {
-  background: #dcdcdc;
+  background: #ebebeb;
 }
 
 ::ng-deep .tooltip-element-row {
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   max-width: 180px !important;
   width: 180px !important;
 }

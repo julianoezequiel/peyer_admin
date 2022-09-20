@@ -29,7 +29,7 @@
                     <!-- TITLE -->
                     <mat-form-field appearance="fill" style="width: 49%;">
                         <mat-label>{{'cadastros.newsletters.field.title'|translate}}</mat-label>
-                        <input matInput formControlName="title">
+                        <input matInput formControlName="title" maxlength="40">
                         <mat-error *ngIf="newsletterForm.controls['title'].hasError('required')">
                             <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
                         </mat-error>
@@ -38,7 +38,7 @@
                     <!-- DESCRIPTION -->
                     <mat-form-field appearance="fill" style="width: 49%;">
                         <mat-label>{{'cadastros.newsletters.field.description'|translate}}</mat-label>
-                        <input matInput formControlName="description">
+                        <input matInput formControlName="description" maxlength="80">
                         <mat-error *ngIf="newsletterForm.controls['description'].hasError('required')">
                             <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
                         </mat-error>
@@ -83,11 +83,12 @@
 
                     <mat-chip-list role="list" class="listFiles">
                         <div class="column-flex">
-                            <mat-chip *ngFor="let file of listFiles" (removed)="removeFile(file)">
+                            <mat-chip *ngFor="let file of listFiles" (click)="removeFile(file)" (mouseover)="tooltip.show()"
+                            (mouseout)="tooltip.hide()">
                                 <mat-icon class="icon-format">{{file.type.includes("image") ? "image" : "picture_as_pdf"}}</mat-icon>
                                 <div>{{file.name}}</div>
                                 <mat-icon matChipRemove matTooltip="{{'titulo.remover'|translate}}"
-                                    matTooltipPosition="above">cancel</mat-icon>
+                                    matTooltipPosition="above" #tooltip="matTooltip">cancel</mat-icon>
                             </mat-chip>
                         </div>
                     </mat-chip-list>
@@ -100,8 +101,7 @@
     <mat-card-actions class="principal">
 
         <div class="row-flex">
-            <i class="author">{{'cadastros.newsletters.title.author' |
-                translate}}:&nbsp;{{this.newsletterData.author.displayName}}</i>
+            <i class="author">{{'cadastros.newsletters.title.author' |translate}}:&nbsp;{{author}}</i>
 
             <mat-form-field appearance="fill" class="publicationDate" [class.isReadOnly]="disableDate" [matTooltip]="getDateMsg()"
             matTooltipPosition="above">

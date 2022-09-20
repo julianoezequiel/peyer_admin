@@ -1,15 +1,9 @@
+import { DriversRouteHistory } from './../vehicle-history/drivers-history.model';
 export interface Vehicle {
   _id?: string;
   name: string;
   onRoute: boolean;
-  lastDriver: {
-    uid: string,
-    displayName: string,
-    contact: string
-  };
+  driverID: string;
   licensePlate: string;
   category: string;
-  totalWeight: string;
-  usefulLoad: string;
-  updateDate: string;
 }

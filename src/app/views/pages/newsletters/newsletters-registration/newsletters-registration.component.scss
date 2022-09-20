@@ -123,6 +123,11 @@ mat-card-actions.principal {
 }
 
 .listFiles {
+
+  mat-chip {
+    cursor: pointer;
+  }
+  
   .column-flex {
     align-items: flex-start;
   }

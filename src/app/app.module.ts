@@ -67,7 +67,15 @@ import { VehiclesRegistrationComponent } from './views/pages/vehicles/vehicles-r
 import { VehicleHistoryModule } from './views/pages/vehicle-history/vehicle-history.module';
 import { NewslettersListComponent } from './views/pages/newsletters/newsletters-list/newsletters-list.component';
 import { NewslettersRegistrationComponent } from './views/pages/newsletters/newsletters-registration/newsletters-registration.component';
-
+import { DailyScheduleListComponent } from './views/pages/daily-schedule/daily-schedule-list/daily-schedule-list.component';
+import { DailyScheduleRegistrationComponent } from './views/pages/daily-schedule/daily-schedule-registration/daily-schedule-registration.component';
+import  localeDECH  from '@angular/common/locales/de-CH'
+import { registerLocaleData } from '@angular/common';
+import { ImprovementsListComponent } from './views/pages/improvements/improvements-list/improvements-list.component';
+import { ImprovementsRegistrationComponent } from './views/pages/improvements/improvements-registration/improvements-registration.component';
+import { ImprovementDetailsDialog } from './views/pages/improvements/improvements-list/improvement-details-dialog/improvement-details-dialog.component';
+import { AbsenceRequestsListComponent } from './views/pages/absence-requests/absence-requests-list/absence-requests-list.component';
+import { AbsenceRequestsRegistrationComponent } from './views/pages/absence-requests/absence-requests-registration/absence-requests-registration.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -80,7 +88,7 @@ const APP_CONTAINERS = [DefaultLayoutComponent];
 // Import routing module
 // Import 3rd party components
 
-//registerLocaleData(localePt, "pt-BR");
+registerLocaleData(localeDECH );
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -159,7 +167,14 @@ const maskConfig: Partial<IConfig> = {
     VehiclesRegistrationComponent,
     NewslettersListComponent,
     NewslettersRegistrationComponent,
-    NewsDetailsDialog
+    NewsDetailsDialog,
+    DailyScheduleListComponent,
+    DailyScheduleRegistrationComponent,
+    ImprovementsListComponent,
+    ImprovementsRegistrationComponent,
+    ImprovementDetailsDialog,
+    AbsenceRequestsListComponent,
+    AbsenceRequestsRegistrationComponent,
   ],
   providers: [
     {
@@ -202,7 +217,13 @@ const maskConfig: Partial<IConfig> = {
       useValue: getDutchPaginatorIntl(),
     },
   ],
-  entryComponents: [ConfirmDialogComponent, AlertDialogComponent, EmergencyContactsDialog, NewsDetailsDialog],
+  entryComponents: [
+    ConfirmDialogComponent,
+    AlertDialogComponent,
+    EmergencyContactsDialog,
+    NewsDetailsDialog,
+    ImprovementDetailsDialog,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

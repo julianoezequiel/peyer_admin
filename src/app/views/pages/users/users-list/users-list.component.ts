@@ -1,3 +1,4 @@
+import { ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -16,6 +17,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { UserFirebase } from '../../model/user/userfirebase.model';
 import { UsuarioService } from '../../services/usuario.service';
 import { EmergencyContactsDialog } from './emergency-contacts-dialog/emergency-contacts-dialog.component';
+import moment from 'moment';
 
 @Component({
   selector: "users-list",
@@ -38,6 +40,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   data: UserFirebase[];
 
+  onlyActive = true;
+
+  @ViewChild("searchFilter", { static: true }) searchFilter: ElementRef<HTMLInputElement>;
+
   constructor(
     public dialog: MatDialog,
     private router: Router,
@@ -56,6 +62,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((x) => x.unsubscribe());
+    this.dialog.closeAll();
   }
 
   add() {
@@ -76,7 +83,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   async getAll() {
-    const subList = await this.usuarioService.read_all().subscribe((data) => {
+
+    this.searchFilter.nativeElement.value = "";
+
+    const subList = await this.usuarioService.getAllByFilters(this.onlyActive).subscribe((data) => {
 
       this.dataEmpty = data.length == 0;
 
@@ -89,17 +99,25 @@ export class UsersListComponent implements OnInit, OnDestroy {
           password: e.payload.doc.data()["password"],
           jobTitle: e.payload.doc.data()["jobTitle"],
           birthDate: e.payload.doc.data()["birthDate"],
-          contact: e.payload.doc.data()["contact"],
+          mainContact: e.payload.doc.data()["mainContact"],
+          secondaryContact: e.payload.doc.data()["secondaryContact"],
           permissions: e.payload.doc.data()["permissions"],
           active: e.payload.doc.data()["active"],
           emergencyContacts: e.payload.doc.data()["emergencyContacts"],
         };
-      });
+      });     
 
       this.data = lista;
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+
+    // Custom sort when nested object
+      this.dataSource.sortingDataAccessor = (data, sort) => {     
+        if (sort == "birthDate") {
+          return moment(data.birthDate, ["DD/MM/YYYY"]).unix();
+        } 
+      };
 
       this.loading = false;
     });
@@ -163,7 +181,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   viewEmergencyContacts(row: UserFirebase) {
-    const dialogData = {username: row.displayName, emergencyContacts: row.emergencyContacts};
+    const dialogData = {user: row, emergencyContacts: row.emergencyContacts};
 
     const dialogRef = this.dialog.open(EmergencyContactsDialog, {
       width: "330px",
@@ -189,9 +207,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
     });
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+  applyFilter() {
+    const filter = this.searchFilter.nativeElement.value;
+    this.dataSource.filter = filter.toLowerCase().trim();
   }
 }

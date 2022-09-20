@@ -4,7 +4,7 @@ mat-card-content.principal {
 }
 
 mat-card-content:not(.principal) {
-  margin: 15px 0px;
+  margin: 15px 0px 35px;
 }
 
 .fieldsGroupHeader {
@@ -45,7 +45,7 @@ mat-card-content:not(.principal) {
 }
 
 .row-flex {
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .scrollDriversList {
@@ -85,24 +85,4 @@ mat-card-content:not(.principal) {
 img.mat-icon {
   height: 27px !important;
   width: 30px !important;
-}
-
-mat-card-actions.principal {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-
-  .updateDate {
-    margin-left: 15px;
-  }
-
-  .row-flex {
-    align-items: baseline;
-  }
-
-  i {
-    font-weight: 500;
-  }
 }

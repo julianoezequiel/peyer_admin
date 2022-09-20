@@ -55,37 +55,16 @@
                     </mat-form-field>
                 </div>
 
-                <div class="row-flex">
-                    <!-- TOTAL WEIGHT -->
-                    <mat-form-field appearance="fill" style="width: 30%;">
-                        <mat-label>{{'cadastros.vehicles.field.totalWeight'|translate}}</mat-label>
-                        <input matInput formControlName="totalWeight" mask="00.0" suffix=" T"
-                            (blur)="formatNumber(true)" placeholder="00.0 T" (keyup)="$event.stopPropagation()">
-                        <mat-error *ngIf="vehicleForm.controls['totalWeight'].hasError('required')">
-                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-                        </mat-error>
-                    </mat-form-field>
+                <!-- ON ROUTE -->
+                <div class="onRoute" style="width: 100%">
+                    <p class="title">{{'cadastros.vehicles.title.onRoute'|translate}}</p>
 
-                    <!-- USEFULD LOAD -->
-                    <mat-form-field appearance="fill" style="width: 30%;">
-                        <mat-label>{{'cadastros.vehicles.field.usefulLoad'|translate}}</mat-label>
-                        <input matInput formControlName="usefulLoad" mask="00.0" suffix=" T"
-                            (blur)="formatNumber(false)" placeholder="00.0 T" (keyup)="$event.stopPropagation()">
-                        <mat-error *ngIf="vehicleForm.controls['usefulLoad'].hasError('required')">
-                            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- ON ROUTE -->
-                    <div class="onRoute" style="width: 35%;">
-                        <p class="title">{{'cadastros.vehicles.title.onRoute'|translate}}</p>
-
-                        <div class="toggle-align">
-                            <mat-label>{{'opcao.nao'|translate}}&nbsp;&nbsp;</mat-label>
-                            <mat-slide-toggle formControlName="onRoute"
-                                [class.onRoute]="vehicleForm.controls['onRoute'].value"></mat-slide-toggle>
-                            <mat-label>&nbsp;&nbsp;{{'opcao.sim'|translate}}</mat-label>
-                        </div>
+                    <div class="toggle-align">
+                        <mat-label>{{'opcao.nao'|translate}}&nbsp;&nbsp;</mat-label>
+                        <mat-slide-toggle formControlName="onRoute"
+                            [class.onRoute]="vehicleForm.controls['onRoute'].value" #slide>
+                        </mat-slide-toggle>
+                        <mat-label>&nbsp;&nbsp;{{'opcao.sim'|translate}}</mat-label>
                     </div>
                 </div>
             </mat-card-content>
@@ -98,11 +77,13 @@
                 </mat-card-title>
             </mat-card-header>
 
-            <mat-card-content formGroupName="lastDriver">
+            <mat-card-content>
                 <div class="row-flex">
-                    <mat-form-field appearance="fill" style="width: 57%">
-                        <mat-label>{{'cadastros.vehicles.field.lastDriver' | translate}}</mat-label>
-                        <mat-select formControlName="displayName" disableOptionCentering>
+
+                    <!-- DRIVER -->
+                    <mat-form-field appearance="fill" style="width: 48%" [class.isReadOnly]="!slide.checked">
+                        <mat-label>{{'cadastros.vehicles.field.lastDriver'|translate}}</mat-label>
+                        <mat-select disableOptionCentering #selectDriver>
 
                             <mat-form-field class="searchDriver">
                                 <mat-icon matPrefix>search</mat-icon>
@@ -110,15 +91,12 @@
                                     (keydown)="$event.stopPropagation()">
                             </mat-form-field>
 
-                            <div class=scrollDriversList>
-                                <mat-option [value]="" (onSelectionChange)="onDriverChange(null, $event)">--
-                                </mat-option>
+                            <div class="scrollDriversList">
                                 <ng-container *ngFor="let driver of driversList">
                                     <mat-option
                                         *ngIf="searchDriver.value ? applyFilter(driver, searchDriver.value) : true"
-                                        [value]="driver.displayName"
-                                        (onSelectionChange)="onDriverChange(driver, $event)">
-                                        {{driver.displayName}}
+                                        [value]="driver">
+                                        {{slide.checked ? driver?.displayName : ''}}
                                     </mat-option>
                                 </ng-container>
                             </div>
@@ -126,10 +104,20 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="fill" class="isReadOnly" style="width: 40%">
-                        <mat-label>{{'cadastros.usuarios.campo.contato' | translate}}</mat-label>
+                    <mat-form-field appearance="fill" class="isReadOnly" style="width: 24%">
+                        <mat-label>{{'cadastros.usuarios.campo.mainContact' | translate}}</mat-label>
                         <span matPrefix>+41&nbsp;</span>
-                        <input matInput formControlName="contact" mask="(00) 000-00-00" readonly>
+                        <input matInput
+                            [value]="slide.checked ? (selectDriver?.value?.mainContact | mask: '(00) 000-00-00') : ''"
+                            readonly>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" class="isReadOnly" style="width: 24%">
+                        <mat-label>{{'cadastros.usuarios.campo.secondaryContact' | translate}}</mat-label>
+                        <span matPrefix>+41&nbsp;</span>
+                        <input matInput
+                            [value]="slide.checked ? (selectDriver?.value?.secondaryContact | mask: '(00) 000-00-00') : ''"
+                            readonly>
                     </mat-form-field>
                 </div>
             </mat-card-content>
@@ -137,19 +125,13 @@
         </mat-card>
     </mat-card-content>
 
-    <mat-card-actions class="principal">
-
-        <i class="updateDate">{{'cadastros.vehicles.field.updateDate' | translate}}:&nbsp;{{vehicleData.updateDate}}
-        </i>
-
-        <div class="row-flex">
-            <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
-            <button mat-raised-button color="primary" (click)="onSubmit()"
-                [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
-            <button mat-raised-button color="danger" type="button" (click)="goBack()"
-                style="margin-left: 10px;">{{'titulo.voltar'|translate}}
-            </button>
-        </div>
+    <mat-card-actions align="end" class="principal">
+        <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+        <button mat-raised-button color="primary" (click)="onSubmit()"
+            [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
+        <button mat-raised-button color="danger" type="button" (click)="goBack()"
+            style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+        </button>
     </mat-card-actions>
 
 </form>

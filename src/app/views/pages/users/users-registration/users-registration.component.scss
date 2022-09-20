@@ -1,281 +1,285 @@
-mat-form-field {
-  width: 100%;
-  padding-top: 10px;
-}
-
-mat-card.card-main {
-  background-color: #f9f9f9;
-
-  mat-card {
-    padding-top: 5px;
-  }
-}
-
-mat-card-header {
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-mat-icon[mat-card-avatar] {
-  font-size: 33px;
-  height: 33px;
-  width: 33px;
-}
-
-.card-title {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 0;
-}
-
-.row {
-  //overflow-x: auto;
-  margin: auto;
-  padding: 6px 0;
-}
-
-/* CARD USER */
-.card-user {
-  height: 100%;
-
-  .permissions {
+form[id="userForm"] {
+  mat-form-field {
+    width: 100%;
     padding-top: 10px;
 
-    .title {
-      font-size: 16px;
-    }
-
-    .checkboxs-align {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+    ::ng-deep .mat-form-field-wrapper {
+      pointer-events: all;
     }
   }
 
-  .active {
-    padding-top: 35px;
-    display: flex;
-    justify-content: space-between;
+  mat-card.card-main {
+    background-color: #f9f9f9;
 
-    .title {
-      font-size: 16px;
-    }
-
-    .toggle-align {
-      display: flex;
-      justify-content: space-between;
+    mat-card {
+      padding-top: 5px;
     }
   }
-
-  ::ng-deep .mat-slide-toggle-thumb {
-    background-image: none !important;
-  }
-}
-
-/* CARD PHOTO */
-.card-photo {
-  height: 50%;
-  overflow-y: auto;
-  padding-bottom: 0;
-
-  mat-card-content {
-    margin-bottom: 0px;
-    height: 75%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    width: 20em;
-    margin: 0px auto;
-  }
-
-  mat-card-actions {
-    
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 165px;
-      height: 40px;
-
-      label {
-        cursor: pointer;
-      }
-    }
-  }
-
-  /* IMAGEM */
-  img {
-    height: 255px;
-    width: 255px;
-    border-radius: 50em;
-  }
-}
-
-/* CARD EMERGENCY CONTACTS */
-.card-emergency-contacts {
-  height: 49%;
-  padding-right: 0;
-  padding-left: 0;
-  padding-bottom: 0;
-  margin-top: 8px;
 
   mat-card-header {
-    padding-left: 16px;
-  }
-}
-
-.loading {
-  height: 92%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* TABLE EMERGENCY CONTACTS */
-.table-conf {
-  margin-top: 6px;
-  height: 71%;
-  overflow-y: auto;
-
-  table {
-    width: 100%;
+    align-items: center;
+    margin-bottom: 5px;
   }
 
-  td {
-    padding-right: 5px;
+  mat-icon[mat-card-avatar] {
+    font-size: 33px;
+    height: 33px;
+    width: 33px;
   }
 
-  th {
-    text-align: center;
+  .card-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 0;
   }
 
-  tr.mat-header-row {
-    height: 40px;
+  .row {
+    //overflow-x: auto;
+    margin: auto;
+    padding: 6px 0;
   }
 
-  tr.mat-row {
-    height: 43px;
-  }
+  /* CARD USER */
+  .card-user {
+    height: 100%;
 
-  th.mat-header-cell,
-  td.mat-cell {
-    &:first-of-type {
-      padding-left: 5px;
-    }
+    .permissions {
+      padding-top: 10px;
 
-    &:last-of-type {
-      padding-right: 5px;
-    }
-  }
-
-  mat-form-field {
-    font-size: 8px;
-    // width: calc(100% - 58px);
-    padding-top: 0;
-
-    input,
-    span[matPrefix] {
-      font-size: 12px;
-    }
-
-    ::ng-deep {
-      .mat-form-field-wrapper {
-        padding-bottom: 0;
+      .title {
+        font-size: 16px;
       }
 
-      .mat-form-field-underline {
-        bottom: 0;
+      .checkboxs-align {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+    }
+
+    .active {
+      padding-top: 35px;
+      display: flex;
+      justify-content: space-between;
+
+      .title {
+        font-size: 16px;
       }
 
-      .mat-form-field-flex {
+      .toggle-align {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    ::ng-deep .mat-slide-toggle-thumb {
+      background-image: none !important;
+    }
+  }
+
+  /* CARD PHOTO */
+  .card-photo {
+    height: 50%;
+    overflow-y: auto;
+    padding-bottom: 0;
+
+    mat-card-content {
+      margin-bottom: 0px;
+      height: 75%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      width: 20em;
+      margin: 0px auto;
+    }
+
+    mat-card-actions {
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        justify-content: flex-end;
-      }
+        width: 165px;
+        height: 40px;
 
-      .mat-form-field-prefix {
-        padding-top: 2px;
-      }
-
-      .mat-form-field-suffix {
-        position: absolute;
-
-        mat-icon {
-          font-size: 19px;
-          padding-top: 7px;
-          padding-left: 7px;
+        label {
+          cursor: pointer;
         }
       }
     }
-  }
 
-  ::ng-deep .mat-sort-header-container {
-    justify-content: center;
-  }
-}
-
-::ng-deep .mat-tooltip {
-  margin: 0 !important;
-}
-
-.mat-column-nome {
-  width: 50%;
-}
-
-.mat-column-telefone {
-  width: 50%;
-}
-
-.mat-column-acoes {
-  text-align: center;
-
-  .buttons-align {
-    display: flex;
-
-    button {
-      width: 44px;
-      height: auto;
+    /* IMAGEM */
+    img {
+      height: 255px;
+      width: 255px;
+      border-radius: 50em;
     }
   }
-}
 
-mat-card-actions.contacts {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin: 0;
+  /* CARD EMERGENCY CONTACTS */
+  .card-emergency-contacts {
+    height: 49%;
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 0;
+    margin-top: 8px;
 
-  button {
-    width: 60px;
-    height: 60px;
-    margin: 0;
+    mat-card-header {
+      padding-left: 16px;
+    }
   }
 
-   mat-paginator {
-     display: contents;
-    
-     ::ng-deep .mat-paginator-container {
-       flex-wrap: nowrap;
+  .loading {
+    height: 71%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-       .mat-paginator-range-label {
-         margin: 0 10px;
-       }
-     }
+  /* TABLE EMERGENCY CONTACTS */
+  .table-conf {
+    margin-top: 6px;
+    height: 71%;
+    overflow-y: auto;
 
-   }
+    table {
+      width: 100%;
+    }
 
-   mat-icon.add {
-     height: 40px;
-     width: 40px;
-     font-size: 40px;
-     line-height: 40px;
-   }
+    td {
+      padding-right: 5px;
+    }
 
-//   // ::ng-deep .mat-button-ripple {
-//   //   top: -10px;
-//   //   left: -4px;
-//   //   right: -4px;
-//   //   bottom: 5px;
-//   // }
- }
+    th {
+      text-align: center;
+    }
+
+    tr.mat-header-row {
+      height: 40px;
+    }
+
+    tr.mat-row {
+      height: 43px;
+    }
+
+    th.mat-header-cell,
+    td.mat-cell {
+      &:first-of-type {
+        padding-left: 5px;
+      }
+
+      &:last-of-type {
+        padding-right: 5px;
+      }
+    }
+
+    mat-form-field {
+      font-size: 8px;
+      // width: calc(100% - 58px);
+      padding-top: 0;
+
+      input,
+      span[matPrefix] {
+        font-size: 12px;
+      }
+
+      ::ng-deep {
+        .mat-form-field-wrapper {
+          padding-bottom: 0;
+        }
+
+        .mat-form-field-underline {
+          bottom: 0;
+        }
+
+        .mat-form-field-flex {
+          align-items: center;
+          justify-content: flex-end;
+        }
+
+        .mat-form-field-prefix {
+          padding-top: 2px;
+        }
+
+        .mat-form-field-suffix {
+          position: absolute;
+
+          mat-icon {
+            font-size: 19px;
+            padding-top: 7px;
+            padding-left: 7px;
+          }
+        }
+      }
+    }
+
+    ::ng-deep .mat-sort-header-container {
+      justify-content: center;
+    }
+  }
+
+  ::ng-deep .mat-tooltip {
+    margin: 0 !important;
+  }
+
+  .mat-column-nome {
+    width: 50%;
+  }
+
+  .mat-column-telefone {
+    width: 50%;
+  }
+
+  .mat-column-acoes {
+    text-align: center;
+
+    .buttons-align {
+      display: flex;
+
+      button {
+        width: 44px;
+        height: auto;
+      }
+    }
+  }
+
+  mat-card-actions.contacts {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin: 0;
+
+    button {
+      width: 60px;
+      height: 60px;
+      margin: 0;
+    }
+
+    mat-paginator {
+      display: contents;
+
+      ::ng-deep .mat-paginator-container {
+        flex-wrap: nowrap;
+
+        .mat-paginator-range-label {
+          margin: 0 10px;
+        }
+      }
+    }
+
+    mat-icon.add {
+      height: 40px;
+      width: 40px;
+      font-size: 40px;
+      line-height: 40px;
+    }
+
+    //   // ::ng-deep .mat-button-ripple {
+    //   //   top: -10px;
+    //   //   left: -4px;
+    //   //   right: -4px;
+    //   //   bottom: 5px;
+    //   // }
+  }
+}

@@ -1,0 +1,22 @@
+<div class="row-flex header">
+    <mat-icon class="icon" color="primary">cake</mat-icon>
+    <span mat-dialog-title>{{ 'dashboard.title.todaysBirthdays' | translate }}</span>
+    <!-- <button mat-icon-button [mat-dialog-close]="true"> -->
+    <mat-icon color=warn [mat-dialog-close]="true">close</mat-icon>
+    <!-- </button> -->
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-list class="listUsers">
+    <mat-list-item *ngFor="let user of userList">
+        <div mat-line class="user-line">
+            <mat-spinner diameter="34" *ngIf="!user.downloadURL && user.photoURL"></mat-spinner>
+            <img class="img-avatar" *ngIf="!user.downloadURL && !user.photoURL" src="assets/img/avatars/default.jpg"
+                alt="" />
+            <img class="img-avatar" *ngIf="user.downloadURL" [src]="user.downloadURL" alt="">
+
+            <div class="ellipsis details-info">{{user.name}}</div>
+        </div>
+    </mat-list-item>
+</mat-list>

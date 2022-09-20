@@ -46,4 +46,8 @@ mat-icon.icon {
 .username {
     text-align: center;
     display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0 15px;
 }

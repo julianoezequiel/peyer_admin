@@ -1,5 +1,5 @@
 import { rowsAnimation } from './../../../../shared/animations';
-import { DriversHistory } from './../../model/vehicle-history/drivers-history.model';
+import { DriversRouteHistory } from './../../model/vehicle-history/drivers-history.model';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -16,7 +16,7 @@ import moment from 'moment';
 export class DriversHistoryComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  dataList: DriversHistory[] = [];
+  dataList: DriversRouteHistory[] = [];
   dataEmpty = true;
   loading = true;
 
@@ -26,27 +26,16 @@ export class DriversHistoryComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const subActivatedRoute = this.activatedRoute.parent.params.subscribe((x) => {
-      const subHistory = this.vehicleHistoryService
-        .getHistoryDrivers(x.id)
-        .valueChanges()
-        .subscribe(data => {
+    const subActivatedRoute = this.activatedRoute.parent.params.subscribe((v) => {
+      this.vehicleHistoryService
+        .getHistoryDriversRoute(v.id)
+        .then(data => {
 
-       data.sort((v1, v2) => {
+          this.dataList = data;
 
-          let d1 = moment(v1.updateDate, ["DD/MM/YYYY HH:mm"]);
-          let d2 = moment(v2.updateDate, ["DD/MM/YYYY HH:mm"]);
-        
-          return moment(d2).diff(d1);
+          this.dataEmpty = this.dataList.length == 0;
+          this.loading = false;
         });
-
-        this.dataList = data as DriversHistory[];
-
-        this.dataEmpty = this.dataList.length == 0;
-        this.loading = false;
-        });
-
-      this.subscriptions.push(subHistory);
     });
 
     this.subscriptions.push(subActivatedRoute);

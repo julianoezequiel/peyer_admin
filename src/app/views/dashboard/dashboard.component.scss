@@ -1,15 +1,247 @@
-.content {
-  padding: 16px;
-  height: 100%;
+@import "src/scss/variables";
+
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #cdcdcd;
+
+  .row-flex {
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 16px;
+    height: 100%;
+
+    &:first-of-type {
+      margin: 0px;
+    }
+
+    mat-card {
+      width: 32.3%;
+      height: 100%;
+      padding: 7px;
+      cursor: pointer;
+      background: #f9f9f9;
+      box-shadow: 3px 3px 5px 1px rgb(0 0 0 / 30%);
+
+      &:hover {
+        box-shadow: 0px 0px 6px 2px rgb(0 0 0 / 40%);
+      }
+
+      .header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 10px 5px;
+        border-bottom: 1px solid #ddd;
+
+        mat-icon {
+          height: 27px;
+          width: 27px;
+          font-size: 27px;
+          margin-right: 10px;
+        }
+
+        .title {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 100%;
+
+          span {
+            font-size: 1.2em;
+            font-weight: 600;
+            text-transform: uppercase;
+          }
+
+          .total {
+            font-size: 1.6em;
+          }
+        }
+      }
+
+      .details {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        height: 75%;
+        padding-top: 15px;
+        padding-bottom: 5px;
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 31%;
+          margin: 0 5px;
+          padding: 2px;
+          border-radius: 5px;
+          box-shadow: 2.5px 3px 4px 0px rgb(0 0 0 / 50%);
+          height: 100%;
+          transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+          &:hover {
+            box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 27%),
+              0px -2px 4px 0px rgb(0 0 0 / 25%);
+          }
+
+          span {
+            color: white;
+          }
+
+          .value {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            font-weight: 600;
+          }
+
+          .description {
+            font-size: 0.95em;
+            font-weight: 400;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
 }
 
-.text-title {
-  font-size: 1.2em;
-  margin-bottom: 5px;
+::ng-deep .tooltip-card {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 5px !important;
+  max-width: 180px !important;
+  width: 180px !important;
 }
 
-mat-icon {
-  height: 60px;
-  width: 60px;
-  font-size: 60px;
+// RED CARDS
+.red-card {
+  .title,
+  .total,
+  .description,
+  mat-icon {
+    color: $color-warn;
+  }
+
+  .header {
+    border-bottom: 1px solid $color-warn;
+  }
+
+  .info {
+    background-color: $color-warn;
+  }
+}
+
+// YELLOW CARDS
+.yellow-card {
+  .title,
+  .total,
+  .description,
+  mat-icon {
+    color: #fbc02d;
+  }
+
+  .header {
+    border-bottom: 1px solid #fbc02d;
+  }
+
+  .info {
+    background-color: #fbc02d;
+  }
+}
+
+// GREEN CARDS
+.green-card {
+  .title,
+  .total,
+  .description,
+  mat-icon {
+    color: $peyer-color-green;
+  }
+
+  .header {
+    border-bottom: 1px solid $peyer-color-green;
+  }
+
+  .info {
+    background-color: $peyer-color-green;
+  }
+}
+
+// DIALOG DETAILS
+::ng-deep .dialog-details {
+  mat-dialog-container {
+    padding: 0px 10px 10px;
+  }
+
+  [mat-dialog-title] {
+    margin: 0;
+  }
+
+  .row-flex {
+    justify-content: space-between;
+  }
+
+  .header {
+    margin: 5px 0;
+  }
+
+  mat-icon {
+    &.icon {
+      font-size: 30px;
+      height: 30px;
+      width: 30px;
+    }
+
+    &.info-icon {
+      font-size: 22px !important;
+      height: 22px !important;
+      width: 22px !important;
+    }
+  }
+
+  mat-list {
+    padding: 0 5px;
+    margin: 5px 0;
+    height: 250px;
+    overflow-y: auto;
+
+    mat-list-item {
+      height: 45px !important;
+      transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 5px;
+      background: #2d72781c;
+
+      &:not(:last-of-type) {
+        margin-bottom: 12px;
+      }
+
+      ::ng-deep .mat-list-text {
+        padding-left: 5px !important;
+      }
+
+      .details-info {
+        font-size: 14px !important;
+      }
+
+      .details-sub-info {
+        font-size: 13px !important;
+        font-weight: lighter !important;
+      }
+    }
+
+    ::ng-deep .mat-list-item-content {
+      padding: 0 !important;
+    }
+  }
+
+  .loading {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

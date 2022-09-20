@@ -1,0 +1,65 @@
+@import "src/scss/variables";
+
+mat-card-content.principal {
+  height: calc(100vh - 216px);
+  padding: 16px 16px 0;
+}
+
+.row-flex {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.scrollLists {
+  max-height: 200px;
+  height: 130px;
+  overflow-y: auto;
+}
+
+.fieldsGroupHeader {
+  background: #2d72781c;
+  border-radius: 5px;
+  margin-bottom: 15px;
+
+  .fieldsGroupTitle {
+      margin: 4px 0px;
+      display: flex;
+      align-items: center;
+
+      mat-icon {
+          height: 33px;
+          width: 33px;
+          font-size: 33px;
+      }
+
+      span {
+          font-size: 20px;
+          margin-left: 10px;
+      }
+  }
+}
+
+mat-select ::ng-deep .mat-select-value {
+  padding-bottom: 1.5px;
+}
+
+.pending ::ng-deep .mat-form-field-flex {
+  background-color: $peyer-color-yellow-light;
+}
+
+.accepted ::ng-deep .mat-form-field-flex {
+  background-color: $peyer-color-green-light;
+}
+
+.rejected ::ng-deep .mat-form-field-flex {
+  background-color: $color-warn-light;
+}
+
+.isNewRecord {
+  cursor: not-allowed !important;
+
+  mat-form-field {
+    pointer-events: none;
+  }
+  
+}

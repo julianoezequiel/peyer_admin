@@ -3,13 +3,15 @@
     "dashboard": "Dashboard",
     "usuarios": "Users",
     "vehicles": "Vehicles",
-    "newsletters": "Newsletters"
+    "newsletters": "Newsletters",
+    "dailyschedule": "Daily Schedule",
+    "improvements": "Improvements",
+    "absenceRequests": "Absence requests",
+    "damages": "Damages"
   },
-
   "alerta": {
     "atencao": "Attention!"
   },
-
   "mensagem": {
     "sucesso": {
       "adicionado": "Register added successfully",
@@ -21,14 +23,13 @@
       "removido": "Failed to remove register",
       "alterado": "Failed to change register"
     },
+    "canceled": "Operation canceled.",
     "confirmar": "Do you want to confirm an operation?"
   },
-
   "opcao": {
     "sim": "Yes",
     "nao": "No"
   },
-
   "titulo": {
     "salvar": "Save",
     "voltar": "Back",
@@ -37,7 +38,8 @@
     "editar": "Edit",
     "pronto": "Done",
     "acoes": "Actions",
-    "buscar": "Search...",
+    "buscar": "Search",
+    "date": "Date",
     "uploadPhoto": "Choose a photo",
     "attachFiles": "Attach files",
     "download": "Download file",
@@ -46,17 +48,55 @@
     "editarRegistro": "/ Edit register",
     "entrar": "Sign in",
     "esqueceuSenha": "Forgot password?",
-    "sair": "Logout"
+    "closeSession": "Close session"
   },
   "dashboard": {
     "title": {
       "users": "Users",
       "vehicles": "Vehicles",
-      "todaysBirthdays": "Today's birthdays"
+      "improvements": "Improvements",
+      "absence": "Absence requests",
+      "todaysNews": "Today's news",
+      "todaysRoutes": "Today's routes",
+      "todaysBirthdays": "Today's birthdays",
+      "damageInternal": "Damage internal",
+      "damageTransport": "Damage in transport"
     },
     "popover": {
-      "users": "View users",
-      "vehicles": "View vehicles",
+      "users": "Go to users",
+      "vehicles": "Go to vehicles",
+      "damages": "Go to damages",
+      "improvements": "Go to improvements",
+      "absence": "Go to absence requests",
+      "todaysNews": "Go to newsletters",
+      "todaysRoutes": "Go to daily schedule"
+    },
+    "subPopover": {
+      "users": {
+        "active": "View active users",
+        "inactive": "View inactive users"
+      },
+      "vehicles": {
+        "onRoute": "View vehicles en route",
+        "onGarage": "View vehicles in garage"
+      },
+      "damages": {
+        "open": "View damage in OPEN stage",
+        "closed": "View damage in CLOSED stage",
+        "readyToRepair": "View damage in READY TO REPAIR stage"
+      },
+      "improvements": {
+        "done": "View improvements with ONE status",
+        "rejected": "View improvements with REJECTED status",
+        "pending": "View improvements with PENDING status"
+      },
+      "absenceRequests": {
+        "accepted": "View absence requests with ACCEPTED status",
+        "rejected": "View absence requests with REJECTED status",
+        "pending": "View absence requests with PENDING status"
+      },
+      "todaysNews": "View today's news",
+      "todaysRoutes": "View today's routes",
       "todaysBirthdays": "View today's birthdays"
     }
   },
@@ -75,7 +115,8 @@
           "titulo": "Permissions",
           "selecionar": "Select user permissions:"
         },
-        "ativo": "Account active:"
+        "ativo": "Account active:",
+        "only-active": "Only active:"
       },
       "campo": {
         "nomeUsuario": "Username",
@@ -84,13 +125,15 @@
         "senhaConfirma": "Confirm password",
         "cargo": "Job title",
         "dataNascimento": "Birth date",
-        "contato": "Contact",
+        "mainContact": "Main contact",
+        "secondaryContact": "Secondary contact",
         "permissao": {
           "funcionario": "Employee",
           "administrativo": "Administrative",
           "motorista": "Driver"
         },
-        "ativo": "Active"
+        "ativo": "Active",
+        "inactive": "Inactive"
       },
       "msg": {
         "sucesso": "User successfully registered, verification email sent to {{value}}",
@@ -106,7 +149,8 @@
         "viewHistory": "View vehicle history",
         "vehicleInformation": "Vehicle information",
         "driverInformation": "Driver information",
-        "onRoute": "Vehicle on route:"
+        "onRoute": "Vehicle on route:",
+        "status": "Status"
       },
       "field": {
         "name": "Name",
@@ -115,13 +159,16 @@
         "licensePlate": "License plate",
         "category": "Category",
         "totalWeight": "Total weight",
-        "usefulLoad": "Useful load",
-        "updateDate": "Update date"
+        "usefulLoad": "Useful load"
+      },
+      "status": {
+        "all": "All status",
+        "onRoute": "On route",
+        "onGarage": "On garage"
       },
       "msg": {
-        "deleteVehicleOnRoute": "This vehicle is on route. Do you want to remove it anyway?",
-        "failedCreateDriverHistory": "Failed to create driver history",
-        "noDriver": "The vehicle was marked 'on route', but there is no driver attached to it.\nPlease, select a driver."
+        "noDriverWithRoute": "If the vehicle is ON ROUTE, please select a driver.",
+        "deleteVehicleOnRoute": "This vehicle is on route. Do you want to remove it anyway?"
       }
     },
     "vehicleHistory": {
@@ -132,13 +179,31 @@
         "damagesHistory": "Damages history"
       }
     },
+    "route": {
+      "title": {
+        "routeInformation": "Route information",
+        "route": "Route"
+      },
+      "traveling": {
+        "destino": "Destination",
+        "partida": "Departure",
+        "dataPartida": "Begin date",
+        "hora": "Time",
+        "vehicle": "Vehicle"
+      },
+      "msg": {
+        "noDriverOrVehicle": "You must link at least one driver and vehicle for this route."
+      }
+    },
     "newsletters": {
       "title": {
         "viewNewsDetails": "View news details",
         "newsInformation": "News information",
         "attachments": "Attachments",
         "onlyFormats": "Only PDF and image formats",
-        "author": "Author"
+        "author": "Author",
+        "beginDate": "Begin date",
+        "endDate": "End date"
       },
       "field": {
         "title": "Title",
@@ -151,8 +216,98 @@
         "fileInvalidFormat": "Some files from the files are not in the correct format, check if they are in PDF or image format.",
         "failedUploadAttachments": "Could not upload file {{value}}.",
         "alreadyPublished": "The news has already been published",
+        "confirmChangeNewsAlreadyPublished": "The news has already been published.\nDo you want to change the information anyway?",
         "lowerDate": "Cannot be less than the current date"
       }
+    },
+    "improvements": {
+      "title": {
+        "viewImprovementDetails": "View improvement details",
+        "requestInformation": "Request information",
+        "toggleStatus": "Toggle status",
+        "changeStatusTo": "Change status to:",
+        "returnStatus": "Return status to pending",
+        "confirmReturnStatus": "When performing this action, the status will return to pending. Do you wish to continue?"
+      },
+      "field": {
+        "description": "Description",
+        "name": "Requester",
+        "creationDate": "Creation date",
+        "requestStatus": "Status",
+        "requestType": "Request type"
+      },
+      "status": {
+        "all": "All status",
+        "pending": "Pending",
+        "done": "Done",
+        "rejected": "Rejected"
+      },
+      "requestType": {
+        "all": "All types",
+        "clientReclamation": "Client reclamation",
+        "purchaseSuggestion": "Purchase suggestion",
+        "suggestionImprovement": "Suggestion for improvement"
+      },
+      "msg": {
+        "selectRequestType": "Select a request type",
+        "selectStatus": "Select a status"
+      }
+    },
+    "absenceRequests": {
+      "title": {
+        "requestInformation": "Request information",
+        "toggleStatus": "Toggle status",
+        "changeStatusTo": "Change status to:",
+        "returnStatus": "Return status to pending",
+        "confirmReturnStatus": "When performing this action, the status will return to pending. Do you wish to continue?"
+      },
+      "field": {
+        "name": "Requester",
+        "beginDate": "Begin date",
+        "endDate": "End date",
+        "period": "Period",
+        "cause": "Cause",
+        "status": "Status"
+      },
+      "period": {
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "wholeDay": "Whole day"
+      },
+      "cause": {
+        "vacation": "Vacation",
+        "family": "Family",
+        "sickAccident": "Sick/Accident",
+        "military": "Military",
+        "other": "Other"
+      },
+      "status": {
+        "all": "All status",
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      },
+      "msg": {
+        "selectPeriod": "Select a period",
+        "selectCause": "Select a cause",
+        "selectStatus": "Select a status"
+      }
+    },
+    "damages": {
+      "title": {},
+      "field": {},
+      "type": {
+        "all": "All types",
+        "internal": "Vehicles, tools and infrastructure",
+        "transport": "Moving issue"
+      },
+      "stage": {
+        "all": "All stages",
+        "closed": "Closed",
+        "open": "Open",
+        "readyToRepair": "Ready to repair"
+      },
+      "msg": {}
     },
     "campo": {
       "obrigatorio": "Required",
@@ -166,7 +321,6 @@
       "emailInvalido": "Email is invalid"
     }
   },
-
   "login": {
     "semPermissao": "Your user does not have admin permission",
     "informarEmail": "Inform an email",
@@ -181,14 +335,12 @@
       "mudarSenha": "Change password"
     }
   },
-
   "errorPage": {
     "perdido": "Oops! You're lost",
     "msg": {
       "404": "The page you are looking for was not found."
     }
   },
-
   "errorFirebase": {
     "unknown": "An unknown error has occurred!\n- Error code: {{code}}\n- Message: {{message}}",
     "email-already-in-use": "The email address is already in use by another account",

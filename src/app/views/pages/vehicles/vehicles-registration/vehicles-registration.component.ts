@@ -1,22 +1,16 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import { MatSelectChange } from "@angular/material/select";
-import { ActivatedRoute, Router } from "@angular/router";
-import { TranslateService } from "@ngx-translate/core";
-import { ToastrService } from "ngx-toastr";
-import { Subscription } from "rxjs/internal/Subscription";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs/internal/Subscription';
 
-import { UserFirebase } from "./../../model/user/userfirebase.model";
-import { Vehicle } from "./../../model/vehicle/vehicle.model";
-import { UsuarioService } from "./../../services/usuario.service";
-import { VehicleService } from "../../services/vehicle.service";
-import { MatOptionSelectionChange } from "@angular/material/core";
-import moment from "moment";
+import { VehicleService } from '../../services/vehicle.service';
+import { UserFirebase } from './../../model/user/userfirebase.model';
+import { Vehicle } from './../../model/vehicle/vehicle.model';
+import { UsuarioService } from './../../services/usuario.service';
 
 @Component({
   selector: "app-vehicles-registration",
@@ -28,16 +22,9 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
     _id: "",
     name: "",
     onRoute: false,
-    lastDriver: {
-      uid: "",
-      displayName: "",
-      contact: "",
-    },
+    driverID: "",
     licensePlate: "",
     category: "",
-    totalWeight: "",
-    usefulLoad: "",
-    updateDate: "",
   };
 
   private subscriptions: Subscription[] = [];
@@ -46,8 +33,11 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
 
   pageTitle: string;
   disableBtn = false;
+  disableDriver = true;
 
   driversList: UserFirebase[] = [];
+
+  @ViewChild("selectDriver") selectDriver: MatSelect;
 
   constructor(
     private router: Router,
@@ -72,15 +62,40 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
         this.pageTitle = id ? "titulo.editarRegistro" : "titulo.novoRegistro";
 
         if (id && id.length > 0) {
-          const material = this.vehicleService.getById(id).valueChanges();
-          const subMaterial = material.subscribe(async (value) => {
-            this.vehicleData = value;
-            this.vehicleData._id = id;
+          const vehicleSub = this.vehicleService
+            .getById(id)
+            .valueChanges()
+            .subscribe(async (value) => {
+              this.vehicleData = value;
+              this.vehicleData._id = id;
 
-            this.createForm();
-          });
+              if (this.vehicleData.driverID && this.vehicleData.onRoute) {
 
-          this.subscriptions.push(subMaterial);
+                this.disableDriver = false;
+
+                const driverSub = await this.userService
+                  .getById(this.vehicleData.driverID)
+                  .valueChanges()
+                  .subscribe(async (driver) => {
+                    this.driversList = this.driversList.map((d) => {
+                      if (d.uid == driver.uid) {
+                        this.selectDriver.value = driver;
+                        return (d = driver);
+                      } else {
+                        return d;
+                      }
+                    });
+                  });
+
+                this.subscriptions.push(driverSub);
+              } else {
+                this.disableDriver = true;
+              }
+
+              this.createForm();
+            });
+
+          this.subscriptions.push(vehicleSub);
         }
       }
     );
@@ -100,7 +115,7 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
     this.router.navigate(["../vehicles"], {});
   }
 
-  onSubmit() {
+  async onSubmit() {
     const controls = this.vehicleForm.controls;
 
     /* check form */
@@ -122,32 +137,31 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
 
     const vehicle: Vehicle = this.vehicleForm.value as Vehicle;
     vehicle._id = this.vehicleData._id;
-    //vehicle.updateDate = moment(new Date()).format("DD/MM/YYYY HH:mm");
 
-    /* check driver vehicle */
-    if (vehicle.onRoute) {
-      if (
-        !vehicle.lastDriver.uid &&
-        (!vehicle.lastDriver.displayName || vehicle.lastDriver.displayName == "")
-      ) {
-        this.toastr.warning(
-          this.translate.instant("cadastros.vehicles.msg.noDriver"),
-          this.translate.instant("alerta.atencao"),
-          {
-            closeButton: true,
-            progressAnimation: "decreasing",
-            progressBar: true,
-          }
-        );
-        return;
-      }
+    /* check driver */
+    if (!this.selectDriver.value && vehicle.onRoute) {
+      this.toastr.warning(
+        this.translate.instant("cadastros.vehicles.msg.noDriverWithRoute"),
+        this.translate.instant("alerta.atencao"),
+        {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        }
+      );
+      return;
+    } 
+    
+    if (!vehicle.onRoute) { 
+      vehicle.driverID = "";
+    } else {
+      vehicle.driverID = this.selectDriver.value.uid;
     }
 
     this.disableBtn = true;
     if (vehicle._id) {
       this.updateVehicle(vehicle);
     } else {
-      vehicle.updateDate = moment(new Date()).format("DD/MM/YYYY HH:mm");
       this.addVehicle(vehicle);
     }
   }
@@ -156,24 +170,9 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
     this.vehicleForm = this.fb.group({
       name: [this.vehicleData.name, Validators.required],
       onRoute: [this.vehicleData.onRoute],
-      lastDriver: this.fb.group({
-        uid: [this.vehicleData.lastDriver.uid],
-        displayName: [this.vehicleData.lastDriver.displayName],
-        contact: [this.vehicleData.lastDriver.contact],
-      }),
       licensePlate: [this.vehicleData.licensePlate, Validators.required],
       category: [this.vehicleData.category, Validators.required],
-      totalWeight: [this.vehicleData.totalWeight, Validators.required],
-      usefulLoad: [this.vehicleData.usefulLoad, Validators.required],
     });
-  }
-
-  checkDriverVehicle(vehicle: Vehicle) {
-    if (
-      vehicle.lastDriver.uid &&
-      (vehicle.lastDriver.displayName || vehicle.lastDriver.displayName == "")
-    ) {
-    }
   }
 
   addVehicle(vehicle: Vehicle) {
@@ -226,44 +225,13 @@ export class VehiclesRegistrationComponent implements OnInit, OnDestroy {
       .finally(() => (this.disableBtn = false));
   }
 
-  formatNumber(isTotalWeight: boolean) {
-    const control = isTotalWeight
-      ? this.vehicleForm.controls["totalWeight"]
-      : this.vehicleForm.controls["usefulLoad"];
-
-    let value = String(control.value);
-    let chars = value.replace(/[^0-9]+/g, "").split("");
-
-    if (!chars.length) {
-      //control.setValue("00.0");
-    } else if (chars.length == 1) {
-      control.setValue(`00.${value}`);
-    } else if (chars.length == 2) {
-      control.setValue(`0${chars[0]}.${chars[1]}`);
-    } else if (chars.length == 3) {
-      //control.setValue(`${chars[0]}${chars[1]}.${chars[3]}`);
-    }
-  }
-
-  onDriverChange(driver, $event: MatOptionSelectionChange) {
-    if ($event.source.selected) {
-      let lastDriver: UserFirebase = driver
-        ? driver
-        : { uid: "", displayName: "", contact: "" };
-      const controls = this.vehicleForm.controls;
-
-      controls.lastDriver.get("uid").setValue(lastDriver.uid);
-      controls.lastDriver.get("displayName").setValue(lastDriver.displayName);
-      controls.lastDriver.get("contact").setValue(lastDriver.contact);
-    }
-  }
-
   applyFilter(driver: UserFirebase, filter: string) {
     filter = filter.toLowerCase();
 
     return (
       driver.displayName.toLowerCase().includes(filter) ||
-      driver.contact.toLowerCase().includes(filter)
+      driver.mainContact.toLowerCase().includes(filter) ||
+      driver.secondaryContact.toLowerCase().includes(filter)
     );
   }
 }

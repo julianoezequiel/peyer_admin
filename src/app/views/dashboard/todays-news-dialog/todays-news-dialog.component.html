@@ -1,0 +1,23 @@
+<div class="row-flex header">
+    <mat-icon class="icon" color="warn">newspaper</mat-icon>
+    <span mat-dialog-title>{{ 'dashboard.title.todaysNews' | translate }}</span>
+    <mat-icon color=warn [mat-dialog-close]="true">close</mat-icon>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-list class="listItens">
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+        <mat-list-item *ngFor="let news of newsList">
+            <mat-icon mat-list-icon color="primary" class="info-icon">info</mat-icon>
+            <span mat-line class="ellipsis details-info">{{news.title}}</span>
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.newsletters.title.author'|translate}}:&nbsp;{{news.author}}</span>
+        </mat-list-item>
+    </div>
+
+</mat-list>

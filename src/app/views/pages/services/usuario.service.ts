@@ -3,6 +3,8 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import {
   AngularFirestore,
   AngularFirestoreDocument,
+  DocumentData,
+  Query,
 } from "@angular/fire/firestore";
 import { AngularFireStorage } from "@angular/fire/storage";
 
@@ -28,7 +30,7 @@ export class UsuarioService {
     return new Promise(async (resolve, reject) => {
 
       let userUid = await (await this.afAuth.currentUser).uid;
-      let userRelog = (await this.read(userUid).get().toPromise()).data() as UserFirebase;
+      let userRelog = (await this.getById(userUid).get().toPromise()).data() as UserFirebase;
 
       console.log("Creating in Authentication...");
       this.authService
@@ -66,7 +68,7 @@ export class UsuarioService {
     return new Promise(async (resolve, reject) => { 
       
       let userUid = await (await this.afAuth.currentUser).uid;
-      let userRelog = (await this.read(userUid).get().toPromise()).data() as UserFirebase;
+      let userRelog = (await this.getById(userUid).get().toPromise()).data() as UserFirebase;
 
       let updateEmail = userUpdate.email != emailCompare;
       let updatePassword = userUpdate.password != passwordCompare;
@@ -165,7 +167,7 @@ export class UsuarioService {
     });
   }
 
-  read(recordID): AngularFirestoreDocument<UserFirebase> {
+  getById(recordID): AngularFirestoreDocument<UserFirebase> {
     return this.firestore.collection(this.collectionName).doc(recordID);
   }
 
@@ -173,8 +175,22 @@ export class UsuarioService {
     return this.firestore.collection(this.collectionName).snapshotChanges();
   }
 
+  getAllByFilters(onlyActive: boolean) {
+    return this.firestore.collection(this.collectionName, (ref) => {
+      let query: Query<DocumentData> = ref;
+
+      if (onlyActive) {
+        query = ref.where("active", "==", true);
+      } 
+
+      return query;
+    })
+    .snapshotChanges();
+
+  }
+
   count() {
-    return this.firestore.collection(this.collectionName).valueChanges();
+    return this.firestore.collection<UserFirebase>(this.collectionName).valueChanges();
   }
 
   delete(userToBeRemoved: UserFirebase) {
@@ -188,7 +204,7 @@ export class UsuarioService {
       }
 
       let userUid = await (await this.afAuth.currentUser).uid;
-      let userRelog = (await this.read(userUid).get().toPromise()).data() as UserFirebase;
+      let userRelog = (await this.getById(userUid).get().toPromise()).data() as UserFirebase;
 
       //console.log("Deleting from Authentication");
       this.authService

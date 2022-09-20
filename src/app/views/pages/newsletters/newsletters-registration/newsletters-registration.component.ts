@@ -1,3 +1,9 @@
+import { MatDialog } from "@angular/material/dialog";
+import {
+  ConfirmDialogModel,
+  ConfirmDialogComponent,
+} from "./../../../../shared/confirm-dialog/confirm-dialog.component";
+import { UsuarioService } from "./../../services/usuario.service";
 import { ErrorFirebaseService } from "./../../../error/services/error-firebase.service";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { UserFirebase } from "./../../model/user/userfirebase.model";
@@ -29,11 +35,10 @@ export class NewslettersRegistrationComponent implements OnInit {
     messageBody: "",
     attachments: [],
     publicationDate: "",
-    author: {
-      uid: "",
-      displayName: "",
-    },
+    authorID: "",
   };
+
+  author = "";
 
   private subscriptions: Subscription[] = [];
 
@@ -53,7 +58,7 @@ export class NewslettersRegistrationComponent implements OnInit {
     id: string;
     name: string;
     type: string;
-    fileProperties?: {}
+    fileProperties?: {};
   }[] = [];
 
   constructor(
@@ -64,8 +69,8 @@ export class NewslettersRegistrationComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public translate: TranslateService,
     private changeDetectorRef: ChangeDetectorRef,
-    private angularFireStorage: AngularFireStorage,
-    private errorFB: ErrorFirebaseService
+    private userService: UsuarioService,
+    private dialog: MatDialog
   ) {}
 
   async ngOnInit() {
@@ -89,19 +94,37 @@ export class NewslettersRegistrationComponent implements OnInit {
 
             this.isNewRecord = false;
 
-            if (moment(this.newsletterData.publicationDate, "DD/MM/YYYY")
-              .isBefore(moment(this.minDate, "DD/MM/YYYY"), 'day')) {
-                this.disableDate = true;
-                this.minDate = moment(this.newsletterData.publicationDate, "DD/MM/YYYY").toDate();
+            // If the publication date is in the past,
+            // then the author remains the same and uneditable on the publication date.
+            if (
+              moment(
+                this.newsletterData.publicationDate,
+                "DD/MM/YYYY"
+              ).isBefore(moment(this.minDate, "DD/MM/YYYY"), "day")
+            ) {
+              this.disableDate = true;
+              this.minDate = moment(
+                this.newsletterData.publicationDate,
+                "DD/MM/YYYY"
+              ).toDate();
+
+              const authorSub = await this.userService
+                .getById(this.newsletterData.authorID)
+                .valueChanges()
+                .subscribe(async (value) => {
+                  this.author = value.displayName;
+                });
+
+              this.subscriptions.push(authorSub);
+
+              // Else the publish date is in the future then get the logged in user
             } else {
               const userLocal = (await JSON.parse(
                 localStorage.getItem("user_firebase")
               )) as UserFirebase;
-    
-              this.newsletterData.author = {
-                uid: userLocal.uid,
-                displayName: userLocal.displayName,
-              };
+
+              this.newsletterData.authorID = userLocal.uid;
+              this.author = userLocal.displayName;
             }
 
             this.createForm();
@@ -113,10 +136,11 @@ export class NewslettersRegistrationComponent implements OnInit {
             localStorage.getItem("user_firebase")
           )) as UserFirebase;
 
-          this.newsletterData.author = {
-            uid: userLocal.uid,
-            displayName: userLocal.displayName,
-          };
+          this.newsletterData.authorID = userLocal.uid;
+          this.author = userLocal.displayName;
+          this.newsletterData.publicationDate = moment().format("DD/MM/YYYY");
+
+          this.createForm();
         }
       }
     );
@@ -129,6 +153,7 @@ export class NewslettersRegistrationComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((x) => x.unsubscribe());
+    this.dialog.closeAll();
   }
 
   goToList() {
@@ -164,13 +189,21 @@ export class NewslettersRegistrationComponent implements OnInit {
 
     this.disableBtn = true;
     if (newsletter._id) {
-      let uploaded = await this.uploadAttachments(newsletter).catch(
-        () => (this.disableBtn = false)
-      );
+      let confirmed = this.disableDate
+        ? await this.confirmChangeNewsAlreadyPublished()
+        : true;
 
-      this.update(newsletter);
+      if (confirmed) {
+        let uploaded = await this.uploadAttachments(newsletter).catch(
+          () => (this.disableBtn = false)
+        );
+
+        this.update(newsletter);
+      } else {
+        this.disableBtn = false;
+      }
     } else {
-      newsletter.author = this.newsletterData.author;
+      newsletter.authorID = this.newsletterData.authorID;
 
       let uploaded = await this.uploadAttachments(newsletter).catch(
         () => (this.disableBtn = false)
@@ -242,82 +275,115 @@ export class NewslettersRegistrationComponent implements OnInit {
       .finally(() => (this.disableBtn = false));
   }
 
+  confirmChangeNewsAlreadyPublished() {
+    return new Promise((resolve, reject) => {
+      const message = this.translate.instant(
+        "cadastros.newsletters.msg.confirmChangeNewsAlreadyPublished"
+      );
+
+      const dialogData = new ConfirmDialogModel(message);
+
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: "400px",
+        data: dialogData,
+      });
+
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        resolve(dialogResult);
+      });
+    });
+  }
+
   getDateMsg(): string {
-    let msg = this.disableDate ? 'cadastros.newsletters.msg.alreadyPublished' : 'cadastros.newsletters.field.publicationDate';
+    let msg = this.disableDate
+      ? "cadastros.newsletters.msg.alreadyPublished"
+      : "cadastros.newsletters.field.publicationDate";
     return this.translate.instant(msg);
   }
 
   getDateErrorMsg(): boolean {
-    
-    const ctrlDate = this.newsletterForm.controls['publicationDate'];
+    const ctrlDate = this.newsletterForm.controls["publicationDate"];
     this.msgError = "";
 
     if (ctrlDate.touched) {
-
-      let date = moment(ctrlDate.value)
-
-      console.log("ctrlDate", ctrlDate);
-      console.log("date", date);
-      console.log("date str", date.toLocaleString());
-
-      if (ctrlDate.hasError('required') || !date.isValid()) {
+      let date = moment(ctrlDate.value);
+      if (ctrlDate.hasError("required") || !date.isValid()) {
         this.msgError = this.translate.instant("cadastros.campo.obrigatorio");
         return true;
-      } else if (date.isBefore(moment(this.minDate, "DD/MM/YYYY"), 'day')) {
-        this.msgError = this.translate.instant("cadastros.newsletters.msg.lowerDate"); 
+      } else if (date.isBefore(moment(this.minDate, "DD/MM/YYYY"), "day")) {
+        this.msgError = this.translate.instant(
+          "cadastros.newsletters.msg.lowerDate"
+        );
         return true;
       }
     }
-    
+
     return false;
   }
 
   /*--------- ATTACHMENTS ---------*/
   async uploadAttachments(newsletter: Newsletter) {
+    
+    let newsSource: Newsletter;
+
+    if (!this.isNewRecord) {
+      newsSource = await (await this.newsletterService.getById(newsletter._id).get().toPromise()).data()
+    }
+
     return new Promise(async (resolve, reject) => {
       if (this.listFiles) {
         if (this.listFiles.length > 0) {
           // Upload attachments in storage
-
           if (!newsletter.attachments) {
             newsletter.attachments = [];
           }
 
           let listFilesLength = this.listFiles.length;
-          
+
           this.listFiles.forEach((file, index) => {
-            this.newsletterService
-              .uploadAttachments(file)
-              .then(() => {
 
-                delete file.fileProperties;
-                newsletter.attachments.push(file);
+            let fileAlreadyExists = this.isNewRecord || !newsSource.attachments || newsSource.attachments.length == 0 ? true : newsSource.attachments.some((f) => f.id != file.id);
+            
+            if (fileAlreadyExists) {
+              this.newsletterService
+                .uploadAttachments(file)
+                .then(() => {
+                  delete file.fileProperties;
+                  newsletter.attachments.push(file);
 
-                if (listFilesLength == newsletter.attachments.length) {
-                  resolve(true);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-                this.toastr.warning(
-                  this.translate.instant(
-                    "cadastros.newsletters.msg.failedUploadAttachments",
-                    {
-                      value: file.name,
-                    }
-                  ),
-                  this.translate.instant("alerta.atencao"),
-                  {
-                    closeButton: true,
-                    progressAnimation: "decreasing",
-                    progressBar: true,
+                  if (listFilesLength == newsletter.attachments.length) {
+                    resolve(true);
                   }
-                );
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.toastr.warning(
+                    this.translate.instant(
+                      "cadastros.newsletters.msg.failedUploadAttachments",
+                      {
+                        value: file.name,
+                      }
+                    ),
+                    this.translate.instant("alerta.atencao"),
+                    {
+                      closeButton: true,
+                      progressAnimation: "decreasing",
+                      progressBar: true,
+                    }
+                  );
 
-                if (index == this.listFiles.length - 1) {
-                  reject(false);
-                }
-              });
+                  if (index == this.listFiles.length - 1) {
+                    reject(false);
+                  }
+                });
+            } else {
+              delete file.fileProperties;
+              newsletter.attachments.push(file);
+
+              if (listFilesLength == newsletter.attachments.length) {
+                resolve(true);
+              }
+            }
           });
         } else {
           resolve(true);
@@ -350,7 +416,7 @@ export class NewslettersRegistrationComponent implements OnInit {
               id: id,
               name: file.name,
               type: file.type,
-              fileProperties: file
+              fileProperties: file,
             };
 
             this.listFiles.push(obj);
@@ -389,7 +455,7 @@ export class NewslettersRegistrationComponent implements OnInit {
     if (this.newsletterData.attachments.some((f) => f.id == file.id)) {
       let fullPath = `newsletters/${file.id}_${file.name}`;
 
-      console.log("Removing in Storage... ", fullPath);
+      //console.log("Removing in Storage... ", fullPath);
       let deleted = await this.newsletterService
         .deleteAttachmentStorage(fullPath)
         .then(() => {
@@ -435,7 +501,7 @@ export class NewslettersRegistrationComponent implements OnInit {
         });
     }
 
-    console.log("Removing in list...");
+    //console.log("Removing in list...");
     this.listFiles = this.listFiles.filter((f) => f.id != file.id);
   }
 

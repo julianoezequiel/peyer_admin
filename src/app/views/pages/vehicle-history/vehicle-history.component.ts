@@ -22,12 +22,12 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
     {
       label: "cadastros.vehicleHistory.title.routesHistory",
       path: "../histories/routes-history",
-      icon: "map",
+      icon: "route",
     },
     {
       label: "cadastros.vehicleHistory.title.damagesHistory",
       path: "../histories/damages-history",
-      icon: "nearby_error",
+      icon: "warning",
     },
   ];
 

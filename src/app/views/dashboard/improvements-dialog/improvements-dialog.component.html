@@ -1,0 +1,27 @@
+<div class="row-flex header">
+    <mat-icon class="icon" color="primary">{{data.icon}}</mat-icon>
+    <span mat-dialog-title>{{ 'dashboard.title.improvements' | translate }}&nbsp;<span style="text-transform: lowercase;">{{data.subTitle | translate}}</span></span>
+    <mat-icon color=warn [mat-dialog-close]="true">close</mat-icon>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-list class="listItens">
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+        <mat-list-item *ngFor="let imp of improvementsList">
+            <mat-icon mat-list-icon color="primary" class="info-icon">info</mat-icon>
+
+            <span mat-line class="ellipsis details-info">{{imp.requestType | translate}}</span>
+
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.improvements.field.name'|translate}}:&nbsp;{{imp.user}}</span>
+
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.improvements.field.creationDate'|translate}}:&nbsp;{{imp.creationDate}}</span>
+        </mat-list-item>
+    </div>
+
+</mat-list>

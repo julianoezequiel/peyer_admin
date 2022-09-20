@@ -1,0 +1,95 @@
+<form [formGroup]="improvementsForm" novalidate>
+
+    <mat-card-header class="principal">
+        <mat-card-title>
+            <span class="title">
+                <a href="#/improvements">
+                    <mat-icon color=accent>arrow_back</mat-icon>
+                    <span>{{ 'menu.improvements' | translate}}</span>
+                </a>
+            </span>
+            <span class="sub-title">{{ pageTitle | translate}}</span>
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="principal">
+        <mat-card class="h100 elevation-card" style="overflow-y: auto;">
+
+            <mat-card-header class="fieldsGroupHeader">
+                <mat-card-title class="fieldsGroupTitle">
+                    <!-- <img class="mat-icon" src="assets/img/icon/truck-solid-green.png"> -->
+                    <mat-icon color="primary">info</mat-icon>
+                    <span>{{'cadastros.improvements.title.requestInformation' | translate}}</span>
+                </mat-card-title>
+            </mat-card-header>
+
+            <div class="row-flex">
+                <!-- NAME -->
+                <mat-form-field appearance="fill" class="isReadOnly" style="width: 49%">
+                    <mat-label>{{'cadastros.improvements.field.name' | translate}}</mat-label>
+                    <input matInput [value]="name" readonly>
+                </mat-form-field>
+
+                <!-- CREATION DATE -->
+                <mat-form-field appearance="fill" style="width: 49%" class="isReadOnly">
+                    <mat-label>{{'cadastros.improvements.field.creationDate'|translate}}</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="creationDate">
+                    <mat-hint>(DD/MM/YYYY)</mat-hint>
+                    <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="improvementsForm.controls['creationDate'].hasError('required')">
+                        <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row-flex">
+                <!-- REQUEST TYPE -->
+                <mat-form-field appearance="fill" style="width: 49%">
+                    <mat-label>{{'cadastros.improvements.field.requestType'|translate}}</mat-label>
+                    <mat-select disableOptionCentering #selectType>
+                        <ng-container *ngFor="let type of requestTypesList">
+                            <mat-option [value]="type.value">{{ type?.label | translate }}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- REQUEST STATUS -->
+                <div [class]="statusColor" style="width: 49%" [ngClass]="{'isNewRecord': isNewRecord}">
+                    <mat-form-field appearance="fill" style="width: 100%">
+                        <mat-label>{{'cadastros.improvements.field.requestStatus'|translate}}</mat-label>
+                        <mat-select disableOptionCentering #selectStatus (selectionChange)="getStatusColor()">
+                            <ng-container *ngFor="let status of requestStatusList">
+                                <mat-option [value]="status.value">{{ status?.label | translate }}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row-flex">
+                <!-- DESCRIPTION -->
+                <mat-form-field appearance="fill" class="description" style="width: 100%;">
+                    <mat-label>{{'cadastros.improvements.field.description'|translate}}</mat-label>
+                    <textarea matInput rows="4" formControlName="description" maxlength="500" #input></textarea>
+                    <mat-error *ngIf="improvementsForm.controls['description'].hasError('required')">
+                        <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+                    </mat-error>
+                    <mat-hint align="start">{{input.value?.length || 0}}/500</mat-hint>
+                </mat-form-field>
+            </div>
+        </mat-card>
+    </mat-card-content>
+
+    <mat-card-actions align="end" class="principal">
+        <mat-spinner [diameter]="20" *ngIf="disableBtn" style="margin: 0 15px"></mat-spinner>
+        <button mat-raised-button color="primary" (click)="onSubmit()"
+            [disabled]="disableBtn">{{'titulo.salvar'|translate}}</button>
+        <button mat-raised-button color="danger" type="button" (click)="goToList()"
+            style="margin-left: 10px;">{{'titulo.voltar'|translate}}
+        </button>
+    </mat-card-actions>
+
+</form>

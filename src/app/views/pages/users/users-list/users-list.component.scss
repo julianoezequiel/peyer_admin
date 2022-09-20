@@ -37,18 +37,22 @@
   }
 }
 
+tr:nth-child(2n - 1):not(.mat-header-row) {
+  background: rgba(249, 249, 249, 0.3);
+}
+
 tr.element-row:not(.element-focus):hover {
-  background: #eeeeee;
+  background: #f5f5f5;
   cursor: pointer;
 }
 
 tr.element-row:not(.element-focus):active {
-  background: #dcdcdc;
+  background: #ebebeb;
 }
 
 ::ng-deep .tooltip-element-row {
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   max-width: 180px !important;
   width: 180px !important;
 }
@@ -64,4 +68,30 @@ tr.element-row:not(.element-focus):active {
   justify-content: center;
   align-items: center;
   height: calc(100vh - 375px);
+}
+
+.active {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+
+  .title {
+    font-size: 14px;
+    margin-right: 30px;
+  }
+
+  .toggle-align {
+    display: flex;
+    justify-content: space-between;
+
+    mat-label {
+      font-size: 13px;
+    }
+  }
+}
+
+::ng-deep .mat-slide-toggle-thumb {
+  background-image: none !important;
 }

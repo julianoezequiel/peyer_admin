@@ -1,0 +1,12 @@
+.user-line {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+
+  .img-avatar,
+  mat-spinner {
+    height: 34px;
+    width: 34px;
+    margin: 0 10px 0 5px;
+  }
+}

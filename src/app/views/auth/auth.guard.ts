@@ -25,11 +25,11 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot,state: RouterStateSnapshot, tentativas?: number, user?: any): Promise<boolean> | boolean {
-    let userLocal = user ? user : JSON.parse(localStorage.getItem("user_firebase")) as UserFirebase;
+    let userLocal: UserFirebase = user ? user : JSON.parse(localStorage.getItem("user_firebase")) as UserFirebase;
 
     if (userLocal) {
       return this.usuarioService
-        .read(userLocal.uid).get().toPromise()
+        .getById(userLocal.uid).get().toPromise()
         .then(async (u) => {
           if (u.exists) {
             let userData = u.data() as UserFirebase;
@@ -54,7 +54,7 @@ export class AuthGuard implements CanActivate {
                 return false;
               }
             } else {
-              if (tentativas > 30) {
+              if (tentativas > 40 && tentativas < 60) {
                 this.authService
                   .SignIn(userData.email, userData.password)
                   .catch(() => {

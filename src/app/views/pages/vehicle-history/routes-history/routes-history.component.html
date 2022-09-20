@@ -1,1 +1,28 @@
-<p>Routes history in development...</p>
+<div class="loading" *ngIf="loading">
+    <mat-spinner diameter="100"></mat-spinner>
+</div>
+
+<mat-list role="list" class="listHistory h100" *ngIf="!loading">
+
+    <mat-list-item *ngIf="dataEmpty" class="dataEmpty">
+        {{'titulo.dataEmpty'|translate}}
+    </mat-list-item>
+
+    <ng-container *ngIf="!dataEmpty">
+        <mat-list-item role="listitem" *ngFor="let item of dataList" [@rowsAnimation]="">
+            <div class="column-flex h100">
+                <div class="row-flex">
+                    <span class="label">{{'cadastros.route.title.route' | translate}}:&nbsp;</span>
+                    <span class="info">{{item.from}}&nbsp;</span>
+                    <mat-icon color="primary">double_arrow</mat-icon>
+                    <span class="info">&nbsp;{{item.to}}</span>
+                </div>
+
+                <div class="row-flex">
+                    <span class="label">{{'titulo.date' | translate}}:&nbsp;</span>
+                    <span class="info">{{item.date}}</span>
+                </div>
+            </div>
+        </mat-list-item>
+    </ng-container>
+</mat-list>

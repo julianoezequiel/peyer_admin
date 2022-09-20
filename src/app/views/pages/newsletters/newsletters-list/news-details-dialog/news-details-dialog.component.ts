@@ -18,7 +18,7 @@ export class NewsDetailsDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<Newsletter>,
-    @Inject(MAT_DIALOG_DATA) public data: Newsletter,
+    @Inject(MAT_DIALOG_DATA) public data: {news: Newsletter, author: string},
     private angularFireStorage: AngularFireStorage,
     private http: HttpClient
   ) {}

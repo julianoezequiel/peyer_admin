@@ -1,0 +1,33 @@
+<div class="row-flex header">
+    <mat-icon class="icon" color="accent">{{data.icon}}</mat-icon>
+    <span mat-dialog-title>{{ 'dashboard.title.absence' | translate }}&nbsp;<span style="text-transform: lowercase;">{{data.subTitle | translate}}</span></span>
+    <mat-icon color=warn [mat-dialog-close]="true">close</mat-icon>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-list class="listItens">
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+        <mat-list-item *ngFor="let ar of absenceRequestsList">
+            <mat-icon mat-list-icon color="primary" class="info-icon">info</mat-icon>
+
+            <span mat-line class="ellipsis details-info">{{ar.user}}</span>
+
+            <div mat-line>
+                <mat-icon color="primary" class="arrow">call_made</mat-icon>
+                <span class="details-sub-info">{{ar.beginDate}}</span>
+                <span class="ddetails-sub-info">&nbsp;-&nbsp;</span>
+                <mat-icon color="warn" class="arrow">call_received</mat-icon>
+                <span class="details-sub-info">{{ar.endDate}}</span>
+            </div>
+
+            <span mat-line class="ellipsis details-sub-info">{{'cadastros.absenceRequests.field.period'|translate}}:&nbsp;{{ar.period | translate}}</span>
+        </mat-list-item>
+    </div>
+
+</mat-list>

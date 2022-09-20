@@ -1,0 +1,19 @@
+<div class="row-flex header">
+    <img *ngIf="data.status == 'onRoute'" class="mat-icon icon" src="assets/img/icon/truck-fast-solid-green.png">
+    <img *ngIf="data.status == 'onGarage'" class="mat-icon icon" src="assets/img/icon/warehouse-solid-green.png">
+    <span mat-dialog-title>
+        {{ 'dashboard.title.vehicles' | translate }}&nbsp;<span style="text-transform: lowercase;">{{subTitle |
+            translate }}</span>
+    </span>
+    <mat-icon color=warn [mat-dialog-close]="true">close</mat-icon>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-list class="listItens">
+    <mat-list-item *ngFor="let vehicle of data.list">
+        <mat-icon mat-list-icon color="primary" class="info-icon">info</mat-icon>
+        <span mat-line class="ellipsis details-info">{{vehicle.name}}</span>
+        <span mat-line class="ellipsis details-sub-info">{{'cadastros.vehicles.field.licensePlate'|translate}}:&nbsp;{{vehicle.licensePlate}}</span>
+    </mat-list-item>
+</mat-list>

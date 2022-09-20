@@ -1,0 +1,154 @@
+<mat-card-header class="principal mat-elevation-z3">
+    <mat-card-title>
+        <span class="title">{{'menu.absenceRequests'|translate}}</span>
+    </mat-card-title>
+</mat-card-header>
+
+<mat-card-content class="principal mat-elevation-z8">
+
+    <div class="options">
+        <!-- REQUEST STATUS FILTER -->
+        <div [class]="statusColor" style="width: 15%">
+            <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>{{'cadastros.absenceRequests.field.status'|translate}}</mat-label>
+                <mat-select disableOptionCentering #selectStatus (selectionChange)="getAll(); getStatusColorSelect()">
+                    <mat-option [value]="status.value" *ngFor="let status of requestStatusList">
+                        {{ status?.label | translate }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>{{'titulo.buscar'| translate}}</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput (keyup)="applyFilter()" type="search" #searchFilter>
+        </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+        <table mat-table class="w100" [dataSource]="dataSource" matSort matSortActive="description"
+            matSortDirection="asc" matSortDisableClear>
+
+            <!-- Row definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr [@rowsAnimation]="" class="element-row" mat-row *matRowDef="let row; columns: displayedColumns"
+                matTooltip="{{row.absenceRequest.status?.value == 1 ? 
+                    ('cadastros.absenceRequests.title.toggleStatus' | translate) :
+                    ('cadastros.absenceRequests.title.returnStatus' | translate)}}"
+                matTooltipPosition="above" [hidden]="loading"
+                (click)="onToggleStatus(row.absenceRequest)"></tr>
+            <!---->
+
+            <!-- NAME Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.absenceRequests.field.name'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span matTooltip="{{ row.name }}" matTooltipPosition="below">{{ row.name }}</span>
+                </td>
+            </ng-container>
+
+            <!-- BEGIN DATE Column -->
+            <ng-container matColumnDef="beginDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.absenceRequests.field.beginDate'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{row.absenceRequest.beginDate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- END DATE Column -->
+            <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.absenceRequests.field.endDate'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{row.absenceRequest.endDate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- STATUS Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>
+                    {{'cadastros.absenceRequests.field.status'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span class="{{getStatusColorCell(row.absenceRequest.status?.value)}} status">
+                        {{row.absenceRequest.status.label | translate}}
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- PERIOD Column -->
+            <ng-container matColumnDef="period">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.absenceRequests.field.period'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{ row.absenceRequest.period.label | translate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- CAUSE Column -->
+            <ng-container matColumnDef="cause">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{'cadastros.absenceRequests.field.cause'|translate}}
+                </th>
+                <td mat-cell *matCellDef="let row" class="ellipsis">
+                    <span>{{ row.absenceRequest.cause.label | translate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- ACTIONS Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>{{'titulo.acoes'|translate}}</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="buttons-align">
+                        <button mat-icon-button color="primary">
+                            <mat-icon>open_in_new</mat-icon>
+                        </button>&nbsp;
+                        <button mat-icon-button color="warn" matTooltip="{{'titulo.remover'|translate}}" type="button"
+                            (click)="confirmDialog(row.absenceRequest)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+        </table>
+
+        <div class="loading" *ngIf="loading">
+            <mat-spinner diameter="100"></mat-spinner>
+        </div>
+
+        <mat-card *ngIf="dataSource?.data.length == 0 && !loading" class="dataEmpty">
+            {{'titulo.dataEmpty'|translate}}
+        </mat-card>
+    </div>
+</mat-card-content>
+
+<mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+    [pageSizeOptions]="[5, 15, 25]">
+</mat-paginator>
+
+<!-- MODAL TO CHANGE THE STATUS -->
+<ng-template #templategToggleStatus>
+    <div class="row-flex header">
+        <span class="title">{{'cadastros.absenceRequests.title.changeStatusTo' | translate}}</span>
+        <mat-icon color=warn (click)="closeDialog()" matRipple>close</mat-icon>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="align-status">
+        <span class="accepted status" (click)="setRequestStatus('accepted')">
+            {{ 'cadastros.absenceRequests.status.accepted' | translate }}
+        </span>
+
+        <span class="rejected status" (click)="setRequestStatus('rejected')">
+            {{ 'cadastros.absenceRequests.status.rejected' | translate }}
+        </span>
+    </div>
+</ng-template>

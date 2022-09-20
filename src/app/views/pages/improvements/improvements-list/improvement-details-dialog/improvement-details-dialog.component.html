@@ -1,0 +1,43 @@
+<div class="row-flex header">
+    <span mat-dialog-title>{{ data.improvement.requestType['label'] | translate }}</span>
+    <mat-icon color=warn [mat-dialog-close]="true" matRipple>close</mat-icon>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-card-content>
+    <div>
+        <h5 class="ellipsis">{{'cadastros.improvements.field.name' | translate}}:&nbsp;{{data.name}}</h5>
+        <h5>{{'cadastros.improvements.field.creationDate' | translate}}:&nbsp;{{data.improvement.creationDate}}</h5>
+
+        <p class="description">{{data.improvement.description}}</p>
+    </div>
+    <div class="{{statusImprovement}} status align" (click)="onToggleStatus()" matTooltip="{{data.improvement.requestStatus['value'] == 1 ? 
+            ('cadastros.improvements.title.toggleStatus' | translate) :
+            ('cadastros.improvements.title.returnStatus' | translate)}}">
+        <span>{{data.improvement.requestStatus['label'] | translate}}</span>
+        <mat-icon>{{data.improvement.requestStatus['value'] == 1 ? 'trending_flat' : 'restore'}}</mat-icon>
+    </div>
+</mat-card-content>
+
+<ngx-loading [show]="changingStatus" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
+
+<!-- MODAL TO CHANGE THE STATUS -->
+<ng-template #templategToggleStatus>
+    <div class="row-flex header">
+        <span class="title">{{'cadastros.improvements.title.changeStatusTo' | translate}}</span>
+        <mat-icon color=warn (click)="closeDialog()" matRipple>close</mat-icon>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="align-status">
+        <span class="done status" (click)="setRequestStatus('done')">
+            {{ 'cadastros.improvements.status.done' | translate }}
+        </span>
+
+        <span class="rejected status" (click)="setRequestStatus('rejected')">
+            {{ 'cadastros.improvements.status.rejected' | translate }}
+        </span>
+    </div>
+</ng-template>

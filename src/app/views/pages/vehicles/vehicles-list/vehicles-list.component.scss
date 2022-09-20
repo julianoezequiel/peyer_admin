@@ -3,12 +3,12 @@ mat-card-content.principal {
 }
 
 .mat-column-name {
-  width: 30%;
+  width: 35%;
   max-width: 90px;
 }
 
 .mat-column-status {
-  width: 8%;
+  width: 15%;
   max-width: 90px;
 }
 
@@ -18,32 +18,14 @@ img.mat-icon {
   width: 26px !important;
 }
 
-.mat-column-lastDriver {
-  width: 30%;
+.mat-column-driver {
+  width: 35%;
   max-width: 90px;
 }
 
 .mat-column-licensePlate {
-  width: 10%;
+  width: 15%;
   max-width: 90px;
-}
-
-.mat-column-totalWeight {
-  width: 10%;
-  max-width: 90px;
-
-  span {
-    margin: 0 16px;
-  }
-}
-
-.mat-column-updateDate {
-  width: 12%;
-  max-width: 90px;
-
-  /*span {
-    margin: 0 16px;
-  }*/
 }
 
 .mat-column-acoes {
@@ -54,18 +36,22 @@ img.mat-icon {
   }
 }
 
+tr:nth-child(2n - 1):not(.mat-header-row) {
+  background: rgba(249, 249, 249, 0.3);
+}
+
 tr.element-row:not(.element-focus):hover {
-  background: #eeeeee;
+  background: #f5f5f5;
   cursor: pointer;
 }
 
 tr.element-row:not(.element-focus):active {
-  background: #dcdcdc;
+  background: #ebebeb;
 }
 
 ::ng-deep .tooltip-element-row {
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   max-width: 180px !important;
   width: 180px !important;
 }

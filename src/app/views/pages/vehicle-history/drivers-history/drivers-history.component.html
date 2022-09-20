@@ -7,12 +7,19 @@
     <mat-list-item *ngIf="dataEmpty" class="dataEmpty">
         {{'titulo.dataEmpty'|translate}}
     </mat-list-item>
-    
+
     <ng-container *ngIf="!dataEmpty">
         <mat-list-item role="listitem" *ngFor="let item of dataList" [@rowsAnimation]="">
-            <div class="column-flex">
-                <span>{{'cadastros.vehicles.field.lastDriver' | translate}}:&nbsp;<span>{{item.displayName}}</span></span>
-                <span>{{'cadastros.vehicles.field.updateDate' | translate}}:&nbsp;<span>{{item.updateDate}}</span></span>
+            <div class="column-flex h100">
+                <div class="row-flex">
+                    <span class="label">{{'cadastros.vehicles.field.lastDriver' | translate}}:&nbsp;</span>
+                    <span class="info">{{item.displayName}}</span>
+                </div>
+
+                <div class="row-flex">
+                    <span class="label">{{'titulo.date' | translate}}:&nbsp;</span>
+                    <span class="info">{{item.date}}</span>
+                </div>
             </div>
         </mat-list-item>
     </ng-container>

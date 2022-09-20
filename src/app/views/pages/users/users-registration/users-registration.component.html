@@ -1,4 +1,4 @@
-<form [formGroup]="userForm" novalidate>
+<form [formGroup]="userForm" novalidate id="userForm">
 
   <mat-card-header class="principal">
     <mat-card-title>
@@ -25,145 +25,156 @@
         <mat-divider></mat-divider>
 
         <!-- USERNAME -->
-          <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
-            <mat-label>{{'cadastros.usuarios.campo.nomeUsuario'|translate}}</mat-label>
-            <input matInput formControlName="usuario" [readonly]="!userActive">
-            <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-          </mat-form-field>
+        <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
+          <mat-label>{{'cadastros.usuarios.campo.nomeUsuario'|translate}}</mat-label>
+          <input matInput formControlName="usuario" [readonly]="!userActive">
+          <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <!-- EMAIL -->
-          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && emailReadOnly">
-            <mat-label>{{'cadastros.usuarios.campo.email'|translate}}</mat-label>
-            <input matInput formControlName="email" type="email" [readonly]="!newUser && emailReadOnly">
-            <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(true)" color="primary"
-              [disabled]="!userActive">
-              <mat-icon class="animation360" *ngIf="emailReadOnly" matTooltip="{{'titulo.editar'|translate}}"
-                matTooltipPosition="below">edit</mat-icon>
-              <mat-icon class="animation360" *ngIf="!emailReadOnly" matTooltip="{{'titulo.pronto'|translate}}"
-                matTooltipPosition="below">done</mat-icon>
-            </button>
-            <mat-error *ngIf="userForm.controls['email'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls['email'].hasError('email')">
-              <strong>{{'cadastros.campo.invalido'|translate}}</strong>
-            </mat-error>
-          </mat-form-field>
+        <!-- EMAIL -->
+        <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && emailReadOnly">
+          <mat-label>{{'cadastros.usuarios.campo.email'|translate}}</mat-label>
+          <input matInput formControlName="email" type="email" [readonly]="!newUser && emailReadOnly">
+          <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(true)" color="primary"
+            [disabled]="!userActive">
+            <mat-icon class="animation360" *ngIf="emailReadOnly" matTooltip="{{'titulo.editar'|translate}}"
+              matTooltipPosition="below">edit</mat-icon>
+            <mat-icon class="animation360" *ngIf="!emailReadOnly" matTooltip="{{'titulo.pronto'|translate}}"
+              matTooltipPosition="below">done</mat-icon>
+          </button>
+          <mat-error *ngIf="userForm.controls['email'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['email'].hasError('email')">
+            <strong>{{'cadastros.campo.invalido'|translate}}</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <!-- PASSWORD -->
-          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
-            <mat-label>{{'cadastros.usuarios.campo.senha'|translate}}</mat-label>
-            <input matInput formControlName="senha" type="password" autocomplete
-              [readonly]="!newUser && passwordReadOnly">
-            <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(false)" color="primary"
-              [disabled]="!userActive">
-              <mat-icon class="animation360" *ngIf="passwordReadOnly" matTooltip="{{'titulo.editar'|translate}}"
-                matTooltipPosition="below">edit</mat-icon>
-              <mat-icon class="animation360" *ngIf="!passwordReadOnly" matTooltip="{{'titulo.pronto'|translate}}"
-                matTooltipPosition="below">done</mat-icon>
-            </button>
-            <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
-              <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
-            </mat-error>
-          </mat-form-field>
+        <!-- PASSWORD -->
+        <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
+          <mat-label>{{'cadastros.usuarios.campo.senha'|translate}}</mat-label>
+          <input matInput formControlName="senha" type="password" autocomplete
+            [readonly]="!newUser && passwordReadOnly">
+          <button mat-icon-button matSuffix *ngIf="!newUser" (click)="enableEditField(false)" color="primary"
+            [disabled]="!userActive">
+            <mat-icon class="animation360" *ngIf="passwordReadOnly" matTooltip="{{'titulo.editar'|translate}}"
+              matTooltipPosition="below">edit</mat-icon>
+            <mat-icon class="animation360" *ngIf="!passwordReadOnly" matTooltip="{{'titulo.pronto'|translate}}"
+              matTooltipPosition="below">done</mat-icon>
+          </button>
+          <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
+            <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <!-- CONFIRM PASSWORD -->
-          <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
-            <mat-label>{{'cadastros.usuarios.campo.senhaConfirma'|translate}}</mat-label>
-            <input matInput formControlName="senha_confirma" type="password" autocomplete
-              [readonly]="!newUser && passwordReadOnly">
-            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
-              <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('confirmPassInvalid')">
-              <strong>{{'cadastros.campo.senhaConfirmaInvalido'|translate}}</strong>
-            </mat-error>
-          </mat-form-field>
+        <!-- CONFIRM PASSWORD -->
+        <mat-form-field appearance="fill" [class.isReadOnly]="!newUser && passwordReadOnly">
+          <mat-label>{{'cadastros.usuarios.campo.senhaConfirma'|translate}}</mat-label>
+          <input matInput formControlName="senha_confirma" type="password" autocomplete
+            [readonly]="!newUser && passwordReadOnly">
+          <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
+            <strong>{{'cadastros.campo.minLength'|translate}} 6</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('confirmPassInvalid')">
+            <strong>{{'cadastros.campo.senhaConfirmaInvalido'|translate}}</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <!-- JOB TITLE -->
-          <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
-            <mat-label>{{'cadastros.usuarios.campo.cargo'|translate}}</mat-label>
-            <input matInput formControlName="cargo" [readonly]="!userActive">
-            <mat-error *ngIf="userForm.controls['cargo'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-          </mat-form-field>
+        <!-- JOB TITLE -->
+        <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
+          <mat-label>{{'cadastros.usuarios.campo.cargo'|translate}}</mat-label>
+          <input matInput formControlName="cargo" [readonly]="!userActive">
+          <mat-error *ngIf="userForm.controls['cargo'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <!-- BIRTH DATE -->
-          <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
-            <mat-label>{{'cadastros.usuarios.campo.dataNascimento'|translate}}</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="dataNascimento" [readonly]="!userActive">
-            <mat-hint>(DD/MM/YYYY)</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="!userActive"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="userForm.controls['dataNascimento'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-          </mat-form-field>
+        <!-- BIRTH DATE -->
+        <mat-form-field appearance="fill" [class.isReadOnly]="!userActive">
+          <mat-label>{{'cadastros.usuarios.campo.dataNascimento'|translate}}</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dataNascimento" [readonly]="!userActive">
+          <mat-hint>(DD/MM/YYYY)</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="!userActive"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
-          <!-- CONTACT -->
-          <mat-form-field appearance="fill" class="field-whith-prefix" [class.isReadOnly]="!userActive">
-            <mat-label>{{'cadastros.usuarios.campo.contato'|translate}}</mat-label>
-            <span matPrefix>+41&nbsp;</span>
-            <input matInput formControlName="contato" mask="(00) 000-00-00" maxlength="14" [validation]="true"
-              [readonly]="!userActive">
-            <mat-error *ngIf="userForm.controls['contato'].hasError('required')">
-              <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
-            </mat-error>
-            <mat-error *ngIf="userForm.controls['contato'].hasError('mask')">
-              <strong>{{'cadastros.campo.formatoInvalido'|translate}}</strong>
-            </mat-error>
-          </mat-form-field>
+        <!-- MAIN CONTACT -->
+        <mat-form-field appearance="fill" class="field-whith-prefix" [class.isReadOnly]="!userActive">
+          <mat-label>{{'cadastros.usuarios.campo.mainContact'|translate}}</mat-label>
+          <span matPrefix>+41&nbsp;</span>
+          <input matInput formControlName="mainContact" mask="(00) 000-00-00" maxlength="14" [validation]="true"
+            [readonly]="!userActive">
+          <mat-error *ngIf="userForm.controls['mainContact'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['mainContact'].hasError('mask')">
+            <strong>{{'cadastros.campo.formatoInvalido'|translate}}</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <mat-divider></mat-divider>
+        <!-- SECONDARY CONTACT -->
+        <mat-form-field appearance="fill" class="field-whith-prefix" [class.isReadOnly]="!userActive">
+          <mat-label>{{'cadastros.usuarios.campo.secondaryContact'|translate}}</mat-label>
+          <span matPrefix>+41&nbsp;</span>
+          <input matInput formControlName="secondaryContact" mask="(00) 000-00-00" maxlength="14" [validation]="true"
+            [readonly]="!userActive">
+          <mat-error *ngIf="userForm.controls['secondaryContact'].hasError('required')">
+            <strong>{{'cadastros.campo.obrigatorio'|translate}}</strong>
+          </mat-error>
+          <mat-error *ngIf="userForm.controls['secondaryContact'].hasError('mask')">
+            <strong>{{'cadastros.campo.formatoInvalido'|translate}}</strong>
+          </mat-error>
+        </mat-form-field>
 
-          <!-- PERMISSIONS -->
-          <div class="permissions" formGroupName="permissao">
+        <mat-divider></mat-divider>
 
-            <p class="title">{{'cadastros.usuarios.titulo.permissao.selecionar'|translate}}</p>
+        <!-- PERMISSIONS -->
+        <div class="permissions" formGroupName="permissao">
 
-            <div class="checkboxs-align">
-              <!-- Employee -->
-              <mat-checkbox id="employee" value="employee" formControlName="employee" color="primary">
-                <mat-label for="employee">{{'cadastros.usuarios.campo.permissao.funcionario'|translate}}</mat-label>
-              </mat-checkbox>
-              <!---->
+          <p class="title">{{'cadastros.usuarios.titulo.permissao.selecionar'|translate}}</p>
 
-              <!-- Administrative -->
-              <mat-checkbox id="administrative" value="administrative" formControlName="administrative" color="primary">
-                <mat-label for="administrative">{{'cadastros.usuarios.campo.permissao.administrativo'|translate}}
-                </mat-label>
-              </mat-checkbox>
-              <!---->
+          <div class="checkboxs-align">
+            <!-- Employee -->
+            <mat-checkbox id="employee" value="employee" formControlName="employee" color="primary">
+              <mat-label for="employee">{{'cadastros.usuarios.campo.permissao.funcionario'|translate}}</mat-label>
+            </mat-checkbox>
+            <!---->
 
-              <!-- Driver -->
-              <mat-checkbox id="driver" value="driver" formControlName="driver" color="primary">
-                <mat-label for="driver">{{'cadastros.usuarios.campo.permissao.motorista'|translate}}</mat-label>
-              </mat-checkbox>
-              <!---->
-            </div>
+            <!-- Administrative -->
+            <mat-checkbox id="administrative" value="administrative" formControlName="administrative" color="primary">
+              <mat-label for="administrative">{{'cadastros.usuarios.campo.permissao.administrativo'|translate}}
+              </mat-label>
+            </mat-checkbox>
+            <!---->
+
+            <!-- Driver -->
+            <mat-checkbox id="driver" value="driver" formControlName="driver" color="primary">
+              <mat-label for="driver">{{'cadastros.usuarios.campo.permissao.motorista'|translate}}</mat-label>
+            </mat-checkbox>
+            <!---->
           </div>
+        </div>
 
-          <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-          <!-- ACTIVE/INACTIVE -->
-          <div class="active">
-            <p class="title">{{'cadastros.usuarios.titulo.ativo'|translate}}</p>
+        <!-- ACTIVE/INACTIVE -->
+        <div class="active">
+          <p class="title">{{'cadastros.usuarios.titulo.ativo'|translate}}</p>
 
-            <div class="toggle-align">
-              <mat-label>{{'opcao.nao'|translate}}&nbsp;</mat-label>
-              <mat-slide-toggle formControlName="ativo" (change)="onToggleChange($event)"></mat-slide-toggle>
-              <mat-label>&nbsp;{{'opcao.sim'|translate}}</mat-label>
-            </div>
+          <div class="toggle-align">
+            <mat-label>{{'opcao.nao'|translate}}&nbsp;</mat-label>
+            <mat-slide-toggle formControlName="ativo" (change)="onToggleChange($event)"></mat-slide-toggle>
+            <mat-label>&nbsp;{{'opcao.sim'|translate}}</mat-label>
           </div>
+        </div>
 
       </mat-card>
     </div>

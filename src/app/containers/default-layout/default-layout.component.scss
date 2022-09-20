@@ -8,7 +8,6 @@
   box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
-
 /* HEADER */
 app-header {
   height: 70px;
@@ -32,9 +31,33 @@ app-header {
     }
   }
 
+  .user-button {
+    margin-right: 10px;
+    padding: 5px 7px;
+    width: 185px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px 1px rgb(0 0 0 / 28%);
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      box-shadow: 0px 0px 6px 2px rgb(0 0 0 / 30%);
+    }
+
+    .row-flex {
+      justify-content: space-between;
+      flex-wrap: nowrap;
+    }
+
+    .username {
+      color: white;
+      font-weight: 400;
+      font-size: 0.93em;
+    }
+  }
+
   .img-avatar {
-    height: 36px;
-    width: 36px;
+    height: 40px;
+    width: 40x;
   }
 }
 
@@ -93,6 +116,10 @@ app-sidebar {
           &:hover {
             background-color: #3a4248 !important;
           }
+
+          &.active, &:hover {
+            box-shadow: 1px 1px 1px 0px rgb(0 0 0 / 30%);
+          }
         }
       }
     }
@@ -101,11 +128,16 @@ app-sidebar {
 
 /* CONTENT MAIN */
 main.main {
-  padding: 15px;
+  padding: 12px;
+  background-color: #cdcdcd;
 
   mat-card.principal {
     height: 100%;
-    padding: 0;
+    padding: 0;  
+    
+    &.isDashboard {
+      box-shadow: none;
+    }
 
     ::ng-deep mat-card-header.principal {
       background-color: #2f353a;

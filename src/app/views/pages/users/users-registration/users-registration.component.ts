@@ -50,7 +50,8 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
     password: "",
     jobTitle: "",
     birthDate: "",
-    contact: "",
+    mainContact: "",
+    secondaryContact: "",
     permissions: {
       employee: false,
       administrative: false,
@@ -109,7 +110,7 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
         this.passwordReadOnly = !this.newUser;
 
         if (id && id.length > 0) {
-          const material = this.usuarioService.read(id).valueChanges();
+          const material = this.usuarioService.getById(id).valueChanges();
           const subMaterial = material.subscribe(async (value) => {
             this.userData = value;
             this.userData.uid = id;
@@ -166,12 +167,12 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
       cargo: [this.userData.jobTitle, [Validators.required]],
       dataNascimento: [
         moment(this.userData.birthDate, "DD/MM/YYYY"),
+      ],
+      mainContact: [
+        this.userData.mainContact,
         Validators.required,
       ],
-      contato: [
-        this.userData.contact,
-        Validators.compose([Validators.required]),
-      ],
+      secondaryContact: this.userData.secondaryContact,
       permissao: this.fb.group({
         employee: this.userData.permissions.employee,
         administrative: this.userData.permissions.administrative,
@@ -253,7 +254,7 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
           () => (this.disableBtn = false)
         );
 
-        console.log("Updating...");
+        //console.log("Updating...");
         this.disableBtn = true;
         this.updateUser(userFirebase);
       }
@@ -263,7 +264,7 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
         () => (this.disableBtn = false)
       );
 
-      console.log("Adding...");
+      //console.log("Adding...");
       this.disableBtn = true;
       this.addUser(userFirebase);
     }
@@ -359,8 +360,9 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
       // emailVerified: false,
       password: controls.senha.value,
       jobTitle: controls.cargo.value,
-      birthDate: new Date(controls.dataNascimento.value).toLocaleDateString(),
-      contact: controls.contato.value,
+      birthDate: moment(controls.dataNascimento.value).format("DD/MM/YYYY"),
+      mainContact: controls.mainContact.value,
+      secondaryContact: controls.secondaryContact.value,
       permissions: controls.permissao.value,
       active: controls.ativo.value,
       emergencyContacts: controls.contatosEmergencia.value,
@@ -433,8 +435,8 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
   async uploadPhoto() {
     if (this.imageFile) {
       try {
-        console.log("photoURL", this.userData.photoURL);
-        console.log("imageFile", this.imageFile);
+        //console.log("photoURL", this.userData.photoURL);
+        //console.log("imageFile", this.imageFile);
 
         const storageRef = this.angularFireStorage.ref(this.userData.photoURL);
 

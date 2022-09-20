@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   checkPermission(result, authData) {
-    let userSub = this.usuarioService.read(result.user.uid).get().toPromise();
+    let userSub = this.usuarioService.getById(result.user.uid).get().toPromise();
 
     userSub.then(x => {
       let userData = x.data() as UserFirebase;

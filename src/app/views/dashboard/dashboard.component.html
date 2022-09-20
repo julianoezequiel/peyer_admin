@@ -1,104 +1,233 @@
-<div class="animated fadeIn content" ngIf="false">
-  <div class="row">
+<mat-card-content class="h100" id="dashboard">
+  <div class="row-flex">
 
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-primary" (click)="goToUsers()" popover="{{'dashboard.popover.users' | translate}}"
-        triggers="mouseenter:mouseleave" placement="bottom">
-        <div class="card-body pb-0">
-          <div class="text-title">{{'dashboard.title.users' | translate}}</div>
-          <div class="text-value">{{totalUsers}}</div>
-        </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
-          <i class="fa fa-user fa-4x"></i>
+    <!-- DAMAGES INTERNAL CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.damages' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToDamages()" class="red-card" #tooltip1="matTooltip">
+      <div class="header">
+        <mat-icon>warning</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.damageInternal' | translate}}</span>
+          <span class="total">0</span>
         </div>
       </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-success" popover="{{'dashboard.popover.todaysBirthdays' | translate}}"
-        triggers="mouseenter:mouseleave" placement="bottom">
-        <div class="card-body pb-0">
-          <div class="text-title">{{'dashboard.title.todaysBirthdays' | translate}}</div>
-          <div class="text-value">{{totalBirthdays}}</div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip1.hide()" (mouseout)="tooltip1.show()"
+          matTooltip="{{'dashboard.subPopover.damages.open' | translate}}" matTooltipPosition="below">
+          <span class="value">0</span>
+          <span class="description">{{ 'cadastros.damages.stage.open' | translate }}</span>
         </div>
-        <div class="chart-wrapper  mt-3 mx-3 text-center " style="height:70px;">
-          <mat-icon>cake</mat-icon>
+        <div class="info" (mouseover)="tooltip1.hide()" (mouseout)="tooltip1.show()"
+          matTooltip="{{'dashboard.subPopover.damages.readyToRepair' | translate}}" matTooltipPosition="below">
+          <span class="value">0</span>
+          <span class="description">{{ 'cadastros.damages.stage.readyToRepair' | translate }}</span>
         </div>
-      </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-info" popover="{{'dashboard.popover.vehicles' | translate}}"
-        triggers="mouseenter:mouseleave" placement="bottom">
-        <div class="card-body pb-0">
-          <div class="text-title">{{'dashboard.title.vehicles' | translate}}</div>
-          <div class="text-value">{{totalVehicles}}</div>
-        </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
-          <mat-icon>local_shipping</mat-icon>
+        <div class="info" (mouseover)="tooltip1.hide()" (mouseout)="tooltip1.show()"
+          matTooltip="{{'dashboard.subPopover.damages.closed' | translate}}" matTooltipPosition="below">
+          <span class="value">0</span>
+          <span class="description">{{ 'cadastros.damages.stage.closed' | translate }}</span>
         </div>
       </div>
-    </div>
+    </mat-card>
 
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-danger">
-        <div class="card-body pb-0">
-          <div class="text-title">Damages</div>
-          <div class="text-value">{{totalcatalogo}}</div>
-        </div>
-        <div class="chart-wrapper mt-3 text-center" style="height:70px;">
-          <mat-icon>nearby_error</mat-icon>
+    <!-- ABSENCE REQUESTS CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.absence' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToAbsenceRequests()" class="yellow-card" #tooltip2="matTooltip">
+      <div class="header">
+        <mat-icon>hourglass_full</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.absence' | translate}}</span>
+          <span class="total">{{absence?.total}}</span>
         </div>
       </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-warning">
-        <div class="card-body pb-0">
-          <div class="text-title">Improvements pending</div>
-          <div class="text-value">{{totalpedidosHistorico}}</div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip2.hide()" (mouseout)="tooltip2.show()"
+          matTooltip="{{'dashboard.subPopover.absenceRequests.pending' | translate}}" matTooltipPosition="below"
+          (click)="viewAbsenceRequests('pending'); $event.stopPropagation()">
+          <span class="value">{{ absence?.pending.total }}</span>
+          <span class="description">{{ 'cadastros.absenceRequests.status.pending' | translate }}</span>
         </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
-          <mat-icon>pending_actions</mat-icon>
+        <div class="info" (mouseover)="tooltip2.hide()" (mouseout)="tooltip2.show()"
+          matTooltip="{{'dashboard.subPopover.absenceRequests.accepted' | translate}}" matTooltipPosition="below"
+          (click)="viewAbsenceRequests('accepted'); $event.stopPropagation()">
+          <span class="value">{{ absence?.accepted.total }}</span>
+          <span class="description">{{ 'cadastros.absenceRequests.status.accepted' | translate }}</span>
         </div>
-      </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-warning">
-        <div class="card-body pb-0">
-          <div class="text-title">Absences pending</div>
-          <div class="text-value">{{totalClientes}}</div>
-        </div>
-        <div class="chart-wrapper  mt-3 mx-3 text-center " style="height:70px;">
-          <mat-icon>work_history</mat-icon>
+        <div class="info" (mouseover)="tooltip2.hide()" (mouseout)="tooltip2.show()"
+          matTooltip="{{'dashboard.subPopover.absenceRequests.rejected' | translate}}" matTooltipPosition="below"
+          (click)="viewAbsenceRequests('rejected'); $event.stopPropagation()">
+          <span class="value">{{ absence?.rejected.total }}</span>
+          <span class="description">{{ 'cadastros.absenceRequests.status.rejected' | translate }}</span>
         </div>
       </div>
-    </div>
+    </mat-card>
 
-    <!-- <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-primary">
-        <div class="card-body pb-0">
-          <div class="text-title">Meu Pedido</div>
-          <div class="text-value">&nbsp;</div>
-        </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
-          <i class="fa fa-shopping-basket  fa-4x"></i>
+    <!-- IMPROVEMENTS CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.improvements' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToImprovements()" class="green-card" #tooltip3="matTooltip">
+      <div class="header">
+        <mat-icon>assignment</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.improvements' | translate}}</span>
+          <span class="total">{{improvements?.total}}</span>
         </div>
       </div>
-    </div>
-
-    <div class="col-sm-3 col-lg-3 col-xs-12" style="cursor: pointer;">
-      <div class="card text-white bg-primary">
-        <div class="card-body pb-0">
-          <div class="text-title">Meu Pedido</div>
-          <div class="text-value">&nbsp;</div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip3.hide()" (mouseout)="tooltip3.show()"
+          matTooltip="{{'dashboard.subPopover.improvements.pending' | translate}}" matTooltipPosition="below"
+          (click)="viewImprovements('pending'); $event.stopPropagation()">
+          <span class="value">{{ improvements?.pending.total }}</span>
+          <span class="description">{{ 'cadastros.improvements.status.pending' | translate }}</span>
         </div>
-        <div class="chart-wrapper mt-3 mx-3 text-center" style="height:70px;">
-          <i class="fa fa-shopping-basket  fa-4x"></i>
+        <div class="info" (mouseover)="tooltip3.hide()" (mouseout)="tooltip3.show()"
+          matTooltip="{{'dashboard.subPopover.improvements.done' | translate}}" matTooltipPosition="below"
+          (click)="viewImprovements('done'); $event.stopPropagation()">
+          <span class="value">{{ improvements?.done.total }}</span>
+          <span class="description">{{ 'cadastros.improvements.status.done' | translate }}</span>
+        </div>
+        <div class="info" (mouseover)="tooltip3.hide()" (mouseout)="tooltip3.show()"
+          matTooltip="{{'dashboard.subPopover.improvements.rejected' | translate}}" matTooltipPosition="below"
+          (click)="viewImprovements('rejected'); $event.stopPropagation()">
+          <span class="value">{{ improvements?.rejected.total }}</span>
+          <span class="description">{{ 'cadastros.improvements.status.rejected' | translate }}</span>
         </div>
       </div>
-    </div> -->
+    </mat-card>
   </div>
 
-</div>
+  <div class="row-flex">
+
+    <!-- DAMAGES IN TRANSPORT CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.damages' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToDamages()" class="red-card" #tooltip6="matTooltip">
+      <div class="header">
+        <mat-icon>warning</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.damageTransport' | translate}}</span>
+          <span class="total">0</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip6.hide()" (mouseout)="tooltip6.show()"
+          matTooltip="{{'dashboard.subPopover.damages.open' | translate}}" matTooltipPosition="below">
+          <span class="value">0</span>
+          <span class="description">{{ 'cadastros.damages.stage.open' | translate }}</span>
+        </div>
+        <div class="info" (mouseover)="tooltip6.hide()" (mouseout)="tooltip6.show()"
+          matTooltip="{{'dashboard.subPopover.damages.closed' | translate}}" matTooltipPosition="below">
+          <span class="value">0</span>
+          <span class="description">{{ 'cadastros.damages.stage.closed' | translate }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- VEHICLES CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.vehicles' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToVehicles()" class="yellow-card" #tooltip4="matTooltip">
+      <div class="header">
+        <mat-icon>local_shipping</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.vehicles' | translate}}</span>
+          <span class="total">{{vehicles?.total}}</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip4.hide()" (mouseout)="tooltip4.show()"
+          matTooltip="{{'dashboard.subPopover.vehicles.onRoute' | translate}}" matTooltipPosition="below"
+          (click)="viewVehicles('onRoute'); $event.stopPropagation()">
+          <span class="value">{{ vehicles?.onRoute.total }}</span>
+          <span class="description">{{ 'cadastros.vehicles.status.onRoute' | translate }}</span>
+        </div>
+        <div class="info" (mouseover)="tooltip4.hide()" (mouseout)="tooltip4.show()"
+          matTooltip="{{'dashboard.subPopover.vehicles.onGarage' | translate}}" matTooltipPosition="below"
+          (click)="viewVehicles('onGarage'); $event.stopPropagation()">
+          <span class="value">{{ vehicles?.onGarage.total }}</span>
+          <span class="description">{{ 'cadastros.vehicles.status.onGarage' | translate }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- USERS CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.users' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToUsers()" class="green-card" #tooltip5="matTooltip">
+      <div class="header">
+        <mat-icon>person</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.users' | translate}}</span>
+          <span class="total">{{users?.total}}</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip5.hide()" (mouseout)="tooltip5.show()"
+          matTooltip="{{'dashboard.subPopover.users.active' | translate}}" matTooltipPosition="below"
+          (click)="viewUsers('active'); $event.stopPropagation()">
+          <span class="value">{{ users?.active.total }}</span>
+          <span class="description">{{ 'cadastros.usuarios.campo.ativo' | translate }}</span>
+        </div>
+        <div class="info" (mouseover)="tooltip5.hide()" (mouseout)="tooltip5.show()"
+          matTooltip="{{'dashboard.subPopover.users.inactive' | translate}}" matTooltipPosition="below"
+          placement="bottom" (click)="viewUsers('inactive'); $event.stopPropagation()">
+          <span class="value">{{ users?.inactive.total }}</span>
+          <span class="description">{{ 'cadastros.usuarios.campo.inactive' | translate }}</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="row-flex">
+
+    <!-- TODAY'S NEWS -->
+    <mat-card matTooltip="{{'dashboard.popover.todaysNews' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToNewsletters()" class="red-card" #tooltip9="matTooltip">
+      <div class="header">
+        <mat-icon>newspaper</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.todaysNews' | translate}}</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip9.hide()" (mouseout)="tooltip9.show()"
+          matTooltip="{{'dashboard.subPopover.todaysNews' | translate}}" matTooltipPosition="below"
+          (click)="viewTodaysNews(); $event.stopPropagation()">
+          <span class="value">{{ todaysNews?.total }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- TODAY'S ROUTES -->
+    <mat-card matTooltip="{{'dashboard.popover.todaysRoutes' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToDailySchedule()" class="yellow-card" #tooltip8="matTooltip">
+      <div class="header">
+        <mat-icon>calendar_month</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.todaysRoutes' | translate}}</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip8.hide()" (mouseout)="tooltip8.show()"
+          matTooltip="{{'dashboard.subPopover.todaysRoutes' | translate}}" matTooltipPosition="below"
+          (click)="viewTodaysRoutes(); $event.stopPropagation()">
+          <span class="value">{{ todaysRoutes?.total }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- TODAY'S BIRTHDAYS CARD -->
+    <mat-card matTooltip="{{'dashboard.popover.users' | translate}}" matTooltipPosition="below"
+      matTooltipClass="tooltip-card" (click)="goToUsers()" class="green-card" #tooltip7="matTooltip">
+      <div class="header">
+        <mat-icon>cake</mat-icon>
+        <div class="title">
+          <span>{{'dashboard.title.todaysBirthdays' | translate}}</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="info" (mouseover)="tooltip7.hide()" (mouseout)="tooltip7.show()"
+          matTooltip="{{'dashboard.subPopover.todaysBirthdays' | translate}}" matTooltipPosition="below"
+          (click)="viewTodaysBirthdays(); $event.stopPropagation()">
+          <span class="value">{{ todaysBirthdays?.total }}</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</mat-card-content>
