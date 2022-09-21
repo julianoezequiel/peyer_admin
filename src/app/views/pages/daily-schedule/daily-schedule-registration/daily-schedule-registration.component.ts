@@ -177,6 +177,7 @@ export class DailyScheduleRegistrationComponent implements OnInit {
 
     const ds: DailySchedule = this.routeForm.value as DailySchedule;
     ds._id = this.routeData._id;
+    ds.beginDate = moment(ds.beginDate).format("DD/MM/YYYY");
 
     /* check driver/vehicle */
     if (!this.selectDriver.value || !this.selectVehicle.value) {
@@ -197,10 +198,8 @@ export class DailyScheduleRegistrationComponent implements OnInit {
 
     this.disableBtn = true;
     if (ds._id) {
-      ds.beginDate = moment(ds.beginDate).format("DD/MM/YYYY");
       this.updateRoute(ds);
     } else {
-      ds.beginDate = moment(new Date()).format("DD/MM/YYYY");
       this.addRoute(ds);
     }
   }

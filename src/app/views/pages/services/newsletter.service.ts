@@ -75,7 +75,7 @@ export class NewsletterService {
   delete(recordToBeRemoved: Newsletter) {
     return new Promise(async (resolve, reject) => {
 
-      if (recordToBeRemoved.attachments.length > 0) {
+      if (recordToBeRemoved.attachments && recordToBeRemoved.attachments.length > 0) {
         //console.log("Deleting photo from Storage...");
         let deletedFiles = await this.deleteAllAttachmentsStorage(recordToBeRemoved.attachments)
         .catch((error) => {

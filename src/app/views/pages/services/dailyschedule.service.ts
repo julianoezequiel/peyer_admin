@@ -46,7 +46,6 @@ export class DailyScheduleService {
   }
 
   create(recordToBeCreated: DailySchedule): Promise<any> {
-    console.log(recordToBeCreated);
 
     return new Promise(async (resolve, reject) => {
       delete recordToBeCreated._id;

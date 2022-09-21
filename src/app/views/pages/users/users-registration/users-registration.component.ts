@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -124,6 +125,10 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
 
             this.setStatusCheckboxs();
             this.createForm();
+            
+            if (this.userData.birthDate)
+            this.userForm.controls.dataNascimento.setValue(moment(this.userData.birthDate, "DD/MM/YYYY"));
+
             await this.downloadPhoto(this.userData);
           });
 
@@ -165,9 +170,7 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
         ],
       ],
       cargo: [this.userData.jobTitle, [Validators.required]],
-      dataNascimento: [
-        moment(this.userData.birthDate, "DD/MM/YYYY"),
-      ],
+      dataNascimento: [null],
       mainContact: [
         this.userData.mainContact,
         Validators.required,
@@ -183,13 +186,17 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
     });
   }
 
+  lockField = false;
+
   async onSubmit() {
     const controls = this.userForm.controls;
 
     controls["senha"].updateValueAndValidity();
     controls["senha_confirma"].updateValueAndValidity();
 
-    //console.log(controls);
+    if (!(controls["dataNascimento"].value as Moment).isValid()) {
+      controls["dataNascimento"].setValue(null);
+    }
 
     /* check form */
     if (this.userForm.invalid) {
@@ -352,6 +359,9 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
 
   prepareUser(): UserFirebase {
     const controls = this.userForm.controls;
+
+    const birthDate = controls.dataNascimento.value ? moment(controls.dataNascimento.value).format("DD/MM/YYYY") : null;
+
     const userFirebase: UserFirebase = {
       uid: this.userData.uid,
       displayName: controls.usuario.value,
@@ -360,7 +370,7 @@ export class UsersRegistrationComponent implements OnInit, OnDestroy {
       // emailVerified: false,
       password: controls.senha.value,
       jobTitle: controls.cargo.value,
-      birthDate: moment(controls.dataNascimento.value).format("DD/MM/YYYY"),
+      birthDate: birthDate,
       mainContact: controls.mainContact.value,
       secondaryContact: controls.secondaryContact.value,
       permissions: controls.permissao.value,
